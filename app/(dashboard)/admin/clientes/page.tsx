@@ -15,6 +15,10 @@ export default function AdminClientesPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [clientStartDate, setClientStartDate] = useState("");
+  const [clientEndDate, setClientEndDate] = useState("");
+
   // Modal State
   const [showModal, setShowModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
@@ -31,11 +35,11 @@ export default function AdminClientesPage() {
 
   useEffect(() => {
     if (selectedCliente) {
-      fetchClienteData(selectedCliente);
+      fetchClienteData(selectedCliente, clientStartDate, clientEndDate);
     } else {
       setClienteData(null);
     }
-  }, [selectedCliente]);
+  }, [selectedCliente, clientStartDate, clientEndDate]);
 
   const fetchGlobalImpact = async (start?: string, end?: string) => {
     const res = await getGlobalImpact(start, end);
@@ -50,13 +54,21 @@ export default function AdminClientesPage() {
     setLoading(false);
   };
 
-  const fetchClienteData = async (clienteId: string) => {
+  const fetchClienteData = async (clienteId: string, start?: string, end?: string) => {
     setLoading(true);
     
-    const { data: coletas } = await supabase.from("coletas").select("litros_coletados").eq("cliente_id", clienteId);
+    let coletasQuery = supabase.from("coletas").select("litros_coletados").eq("cliente_id", clienteId);
+    if (start) coletasQuery = coletasQuery.gte("data_coleta", start);
+    if (end) coletasQuery = coletasQuery.lte("data_coleta", end);
+    
+    const { data: coletas } = await coletasQuery;
     const totalLitros = coletas ? coletas.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0) : 0;
 
-    const { data: documentos } = await supabase.from("documentos").select("*").eq("cliente_id", clienteId).order("data_referencia", { ascending: false });
+    let docsQuery = supabase.from("documentos").select("*").eq("cliente_id", clienteId).order("data_referencia", { ascending: false });
+    if (start) docsQuery = docsQuery.gte("data_referencia", start);
+    if (end) docsQuery = docsQuery.lte("data_referencia", end);
+    
+    const { data: documentos } = await docsQuery;
 
     setClienteData({ totalLitros, documentos: documentos || [] });
     setLoading(false);
@@ -86,7 +98,7 @@ export default function AdminClientesPage() {
       
       {/* HEADER E RESUMO GLOBAL */}
       <div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 print:hidden">
           <h1 className="text-2xl font-bold text-gray-800">Visão de Clientes (Admin)</h1>
           <button 
             onClick={() => { setShowModal(true); setCreatedCredentials(null); }}
@@ -96,7 +108,7 @@ export default function AdminClientesPage() {
           </button>
         </div>
 
-        <div className="bg-gradient-to-r from-[#3DB5D9] to-blue-500 rounded-xl p-6 text-white shadow-lg relative">
+        <div className="bg-gradient-to-r from-[#3DB5D9] to-blue-500 rounded-xl p-6 text-white shadow-lg relative print:hidden">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h2 className="text-lg font-semibold text-white/90">Impacto Global da Plataforma</h2>
             <div className="flex items-center gap-3">
@@ -136,18 +148,33 @@ export default function AdminClientesPage() {
       </div>
 
       {/* SELEÇÃO E RELATÓRIO DO CLIENTE */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Selecione um Cliente para ver o relatório individual</label>
-        <select 
-          value={selectedCliente}
-          onChange={(e) => setSelectedCliente(e.target.value)}
-          className="w-full md:w-1/2 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] outline-none"
-        >
-          <option value="">-- Selecione --</option>
-          {clientes.map(c => (
-            <option key={c.id} value={c.id}>{c.nome_empresa} {c.cnpj ? `(${c.cnpj})` : ''}</option>
-          ))}
-        </select>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 print:hidden">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Selecione um Cliente para ver o relatório individual</h2>
+        
+        <div className="flex flex-col gap-4 max-w-2xl">
+          <input 
+            type="text" 
+            placeholder="Buscar por ID, Nome ou CNPJ..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] focus:outline-none"
+          />
+          <select 
+            value={selectedCliente} 
+            onChange={(e) => setSelectedCliente(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] focus:outline-none bg-white text-gray-800"
+          >
+            <option value="">-- Selecione --</option>
+            {clientes
+              .filter(c => 
+                c.nome_empresa.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                (c.cnpj && c.cnpj.includes(searchTerm))
+              )
+              .map(cliente => (
+                <option key={cliente.id} value={cliente.id}>{cliente.nome_empresa} ({cliente.cnpj || "Sem CNPJ"})</option>
+            ))}
+          </select>
+        </div>
         
         {clientes.length === 0 && !loading && (
           <p className="text-sm text-gray-500 mt-2">Nenhum cliente cadastrado ainda. Clique em "Novo Cliente" acima para começar.</p>
@@ -159,7 +186,36 @@ export default function AdminClientesPage() {
       {clienteData && !loading && (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div>
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Impacto do Cliente</h2>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+              <h2 className="text-xl font-bold text-gray-800">
+                Impacto de: <span className="text-[#3DB5D9]">{clientes.find(c => c.id === selectedCliente)?.nome_empresa}</span>
+              </h2>
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2 bg-white rounded-md px-3 py-1.5 border border-gray-300 shadow-sm print:hidden">
+                  <span className="text-sm font-medium text-gray-600">De</span>
+                  <input 
+                    type="date" 
+                    value={clientStartDate}
+                    onChange={(e) => setClientStartDate(e.target.value)}
+                    className="bg-transparent text-gray-800 text-sm focus:outline-none cursor-pointer" 
+                  />
+                  <span className="text-sm font-medium text-gray-600 ml-2">Até</span>
+                  <input 
+                    type="date" 
+                    value={clientEndDate}
+                    onChange={(e) => setClientEndDate(e.target.value)}
+                    className="bg-transparent text-gray-800 text-sm focus:outline-none cursor-pointer" 
+                  />
+                </div>
+                <button 
+                  onClick={() => window.print()}
+                  className="print:hidden bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center gap-2 shadow-sm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                  Emitir PDF
+                </button>
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
               <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-[#3DB5D9]/10 rounded-full flex items-center justify-center mb-3 text-[#3DB5D9]"><Droplet size={24} /></div>
