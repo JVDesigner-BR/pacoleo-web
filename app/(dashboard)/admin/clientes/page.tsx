@@ -335,8 +335,8 @@ export default function AdminClientesPage() {
           {/* HEADER EXCLUSIVO PARA IMPRESSÃO */}
           <div className="hidden print:flex flex-col mb-10 pb-6 border-b-2 border-[#3DB5D9]">
             <div className="flex justify-between items-center mb-6">
-              <div className="flex items-center gap-2 text-[#3DB5D9]">
-                <Droplet size={40} className="fill-[#3DB5D9]" />
+              <div className="flex items-center gap-3 text-[#3DB5D9]">
+                <img src="/logo-pacman.png" alt="PacOleo Logo" className="h-10 w-auto object-contain" />
                 <h1 className="text-3xl font-black tracking-tight">PacOleo</h1>
               </div>
               <div className="text-right">
