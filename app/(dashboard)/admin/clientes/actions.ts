@@ -101,9 +101,18 @@ export async function getGlobalImpact() {
       from += limit;
     }
     
-    return { success: true, totalLitros };
+    // Fetch min and max dates
+    const { data: minData } = await supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: true }).limit(1);
+    const { data: maxData } = await supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: false }).limit(1);
+    
+    let minDate = "";
+    let maxDate = "";
+    if (minData && minData.length > 0) minDate = minData[0].data_coleta;
+    if (maxData && maxData.length > 0) maxDate = maxData[0].data_coleta;
+    
+    return { success: true, totalLitros, minDate, maxDate };
   } catch (error: any) {
     console.error("Exception in getGlobalImpact:", error);
-    return { success: false, totalLitros: 0 };
+    return { success: false, totalLitros: 0, minDate: "", maxDate: "" };
   }
 }

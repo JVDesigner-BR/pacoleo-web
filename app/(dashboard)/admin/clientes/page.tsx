@@ -11,6 +11,7 @@ export default function AdminClientesPage() {
   const [clienteData, setClienteData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [globalTotal, setGlobalTotal] = useState(0);
+  const [globalPeriod, setGlobalPeriod] = useState("");
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -35,6 +36,16 @@ export default function AdminClientesPage() {
     const res = await getGlobalImpact();
     if (res.success) {
       setGlobalTotal(res.totalLitros);
+      
+      if (res.minDate && res.maxDate) {
+        const formatDt = (iso: string) => {
+          const [y, m, d] = iso.split("-");
+          return `${d}/${m}/${y}`;
+        };
+        setGlobalPeriod(`${formatDt(res.minDate)} a ${formatDt(res.maxDate)}`);
+      } else {
+        setGlobalPeriod("");
+      }
     }
   };
 
@@ -90,8 +101,15 @@ export default function AdminClientesPage() {
           </button>
         </div>
 
-        <div className="bg-gradient-to-r from-[#3DB5D9] to-blue-500 rounded-xl p-6 text-white shadow-lg">
-          <h2 className="text-lg font-semibold mb-4 text-white/90">Impacto Global da Plataforma</h2>
+        <div className="bg-gradient-to-r from-[#3DB5D9] to-blue-500 rounded-xl p-6 text-white shadow-lg relative">
+          <div className="flex justify-between items-start mb-4">
+            <h2 className="text-lg font-semibold text-white/90">Impacto Global da Plataforma</h2>
+            {globalPeriod && (
+              <div className="bg-white/20 px-3 py-1 rounded-full text-xs font-medium border border-white/30 backdrop-blur-sm">
+                Período total: {globalPeriod}
+              </div>
+            )}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">
               <p className="text-white/70 text-sm font-medium mb-1">Total de Óleo Reciclado</p>
