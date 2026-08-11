@@ -182,32 +182,6 @@ export default function AdminClientesPage() {
       
       {/* HEADER E RESUMO GLOBAL */}
       <div>
-        {/* HEADER EXCLUSIVO PARA IMPRESSÃO */}
-        <div className="hidden print:flex flex-col mb-10 pb-6 border-b-2 border-[#3DB5D9]">
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-2 text-[#3DB5D9]">
-              <Droplet size={40} className="fill-[#3DB5D9]" />
-              <h1 className="text-3xl font-black tracking-tight">PacOleo</h1>
-            </div>
-            <div className="text-right">
-              <h2 className="text-xl font-bold text-gray-800 uppercase tracking-widest">Relatório de Impacto Ambiental</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Data de Emissão: {new Date().toLocaleDateString('pt-BR')}
-              </p>
-            </div>
-          </div>
-          
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Cliente</p>
-            <h3 className="text-lg font-bold text-gray-900">
-              [{clienteData.id}] {clienteData.nome_empresa}
-            </h3>
-            {clienteData.cnpj && (
-              <p className="text-sm text-gray-600 mt-1">CNPJ: {clienteData.cnpj}</p>
-            )}
-          </div>
-        </div>
-
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 print:hidden">
           <h1 className="text-2xl font-bold text-gray-800">Visão de Clientes (Admin)</h1>
           <button 
@@ -358,6 +332,32 @@ export default function AdminClientesPage() {
 
       {clienteData && (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {/* HEADER EXCLUSIVO PARA IMPRESSÃO */}
+          <div className="hidden print:flex flex-col mb-10 pb-6 border-b-2 border-[#3DB5D9]">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-2 text-[#3DB5D9]">
+                <Droplet size={40} className="fill-[#3DB5D9]" />
+                <h1 className="text-3xl font-black tracking-tight">PacOleo</h1>
+              </div>
+              <div className="text-right">
+                <h2 className="text-xl font-bold text-gray-800 uppercase tracking-widest">Relatório de Impacto Ambiental</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Data de Emissão: {new Date().toLocaleDateString('pt-BR')}
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Cliente</p>
+              <h3 className="text-lg font-bold text-gray-900">
+                [{clienteData.id}] {clienteData.nome_empresa}
+              </h3>
+              {clienteData.cnpj && (
+                <p className="text-sm text-gray-600 mt-1">CNPJ: {clienteData.cnpj}</p>
+              )}
+            </div>
+          </div>
+
           <div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
               <h2 className="text-xl font-bold text-gray-800">
