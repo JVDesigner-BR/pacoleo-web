@@ -178,7 +178,7 @@ export default function DashboardPage() {
                       contentStyle={{ borderRadius: '16px', border: '1px solid #f3f4f6', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '12px' }}
                       labelStyle={{ fontWeight: 'bold', color: '#374151', marginBottom: '4px' }}
                       itemStyle={{ color: '#3DB5D9', fontWeight: 600 }}
-                      formatter={(value: number) => [`${value.toLocaleString('pt-BR')} Litros`, 'Volume']}
+                      formatter={(value: any) => [`${Number(value).toLocaleString('pt-BR')} Litros`, 'Volume']}
                     />
                     <Bar dataKey="volume" radius={[6, 6, 0, 0]} maxBarSize={60}>
                       {chartData.map((entry, index) => (
