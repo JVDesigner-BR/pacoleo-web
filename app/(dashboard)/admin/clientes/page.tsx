@@ -477,37 +477,6 @@ export default function AdminClientesPage() {
               </div>
             </div>
 
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Documentos Avulsos (Antigo)</h2>
-            <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-opacity ${loading ? 'opacity-50' : ''}`}>
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="py-3 px-6 font-semibold text-gray-600 text-sm">Data</th>
-                    <th className="py-3 px-6 font-semibold text-gray-600 text-sm">Tipo</th>
-                    <th className="py-3 px-6 font-semibold text-gray-600 text-sm text-right">Ação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {clienteData.documentos.length === 0 ? (
-                    <tr><td colSpan={3} className="py-6 text-center text-gray-500">Nenhum documento cadastrado via webhook ainda.</td></tr>
-                  ) : clienteData.documentos.map((doc: any) => (
-                    <tr key={doc.id} className="border-b border-gray-50">
-                      <td className="py-3 px-6 text-sm">{new Date(doc.data_referencia).toLocaleDateString("pt-BR", { timeZone: "UTC" })}</td>
-                      <td className="py-3 px-6">
-                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${
-                          doc.tipo_doc === "CDF" ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
-                        }`}>{doc.tipo_doc}</span>
-                      </td>
-                      <td className="py-3 px-6 text-right">
-                        <a href={doc.link_google_drive} target="_blank" rel="noopener noreferrer" className="text-[#3DB5D9] hover:underline text-sm inline-flex items-center gap-1">
-                          Ver <ExternalLink size={14} />
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       )}
