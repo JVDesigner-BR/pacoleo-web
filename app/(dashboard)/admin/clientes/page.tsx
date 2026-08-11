@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Droplet, Droplets, Zap, ExternalLink, Plus, X } from "lucide-react";
-import { createClientAccount, getGlobalImpact, PeriodFilter } from "./actions";
+import { createClientAccount, getGlobalImpact } from "./actions";
 
 export default function AdminClientesPage() {
   const [clientes, setClientes] = useState<{id: string, nome_empresa: string, cnpj: string}[]>([]);
@@ -12,8 +12,8 @@ export default function AdminClientesPage() {
   const [loading, setLoading] = useState(true);
   
   const [globalTotal, setGlobalTotal] = useState(0);
-  const [globalPeriod, setGlobalPeriod] = useState("");
-  const [globalFilter, setGlobalFilter] = useState<PeriodFilter>("total");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -22,8 +22,8 @@ export default function AdminClientesPage() {
   const [createdCredentials, setCreatedCredentials] = useState<{email: string, password: string} | null>(null);
 
   useEffect(() => {
-    fetchGlobalImpact(globalFilter);
-  }, [globalFilter]);
+    fetchGlobalImpact(startDate, endDate);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     fetchClientes();
@@ -37,34 +37,10 @@ export default function AdminClientesPage() {
     }
   }, [selectedCliente]);
 
-  const fetchGlobalImpact = async (filter: PeriodFilter) => {
-    const res = await getGlobalImpact(filter);
+  const fetchGlobalImpact = async (start?: string, end?: string) => {
+    const res = await getGlobalImpact(start, end);
     if (res.success) {
       setGlobalTotal(res.totalLitros);
-      
-      const today = new Date();
-      const formatToday = (d: Date) => {
-        return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-      };
-      
-      const formattedToday = formatToday(today);
-      
-      if (filter === "total") {
-        if (res.minDate) {
-          const [y, m, d] = res.minDate.split("-");
-          setGlobalPeriod(`${d}/${m}/${y} a ${formattedToday}`);
-        } else {
-          setGlobalPeriod("");
-        }
-      } else if (filter === "1_semana") {
-        const past = new Date(today);
-        past.setDate(past.getDate() - 7);
-        setGlobalPeriod(`${formatToday(past)} a ${formattedToday}`);
-      } else if (filter === "1_mes") {
-        const past = new Date(today);
-        past.setMonth(past.getMonth() - 1);
-        setGlobalPeriod(`${formatToday(past)} a ${formattedToday}`);
-      }
     }
   };
 
@@ -124,20 +100,22 @@ export default function AdminClientesPage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h2 className="text-lg font-semibold text-white/90">Impacto Global da Plataforma</h2>
             <div className="flex items-center gap-3">
-              {globalPeriod && (
-                <div className="bg-white/20 px-3 py-1.5 rounded-full text-xs font-medium border border-white/30 backdrop-blur-sm">
-                  {globalPeriod}
-                </div>
-              )}
-              <select
-                value={globalFilter}
-                onChange={(e) => setGlobalFilter(e.target.value as PeriodFilter)}
-                className="bg-white/20 border border-white/30 text-white text-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-white/50 cursor-pointer backdrop-blur-sm [&>option]:text-gray-800"
-              >
-                <option value="total">Período Total</option>
-                <option value="1_mes">Último Mês</option>
-                <option value="1_semana">Última Semana</option>
-              </select>
+              <div className="flex items-center gap-2 bg-white/20 rounded-md px-3 py-1.5 border border-white/30 backdrop-blur-sm">
+                <span className="text-sm font-medium text-white/90">De</span>
+                <input 
+                  type="date" 
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer" 
+                />
+                <span className="text-sm font-medium text-white/90 ml-2">Até</span>
+                <input 
+                  type="date" 
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer" 
+                />
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

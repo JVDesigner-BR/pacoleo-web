@@ -75,18 +75,8 @@ export async function createClientAccount(formData: FormData) {
   }
 }
 
-export type PeriodFilter = "1_semana" | "1_mes" | "total";
-
-export async function getGlobalImpact(period: PeriodFilter = "total") {
+export async function getGlobalImpact(startDate?: string, endDate?: string) {
   try {
-    let minDateThreshold: string | null = null;
-    if (period !== "total") {
-       const date = new Date();
-       if (period === "1_semana") date.setDate(date.getDate() - 7);
-       if (period === "1_mes") date.setMonth(date.getMonth() - 1);
-       minDateThreshold = date.toISOString().split('T')[0];
-    }
-
     let totalLitros = 0;
     let from = 0;
     const limit = 1000;
@@ -97,8 +87,11 @@ export async function getGlobalImpact(period: PeriodFilter = "total") {
         .select("litros_coletados")
         .range(from, from + limit - 1);
       
-      if (minDateThreshold) {
-        query = query.gte("data_coleta", minDateThreshold);
+      if (startDate) {
+        query = query.gte("data_coleta", startDate);
+      }
+      if (endDate) {
+        query = query.lte("data_coleta", endDate);
       }
         
       const { data, error } = await query;
@@ -121,9 +114,13 @@ export async function getGlobalImpact(period: PeriodFilter = "total") {
     let minQuery = supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: true }).limit(1);
     let maxQuery = supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: false }).limit(1);
 
-    if (minDateThreshold) {
-      minQuery = minQuery.gte("data_coleta", minDateThreshold);
-      maxQuery = maxQuery.gte("data_coleta", minDateThreshold);
+    if (startDate) {
+      minQuery = minQuery.gte("data_coleta", startDate);
+      maxQuery = maxQuery.gte("data_coleta", startDate);
+    }
+    if (endDate) {
+      minQuery = minQuery.lte("data_coleta", endDate);
+      maxQuery = maxQuery.lte("data_coleta", endDate);
     }
 
     const { data: minData } = await minQuery;
