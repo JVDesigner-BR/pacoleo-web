@@ -181,9 +181,9 @@ export default function AdminClientesPage() {
         )}
       </div>
 
-      {loading && selectedCliente && <div className="text-center text-gray-500 py-10">Carregando dados do cliente...</div>}
+      {!clienteData && loading && selectedCliente && <div className="text-center text-gray-500 py-10">Carregando dados do cliente...</div>}
 
-      {clienteData && !loading && (
+      {clienteData && (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
@@ -216,7 +216,8 @@ export default function AdminClientesPage() {
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-opacity ${loading ? 'opacity-50' : ''}`}>
               <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-[#3DB5D9]/10 rounded-full flex items-center justify-center mb-3 text-[#3DB5D9]"><Droplet size={24} /></div>
                 <h3 className="text-2xl font-bold text-gray-800">{clienteData.totalLitros.toLocaleString("pt-BR")} L</h3>
@@ -237,7 +238,7 @@ export default function AdminClientesPage() {
 
           <div>
             <h2 className="text-xl font-bold text-gray-800 mb-4">Documentos do Cliente</h2>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-opacity ${loading ? 'opacity-50' : ''}`}>
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-100">
