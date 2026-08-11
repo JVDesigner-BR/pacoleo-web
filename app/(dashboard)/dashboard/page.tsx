@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Droplet, Droplets, Zap, Leaf } from "lucide-react";
+import { Droplet, Droplets, Zap, Leaf, TrendingUp } from "lucide-react";
 import Image from "next/image";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState<"meu" | "global">("meu");
@@ -12,6 +13,7 @@ export default function DashboardPage() {
   const [globalFilter, setGlobalFilter] = useState<"todos" | "semana" | "mes">("todos");
   const [loading, setLoading] = useState(true);
   const [companyName, setCompanyName] = useState("");
+  const [chartData, setChartData] = useState<any[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -36,11 +38,35 @@ export default function DashboardPage() {
 
       const { data: coletas } = await supabase
         .from("coletas")
-        .select("litros_coletados");
+        .select("litros_coletados, data_coleta")
+        .eq("cliente_id", session.user.id);
         
       if (coletas) {
         const sum = coletas.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0);
         setMeuTotal(sum);
+        
+        // Build chart data grouped by month
+        const grouped: Record<string, number> = {};
+        coletas.forEach(c => {
+          if (!c.data_coleta) return;
+          const [ano, mes] = c.data_coleta.split("-");
+          const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+          const monthName = months[parseInt(mes, 10) - 1];
+          const key = `${monthName}/${ano.substring(2)}`;
+          grouped[key] = (grouped[key] || 0) + Number(c.litros_coletados);
+        });
+
+        // Ensure chronological order
+        const sortedKeys = Object.keys(grouped).sort((a, b) => {
+          const [mA, yA] = a.split("/");
+          const [mB, yB] = b.split("/");
+          const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+          if (yA !== yB) return Number(yA) - Number(yB);
+          return months.indexOf(mA) - months.indexOf(mB);
+        });
+
+        const formattedChartData = sortedKeys.map(k => ({ name: k, volume: grouped[k] }));
+        setChartData(formattedChartData);
       }
 
       // Impacto Global (sem RPC)
@@ -181,6 +207,55 @@ export default function DashboardPage() {
             </div>
 
           </div>
+
+          {/* GRÁFICO DE ANÁLISE (Aparece apenas na aba "Meu Impacto" para incentivar o cliente) */}
+          {tab === "meu" && chartData.length > 0 && (
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mt-8 relative overflow-hidden transition-all duration-500 hover:shadow-md">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="bg-[#3DB5D9]/10 p-3 rounded-xl text-[#3DB5D9]">
+                    <TrendingUp size={24} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 tracking-tight">Sua Evolução no Descarte</h3>
+                    <p className="text-sm text-gray-500 mt-1">Acompanhe seu histórico de volume de óleo reciclado por mês.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                    <XAxis 
+                      dataKey="name" 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#6B7280', fontSize: 13, fontWeight: 500 }} 
+                      dy={10} 
+                    />
+                    <YAxis 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#9CA3AF', fontSize: 12 }} 
+                      tickFormatter={(value) => `${value}L`}
+                    />
+                    <Tooltip 
+                      cursor={{ fill: '#f9fafb' }}
+                      contentStyle={{ borderRadius: '16px', border: '1px solid #f3f4f6', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '12px' }}
+                      labelStyle={{ fontWeight: 'bold', color: '#374151', marginBottom: '4px' }}
+                      itemStyle={{ color: '#3DB5D9', fontWeight: 600 }}
+                      formatter={(value: number) => [`${value.toLocaleString('pt-BR')} Litros`, 'Volume']}
+                    />
+                    <Bar dataKey="volume" radius={[6, 6, 0, 0]} maxBarSize={60}>
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={index === chartData.length - 1 ? '#3DB5D9' : '#bae6fd'} className="transition-all duration-300 hover:opacity-80" />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
 
           {/* ODS SECTION */}
           <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 mt-8 relative overflow-hidden">
