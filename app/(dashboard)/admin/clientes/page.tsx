@@ -158,29 +158,44 @@ export default function AdminClientesPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 print:hidden">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Selecione um Cliente para ver o relatório individual</h2>
         
-        <div className="flex flex-col gap-4 max-w-2xl">
+        <div className="relative max-w-2xl">
           <input 
             type="text" 
             placeholder="Buscar por ID, Nome ou CNPJ..." 
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] focus:outline-none"
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              if (selectedCliente) setSelectedCliente("");
+            }}
+            className="w-full border border-gray-300 rounded-md px-4 py-3 focus:ring-2 focus:ring-[#3DB5D9] focus:outline-none"
           />
-          <select 
-            value={selectedCliente} 
-            onChange={(e) => setSelectedCliente(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] focus:outline-none bg-white text-gray-800"
-          >
-            <option value="">-- Selecione --</option>
-            {clientes
-              .filter(c => 
-                c.nome_empresa.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                (c.cnpj && c.cnpj.includes(searchTerm))
-              )
-              .map(cliente => (
-                <option key={cliente.id} value={cliente.id}>{cliente.nome_empresa} ({cliente.cnpj || "Sem CNPJ"})</option>
-            ))}
-          </select>
+          
+          {searchTerm.length > 0 && !selectedCliente && (
+            <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+              {clientes
+                .filter(c => 
+                  c.nome_empresa.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                  (c.cnpj && c.cnpj.includes(searchTerm)) ||
+                  c.id.toString().includes(searchTerm)
+                )
+                .map(cliente => (
+                  <li 
+                    key={cliente.id} 
+                    onClick={() => {
+                      setSelectedCliente(cliente.id);
+                      setSearchTerm(`[${cliente.id}] ${cliente.nome_empresa}`);
+                    }}
+                    className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0 transition-colors"
+                  >
+                    <div className="font-medium text-gray-800">[{cliente.id}] {cliente.nome_empresa}</div>
+                    {cliente.cnpj && <div className="text-xs text-gray-500 mt-1">{cliente.cnpj}</div>}
+                  </li>
+              ))}
+              {clientes.filter(c => c.nome_empresa.toLowerCase().includes(searchTerm.toLowerCase()) || (c.cnpj && c.cnpj.includes(searchTerm)) || c.id.toString().includes(searchTerm)).length === 0 && (
+                <li className="px-4 py-3 text-sm text-gray-500">Nenhum cliente encontrado.</li>
+              )}
+            </ul>
+          )}
         </div>
         
         {clientes.length === 0 && !loading && (
