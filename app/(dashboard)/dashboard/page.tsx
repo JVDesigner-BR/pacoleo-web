@@ -139,44 +139,44 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             {/* Card 1 */}
-            <div className="group relative bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden hover:-translate-y-1">
-              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-gradient-to-br from-[#3DB5D9]/10 to-transparent rounded-full blur-2xl group-hover:bg-[#3DB5D9]/20 transition-all duration-500"></div>
+            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-50 to-[#3DB5D9]/10 rounded-2xl flex items-center justify-center mb-6 text-[#3DB5D9] shadow-sm border border-[#3DB5D9]/20 group-hover:scale-110 transition-transform duration-500">
-                  <Droplet size={36} strokeWidth={1.5} />
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                  <Droplet size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-4xl font-black text-gray-800 mb-2 tracking-tight">{currentTotal.toLocaleString("pt-BR")} <span className="text-2xl text-gray-400 font-medium">L</span></h3>
-                <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4"></div>
-                <p className="text-gray-900 font-bold text-lg mb-2">Óleo Reciclado</p>
-                <p className="text-sm text-gray-500 leading-relaxed">Volume total coletado de óleo vegetal que deixou de poluir a natureza.</p>
+                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{currentTotal.toLocaleString("pt-BR")} <span className="text-2xl text-white/80 font-medium">L</span></h3>
+                <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm">Óleo Reciclado</p>
+                <p className="text-sm text-white/90 leading-relaxed font-medium">Volume total coletado de óleo vegetal que deixou de poluir a natureza.</p>
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className="group relative bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden hover:-translate-y-1">
-              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-transparent rounded-full blur-2xl group-hover:bg-blue-400/20 transition-all duration-500"></div>
+            <div className="group relative bg-gradient-to-br from-[#268ca6] to-[#1d6b80] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-500 shadow-sm border border-blue-200 group-hover:scale-110 transition-transform duration-500">
-                  <Droplets size={36} strokeWidth={1.5} />
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                  <Droplets size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-4xl font-black text-gray-800 mb-2 tracking-tight">{(currentTotal * 25000).toLocaleString("pt-BR")} <span className="text-2xl text-gray-400 font-medium">L</span></h3>
-                <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4"></div>
-                <p className="text-gray-900 font-bold text-lg mb-2">Água Preservada</p>
-                <p className="text-sm text-gray-500 leading-relaxed">Evitamos a contaminação direta de mananciais hídricos com essa ação.</p>
+                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{(currentTotal * 25000).toLocaleString("pt-BR")} <span className="text-2xl text-white/80 font-medium">L</span></h3>
+                <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm">Água Preservada</p>
+                <p className="text-sm text-white/90 leading-relaxed font-medium">Evitamos a contaminação direta de mananciais hídricos com essa ação.</p>
               </div>
             </div>
 
             {/* Card 3 */}
-            <div className="group relative bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden hover:-translate-y-1">
-              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-gradient-to-br from-emerald-400/10 to-transparent rounded-full blur-2xl group-hover:bg-emerald-400/20 transition-all duration-500"></div>
+            <div className="group relative bg-gradient-to-br from-[#4dc2e2] to-[#2ba1c4] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl flex items-center justify-center mb-6 text-emerald-500 shadow-sm border border-emerald-200 group-hover:scale-110 transition-transform duration-500">
-                  <Zap size={36} strokeWidth={1.5} />
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                  <Zap size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-4xl font-black text-gray-800 mb-2 tracking-tight">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-2xl text-gray-400 font-medium">L</span></h3>
-                <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4"></div>
-                <p className="text-gray-900 font-bold text-lg mb-2">Biodiesel Gerado</p>
-                <p className="text-sm text-gray-500 leading-relaxed">Apoiamos a produção de energia limpa e renovável para o futuro.</p>
+                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-2xl text-white/80 font-medium">L</span></h3>
+                <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm">Biodiesel Gerado</p>
+                <p className="text-sm text-white/90 leading-relaxed font-medium">Apoiamos a produção de energia limpa e renovável para o futuro.</p>
               </div>
             </div>
 
