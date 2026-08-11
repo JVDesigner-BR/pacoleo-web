@@ -78,6 +78,7 @@ export async function createClientAccount(formData: FormData) {
 export async function getGlobalImpact(startDate?: string, endDate?: string) {
   try {
     let totalLitros = 0;
+    let totalColetas = 0;
     let from = 0;
     const limit = 1000;
     
@@ -105,6 +106,7 @@ export async function getGlobalImpact(startDate?: string, endDate?: string) {
       
       const sum = data.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0);
       totalLitros += sum;
+      totalColetas += data.length;
       
       if (data.length < limit) break;
       from += limit;
@@ -126,14 +128,12 @@ export async function getGlobalImpact(startDate?: string, endDate?: string) {
     const { data: minData } = await minQuery;
     const { data: maxData } = await maxQuery;
     
-    let minDate = "";
-    let maxDate = "";
-    if (minData && minData.length > 0) minDate = minData[0].data_coleta;
-    if (maxData && maxData.length > 0) maxDate = maxData[0].data_coleta;
+    const minDate = minData && minData.length > 0 ? minData[0].data_coleta : null;
+    const maxDate = maxData && maxData.length > 0 ? maxData[0].data_coleta : null;
     
-    return { success: true, totalLitros, minDate, maxDate };
+    return { success: true, totalLitros, totalColetas, minDate, maxDate };
   } catch (error: any) {
-    console.error("Exception in getGlobalImpact:", error);
-    return { success: false, totalLitros: 0, minDate: "", maxDate: "" };
+    console.error("Unexpected error in getGlobalImpact:", error);
+    return { success: false, error: error.message };
   }
 }

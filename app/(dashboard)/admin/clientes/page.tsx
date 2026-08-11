@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Droplet, Droplets, Zap, ExternalLink, Plus, X } from "lucide-react";
+import { Droplet, Droplets, Zap, ExternalLink, Plus, X, Truck } from "lucide-react";
 import { createClientAccount, getGlobalImpact } from "./actions";
 
 export default function AdminClientesPage() {
@@ -12,6 +12,7 @@ export default function AdminClientesPage() {
   const [loading, setLoading] = useState(true);
   
   const [globalTotal, setGlobalTotal] = useState(0);
+  const [globalColetas, setGlobalColetas] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -44,7 +45,8 @@ export default function AdminClientesPage() {
   const fetchGlobalImpact = async (start?: string, end?: string) => {
     const res = await getGlobalImpact(start, end);
     if (res.success) {
-      setGlobalTotal(res.totalLitros);
+      setGlobalTotal(res.totalLitros || 0);
+      setGlobalColetas(res.totalColetas || 0);
     }
   };
 
@@ -63,6 +65,7 @@ export default function AdminClientesPage() {
     
     const { data: coletas } = await coletasQuery;
     const totalLitros = coletas ? coletas.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0) : 0;
+    const totalColetas = coletas ? coletas.length : 0;
 
     let docsQuery = supabase.from("documentos").select("*").eq("cliente_id", clienteId).order("data_referencia", { ascending: false });
     if (start) docsQuery = docsQuery.gte("data_referencia", start);
@@ -70,7 +73,7 @@ export default function AdminClientesPage() {
     
     const { data: documentos } = await docsQuery;
 
-    setClienteData({ totalLitros, documentos: documentos || [] });
+    setClienteData({ totalLitros, totalColetas, documentos: documentos || [] });
     setLoading(false);
   };
 
@@ -130,7 +133,11 @@ export default function AdminClientesPage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">
+              <p className="text-white/70 text-sm font-medium mb-1">Coletas Realizadas</p>
+              <h3 className="text-3xl font-bold">{globalColetas}</h3>
+            </div>
             <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">
               <p className="text-white/70 text-sm font-medium mb-1">Total de Óleo Reciclado</p>
               <h3 className="text-3xl font-bold">{globalTotal.toLocaleString("pt-BR")} L</h3>
@@ -217,7 +224,12 @@ export default function AdminClientesPage() {
               </div>
             </div>
             
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-opacity ${loading ? 'opacity-50' : ''}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-opacity ${loading ? 'opacity-50' : ''}`}>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-3 text-amber-500"><Truck size={24} /></div>
+                <h3 className="text-2xl font-bold text-gray-800">{clienteData.totalColetas}</h3>
+                <p className="text-sm text-gray-600 font-medium">Coletas Realizadas</p>
+              </div>
               <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-[#3DB5D9]/10 rounded-full flex items-center justify-center mb-3 text-[#3DB5D9]"><Droplet size={24} /></div>
                 <h3 className="text-2xl font-bold text-gray-800">{clienteData.totalLitros.toLocaleString("pt-BR")} L</h3>
