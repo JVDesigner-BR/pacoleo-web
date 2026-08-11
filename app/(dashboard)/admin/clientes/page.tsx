@@ -331,32 +331,107 @@ export default function AdminClientesPage() {
       {!clienteData && loading && selectedCliente && <div className="text-center text-gray-500 py-10">Carregando dados do cliente...</div>}
 
       {clienteData && (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {/* HEADER EXCLUSIVO PARA IMPRESSÃO */}
-          <div className="hidden print:flex flex-col mb-10 pb-6 border-b-2 border-[#3DB5D9]">
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex items-center gap-3 text-[#3DB5D9]">
-                <img src="/logo-pacman.png" alt="PacOleo Logo" className="h-10 w-auto object-contain" />
-                <h1 className="text-3xl font-black tracking-tight">PacOleo</h1>
-              </div>
-              <div className="text-right">
-                <h2 className="text-xl font-bold text-gray-800 uppercase tracking-widest">Relatório de Impacto Ambiental</h2>
-                <p className="text-sm text-gray-500 mt-1">
-                  Data de Emissão: {new Date().toLocaleDateString('pt-BR')}
-                </p>
-              </div>
+        <>
+          {/* NOVO RELATÓRIO PÔSTER EXCLUSIVO PARA IMPRESSÃO */}
+          <div className="hidden print:flex flex-col w-[210mm] h-[297mm] bg-white font-sans overflow-hidden mx-auto">
+            {/* Título Principal */}
+            <div className="bg-[#3DB5D9] text-white py-8 px-4 text-center border-b-4 border-white shrink-0">
+              <h1 className="text-5xl font-bold tracking-tight uppercase" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.2)' }}>Relatório Impacto Positivo</h1>
             </div>
             
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Cliente</p>
-              <h3 className="text-lg font-bold text-gray-900">
-                [{clienteData.id}] {clienteData.nome_empresa}
-              </h3>
-              {clienteData.cnpj && (
-                <p className="text-sm text-gray-600 mt-1">CNPJ: {clienteData.cnpj}</p>
-              )}
+            {/* Parabéns */}
+            <div className="bg-[#3DB5D9] text-white flex items-center justify-center py-10 px-8 border-b-4 border-white shrink-0 relative overflow-hidden">
+              <div className="w-56 h-56 bg-white rounded-full flex flex-col items-center justify-center p-4 shadow-xl z-10 shrink-0 border-8 border-gray-100">
+                <span className="text-xl font-bold uppercase text-gray-400">Cliente</span>
+                <span className="text-2xl font-black text-[#3DB5D9] text-center mt-2 leading-tight px-2">{clienteData.nome_empresa}</span>
+              </div>
+              <div className="ml-10 z-10">
+                <h2 className="text-4xl font-light">
+                  <span className="font-bold">Parabéns</span> por fazer parte dessa mudança!
+                </h2>
+              </div>
+            </div>
+
+            {/* Métricas Principais */}
+            <div className="grid grid-cols-2 border-b-4 border-white shrink-0">
+              <div className="bg-[#3DB5D9] text-white p-10 flex flex-col items-center text-center justify-center relative border-r-4 border-white">
+                <h3 className="text-3xl font-light mb-4">Foram coletados</h3>
+                <div className="flex items-end gap-2 my-2">
+                  <span className="text-8xl font-bold tracking-tighter" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>{clienteData.totalLitros}</span>
+                  <span className="text-3xl font-light mb-3">litros</span>
+                </div>
+                <p className="text-3xl font-light mt-4 leading-tight">
+                  de óleo e enviados<br/>para um <span className="font-bold">descarte<br/>ambientalmente correto.</span>
+                </p>
+              </div>
+              
+              <div className="bg-[#3DB5D9] text-white p-10 flex flex-col items-center text-center justify-center relative">
+                <h3 className="text-3xl font-light mb-4">Com isso,<br/><span className="font-bold">evitamos que</span></h3>
+                <div className="flex items-end gap-2 my-2">
+                  <span className="text-7xl font-bold tracking-tighter" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>{(clienteData.totalLitros * 25000).toLocaleString("pt-BR")}</span>
+                  <span className="text-3xl font-light mb-3">litros</span>
+                </div>
+                <p className="text-3xl font-light mt-4 leading-tight">
+                  de água fossem<br/><span className="font-bold">contaminados.</span>
+                </p>
+                <div className="absolute bottom-6 right-6 flex opacity-90">
+                  <Droplet size={80} className="fill-blue-200 text-blue-100" />
+                  <Droplet size={50} className="fill-blue-100 text-blue-50 -ml-4 mt-8" />
+                </div>
+              </div>
+            </div>
+
+            {/* Biodiesel */}
+            <div className="bg-[#3DB5D9] text-white py-10 px-6 text-center border-b-4 border-white flex items-center justify-center gap-4 shrink-0">
+              <h3 className="text-3xl font-light">Ainda, <span className="font-bold">apoiamos</span> a produção de</h3>
+              <span className="text-6xl font-bold mx-2" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{(clienteData.totalLitros * 0.8).toLocaleString("pt-BR")}</span>
+              <span className="text-2xl font-light">litros</span>
+              <h3 className="text-3xl font-bold ml-2">de biodiesel.</h3>
+            </div>
+
+            {/* ODS */}
+            <div className="bg-[#3DB5D9] flex-1 text-white py-10 px-8 flex flex-col items-center justify-center border-b-4 border-white">
+              <h3 className="text-3xl font-light mb-10">Que contribuíram para apoiar os seguintes ODS</h3>
+              <div className="flex gap-8 justify-center">
+                <div className="w-40 h-40 bg-[#26BDE2] flex flex-col items-center justify-center text-white font-bold p-3 text-center border-2 border-white">
+                  <div className="text-5xl">6</div>
+                  <div className="text-xs leading-tight mt-2 mb-3">ÁGUA POTÁVEL<br/>E SANEAMENTO</div>
+                  <Droplet size={36} className="fill-white" />
+                </div>
+                <div className="w-40 h-40 bg-[#BF8B2E] flex flex-col items-center justify-center text-white font-bold p-3 text-center border-2 border-white">
+                  <div className="text-5xl">12</div>
+                  <div className="text-xs leading-tight mt-2 mb-3">CONSUMO E<br/>PRODUÇÃO<br/>RESPONSÁVEIS</div>
+                  <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L15.17 9l1.41 1.41L19 7.59l-2.42-2.42-1.41 1.41 1.42 1.42zM7 16.41l2.42-2.42-1.41-1.41L5 15.59l2.42 2.42 1.41-1.41L7 15.41v1z"/></svg>
+                </div>
+                <div className="w-40 h-40 bg-[#3F7E44] flex flex-col items-center justify-center text-white font-bold p-3 text-center border-2 border-white">
+                  <div className="text-5xl">13</div>
+                  <div className="text-xs leading-tight mt-2 mb-3">AÇÃO CONTRA A<br/>MUDANÇA GLOBAL<br/>DO CLIMA</div>
+                  <div className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-sm">🌍</div>
+                </div>
+                <div className="w-40 h-40 bg-[#0A97D9] flex flex-col items-center justify-center text-white font-bold p-3 text-center border-2 border-white">
+                  <div className="text-5xl">14</div>
+                  <div className="text-xs leading-tight mt-2 mb-3">VIDA NA<br/>ÁGUA</div>
+                  <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-5.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-[#3DB5D9] text-white py-12 px-10 flex justify-between items-end relative overflow-hidden shrink-0">
+              <div className="z-10">
+                <h2 className="text-3xl font-bold mb-2">Só na Pac Óleo você transforma óleo em ODS</h2>
+                <h3 className="text-2xl font-light mb-6">Objetivos de Desenvolvimento Sustentável</h3>
+                <p className="text-3xl font-bold">Venha fazer parte desse impacto!</p>
+              </div>
+              <div className="absolute right-0 bottom-0 w-2/5 h-full bg-white" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }}></div>
+              <div className="z-10 flex items-center gap-3 text-[#3DB5D9] pr-6 pb-2">
+                <img src="/logo-pacman.png" alt="PacOleo Logo" className="h-16 w-auto object-contain" />
+                <h1 className="text-5xl font-black tracking-tight">PacOleo</h1>
+              </div>
             </div>
           </div>
+
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 print:hidden">
 
           <div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
@@ -504,27 +579,8 @@ export default function AdminClientesPage() {
             </div>
           </div>
 
-          {/* RODAPÉ E ASSINATURA EXCLUSIVO PARA IMPRESSÃO */}
-          <div className="hidden print:block mt-32">
-            <div className="flex justify-around items-end">
-              <div className="text-center w-64">
-                <div className="border-b border-gray-400 mb-2"></div>
-                <p className="text-sm font-semibold text-gray-800">Assinatura do Cliente</p>
-                <p className="text-xs text-gray-500">{clienteData.nome_empresa}</p>
-              </div>
-              <div className="text-center w-64">
-                <div className="border-b border-gray-400 mb-2"></div>
-                <p className="text-sm font-semibold text-gray-800">PacOleo</p>
-                <p className="text-xs text-gray-500">Gestão Ambiental</p>
-              </div>
-            </div>
-            
-            <div className="mt-16 text-center text-xs text-gray-400 border-t border-gray-200 pt-4">
-              <p>Este relatório ambiental foi gerado eletronicamente e contém o resumo das atividades de coleta e destinação sustentável de óleo vegetal usado.</p>
-              <p className="mt-1">© {new Date().getFullYear()} PacOleo. Todos os direitos reservados.</p>
-            </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* MODAL NOVO CLIENTE */}
