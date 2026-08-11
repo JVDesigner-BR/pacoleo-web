@@ -79,7 +79,7 @@ export default function AdminClientesPage() {
     setDriveError("");
     setDriveFolderId(null);
     try {
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzYMl1CODpTUwqR0MIg33G5XszM05Gizs4xofy0z0PaUF4TwLd5AP9WkUvWKYwQCScG/exec";
+      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby51b908_XmHDtgPbkJHcDDVk8Kzl77dueuP5TZ8jfcG1Qxc50Nmhd9XRhUhTCPRpKm/exec";
       const res = await fetch(`${WEB_APP_URL}?clientId=${id}`);
       const data = await res.json();
       if (data.success && data.folderId) {
