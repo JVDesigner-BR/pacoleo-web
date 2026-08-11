@@ -183,11 +183,11 @@ export default function AdminClientesPage() {
                     key={cliente.id} 
                     onClick={() => {
                       setSelectedCliente(cliente.id);
-                      setSearchTerm(`[${cliente.id}] ${cliente.nome_empresa}`);
+                      setSearchTerm(cliente.nome_empresa);
                     }}
                     className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0 transition-colors"
                   >
-                    <div className="font-medium text-gray-800">[{cliente.id}] {cliente.nome_empresa}</div>
+                    <div className="font-medium text-gray-800">{cliente.nome_empresa}</div>
                     {cliente.cnpj && <div className="text-xs text-gray-500 mt-1">{cliente.cnpj}</div>}
                   </li>
               ))}
