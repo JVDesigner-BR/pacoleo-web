@@ -11,6 +11,10 @@ export default function AdminClientesPage() {
   const [clienteData, setClienteData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   
+  const [driveFolderId, setDriveFolderId] = useState<string | null>(null);
+  const [loadingDrive, setLoadingDrive] = useState(false);
+  const [driveError, setDriveError] = useState("");
+  
   const [globalTotal, setGlobalTotal] = useState(0);
   const [globalColetas, setGlobalColetas] = useState(0);
   const [globalInsights, setGlobalInsights] = useState<any>(null);
@@ -38,10 +42,22 @@ export default function AdminClientesPage() {
   useEffect(() => {
     if (selectedCliente) {
       fetchClienteData(selectedCliente, clientStartDate, clientEndDate);
+      
+      const clienteObj = clientes.find(c => c.id === selectedCliente);
+      if (clienteObj) {
+        const match = clienteObj.nome_empresa.match(/^\[(\d+)\]/);
+        if (match) {
+          fetchDriveFolder(match[1]);
+        } else {
+          setDriveFolderId(null);
+          setDriveError("Cliente não possui ID numérico no nome.");
+        }
+      }
     } else {
       setClienteData(null);
+      setDriveFolderId(null);
     }
-  }, [selectedCliente, clientStartDate, clientEndDate]);
+  }, [selectedCliente, clientStartDate, clientEndDate, clientes]);
 
   const fetchGlobalImpact = async (start?: string, end?: string) => {
     const res = await getGlobalImpact(start, end);
@@ -56,6 +72,26 @@ export default function AdminClientesPage() {
     const { data } = await supabase.from("clientes").select("id, nome_empresa, cnpj").eq("nivel_acesso", "cliente").order("nome_empresa");
     if (data) setClientes(data);
     setLoading(false);
+  };
+
+  const fetchDriveFolder = async (id: string) => {
+    setLoadingDrive(true);
+    setDriveError("");
+    setDriveFolderId(null);
+    try {
+      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzYMl1CODpTUwqR0MIg33G5XszM05Gizs4xofy0z0PaUF4TwLd5AP9WkUvWKYwQCScG/exec";
+      const res = await fetch(`${WEB_APP_URL}?clientId=${id}`);
+      const data = await res.json();
+      if (data.success && data.folderId) {
+        setDriveFolderId(data.folderId);
+      } else {
+        setDriveError(data.error || "Pasta não encontrada.");
+      }
+    } catch (e: any) {
+      setDriveError("Erro de conexão ao buscar a pasta no Google Drive.");
+    } finally {
+      setLoadingDrive(false);
+    }
   };
 
   const fetchClienteData = async (clienteId: string, start?: string, end?: string) => {
@@ -310,7 +346,24 @@ export default function AdminClientesPage() {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Documentos do Cliente</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Pastas do Cliente (Google Drive)</h2>
+            <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-opacity mb-8 ${loadingDrive ? 'opacity-50' : ''}`}>
+              {loadingDrive ? (
+                <div className="py-16 text-center text-gray-500 animate-pulse">Procurando pasta no Google Drive...</div>
+              ) : driveFolderId ? (
+                <iframe 
+                  src={`https://drive.google.com/embeddedfolderview?id=${driveFolderId}#list`}
+                  style={{ width: '100%', height: '500px', border: 'none' }}
+                  title="Pasta do Cliente no Google Drive"
+                ></iframe>
+              ) : (
+                <div className="py-16 text-center text-gray-500 bg-gray-50">
+                  {driveError || "Nenhuma pasta encontrada para este cliente."}
+                </div>
+              )}
+            </div>
+
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Documentos Avulsos (Antigo)</h2>
             <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-opacity ${loading ? 'opacity-50' : ''}`}>
               <table className="w-full text-left border-collapse">
                 <thead>
