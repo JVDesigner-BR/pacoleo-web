@@ -3,15 +3,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Droplet, Droplets, Zap, ExternalLink, Plus, X } from "lucide-react";
-import { createClientAccount, getGlobalImpact } from "./actions";
+import { createClientAccount, getGlobalImpact, PeriodFilter } from "./actions";
 
 export default function AdminClientesPage() {
   const [clientes, setClientes] = useState<{id: string, nome_empresa: string, cnpj: string}[]>([]);
   const [selectedCliente, setSelectedCliente] = useState<string>("");
   const [clienteData, setClienteData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  
   const [globalTotal, setGlobalTotal] = useState(0);
   const [globalPeriod, setGlobalPeriod] = useState("");
+  const [globalFilter, setGlobalFilter] = useState<PeriodFilter>("total");
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +22,10 @@ export default function AdminClientesPage() {
   const [createdCredentials, setCreatedCredentials] = useState<{email: string, password: string} | null>(null);
 
   useEffect(() => {
-    fetchGlobalImpact();
+    fetchGlobalImpact(globalFilter);
+  }, [globalFilter]);
+
+  useEffect(() => {
     fetchClientes();
   }, []);
 
@@ -32,8 +37,8 @@ export default function AdminClientesPage() {
     }
   }, [selectedCliente]);
 
-  const fetchGlobalImpact = async () => {
-    const res = await getGlobalImpact();
+  const fetchGlobalImpact = async (filter: PeriodFilter) => {
+    const res = await getGlobalImpact(filter);
     if (res.success) {
       setGlobalTotal(res.totalLitros);
       
@@ -102,13 +107,24 @@ export default function AdminClientesPage() {
         </div>
 
         <div className="bg-gradient-to-r from-[#3DB5D9] to-blue-500 rounded-xl p-6 text-white shadow-lg relative">
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h2 className="text-lg font-semibold text-white/90">Impacto Global da Plataforma</h2>
-            {globalPeriod && (
-              <div className="bg-white/20 px-3 py-1 rounded-full text-xs font-medium border border-white/30 backdrop-blur-sm">
-                Período total: {globalPeriod}
-              </div>
-            )}
+            <div className="flex items-center gap-3">
+              {globalPeriod && (
+                <div className="bg-white/20 px-3 py-1.5 rounded-full text-xs font-medium border border-white/30 backdrop-blur-sm">
+                  {globalPeriod}
+                </div>
+              )}
+              <select
+                value={globalFilter}
+                onChange={(e) => setGlobalFilter(e.target.value as PeriodFilter)}
+                className="bg-white/20 border border-white/30 text-white text-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-white/50 cursor-pointer backdrop-blur-sm [&>option]:text-gray-800"
+              >
+                <option value="total">Período Total</option>
+                <option value="1_mes">Último Mês</option>
+                <option value="1_semana">Última Semana</option>
+              </select>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">

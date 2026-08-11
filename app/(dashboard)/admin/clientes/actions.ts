@@ -75,17 +75,33 @@ export async function createClientAccount(formData: FormData) {
   }
 }
 
-export async function getGlobalImpact() {
+export type PeriodFilter = "1_semana" | "1_mes" | "total";
+
+export async function getGlobalImpact(period: PeriodFilter = "total") {
   try {
+    let minDateThreshold: string | null = null;
+    if (period !== "total") {
+       const date = new Date();
+       if (period === "1_semana") date.setDate(date.getDate() - 7);
+       if (period === "1_mes") date.setMonth(date.getMonth() - 1);
+       minDateThreshold = date.toISOString().split('T')[0];
+    }
+
     let totalLitros = 0;
     let from = 0;
     const limit = 1000;
     
     while (true) {
-      const { data, error } = await supabaseAdmin
+      let query = supabaseAdmin
         .from("coletas")
         .select("litros_coletados")
         .range(from, from + limit - 1);
+      
+      if (minDateThreshold) {
+        query = query.gte("data_coleta", minDateThreshold);
+      }
+        
+      const { data, error } = await query;
         
       if (error) {
         console.error("Erro fetchGlobalImpact:", error);
@@ -102,8 +118,16 @@ export async function getGlobalImpact() {
     }
     
     // Fetch min and max dates
-    const { data: minData } = await supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: true }).limit(1);
-    const { data: maxData } = await supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: false }).limit(1);
+    let minQuery = supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: true }).limit(1);
+    let maxQuery = supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: false }).limit(1);
+
+    if (minDateThreshold) {
+      minQuery = minQuery.gte("data_coleta", minDateThreshold);
+      maxQuery = maxQuery.gte("data_coleta", minDateThreshold);
+    }
+
+    const { data: minData } = await minQuery;
+    const { data: maxData } = await maxQuery;
     
     let minDate = "";
     let maxDate = "";
