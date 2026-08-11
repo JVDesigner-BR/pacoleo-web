@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Droplet, Droplets, Zap } from "lucide-react";
+import { Droplet, Droplets, Zap, Leaf } from "lucide-react";
+import Image from "next/image";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState<"meu" | "global">("meu");
@@ -32,6 +33,7 @@ export default function DashboardPage() {
         // Remove the numeric ID prefix (e.g. "[204] ") from the company name
         setCompanyName(cliente.nome_empresa.replace(/^\[\d+\]\s*/, ''));
       }
+
       const { data: coletas } = await supabase
         .from("coletas")
         .select("litros_coletados");
@@ -72,113 +74,156 @@ export default function DashboardPage() {
   const currentTotal = tab === "meu" ? meuTotal : globalTotal;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="max-w-6xl mx-auto space-y-8">
+      {/* HEADER SECTION */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-gray-100">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Dashboard de Impacto</h1>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-[#3DB5D9]/10 p-2 rounded-lg text-[#3DB5D9]">
+              <Leaf size={24} />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Dashboard de Impacto</h1>
+          </div>
           {tab === "meu" && (
-            <p className="text-gray-500 mt-1">Olá, <span className="font-semibold text-[#3DB5D9]">{companyName}</span>, parabéns por fazer parte dessa mudança!</p>
+            <p className="text-gray-500 text-lg">Olá, <span className="font-semibold text-[#3DB5D9]">{companyName}</span>, que bom ter você conosco nessa jornada sustentável!</p>
           )}
           {tab === "global" && (
-            <p className="text-gray-500 mt-1">Veja o impacto positivo gerado por toda a rede PacÓleo.</p>
+            <p className="text-gray-500 text-lg">Veja o impacto positivo gerado por toda a comunidade PacÓleo.</p>
           )}
         </div>
         
-        <div className="flex bg-gray-200 p-1 rounded-lg">
+        <div className="flex bg-gray-100/80 p-1.5 rounded-xl border border-gray-200/50 shadow-sm backdrop-blur-sm">
           <button 
             onClick={() => setTab("meu")}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${tab === "meu" ? "bg-white shadow text-[#3DB5D9]" : "text-gray-600 hover:text-gray-900"}`}
+            className={`px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${tab === "meu" ? "bg-white shadow-md text-[#3DB5D9] scale-100" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200/50 scale-95"}`}
           >
             Meu Impacto
           </button>
           <button 
             onClick={() => setTab("global")}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${tab === "global" ? "bg-white shadow text-[#3DB5D9]" : "text-gray-600 hover:text-gray-900"}`}
+            className={`px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${tab === "global" ? "bg-white shadow-md text-[#3DB5D9] scale-100" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200/50 scale-95"}`}
           >
-            Impacto Global PacÓleo
+            Rede PacÓleo
           </button>
         </div>
       </div>
 
       {tab === "global" && (
-        <div className="flex justify-end gap-2">
-          <select 
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value as any)}
-            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#3DB5D9]"
-          >
-            <option value="todos">Todo o Período</option>
-            <option value="mes">Este Mês</option>
-            <option value="semana">Esta Semana</option>
-          </select>
+        <div className="flex justify-end gap-2 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="relative">
+            <select 
+              value={globalFilter}
+              onChange={(e) => setGlobalFilter(e.target.value as any)}
+              className="appearance-none bg-white border border-gray-200 rounded-lg pl-4 pr-10 py-2 text-sm font-medium text-gray-700 outline-none focus:ring-2 focus:ring-[#3DB5D9]/20 focus:border-[#3DB5D9] shadow-sm transition-all"
+            >
+              <option value="todos">Todo o Período</option>
+              <option value="mes">Este Mês</option>
+              <option value="semana">Esta Semana</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
         </div>
       )}
 
       {loading ? (
-        <div className="py-20 text-center text-gray-500">Calculando impacto...</div>
+        <div className="py-32 flex flex-col items-center justify-center space-y-4">
+          <div className="w-12 h-12 border-4 border-[#3DB5D9]/20 border-t-[#3DB5D9] rounded-full animate-spin"></div>
+          <p className="text-gray-500 font-medium animate-pulse">Calculando o impacto ambiental...</p>
+        </div>
       ) : (
-        <div id="impact-report" className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+          
+          {/* CARDS DE IMPACTO */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             {/* Card 1 */}
-            <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center transition-transform hover:-translate-y-1">
-              <div className="w-16 h-16 bg-[#3DB5D9]/10 rounded-full flex items-center justify-center mb-4 text-[#3DB5D9]">
-                <Droplet size={32} />
+            <div className="group relative bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden hover:-translate-y-1">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-gradient-to-br from-[#3DB5D9]/10 to-transparent rounded-full blur-2xl group-hover:bg-[#3DB5D9]/20 transition-all duration-500"></div>
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-50 to-[#3DB5D9]/10 rounded-2xl flex items-center justify-center mb-6 text-[#3DB5D9] shadow-sm border border-[#3DB5D9]/20 group-hover:scale-110 transition-transform duration-500">
+                  <Droplet size={36} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-4xl font-black text-gray-800 mb-2 tracking-tight">{currentTotal.toLocaleString("pt-BR")} <span className="text-2xl text-gray-400 font-medium">L</span></h3>
+                <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4"></div>
+                <p className="text-gray-900 font-bold text-lg mb-2">Óleo Reciclado</p>
+                <p className="text-sm text-gray-500 leading-relaxed">Volume total coletado de óleo vegetal que deixou de poluir a natureza.</p>
               </div>
-              <h3 className="text-3xl font-bold text-gray-800 mb-1">{currentTotal.toLocaleString("pt-BR")} L</h3>
-              <p className="text-gray-600 font-medium">Óleo Reciclado</p>
-              <p className="text-xs text-gray-400 mt-2">Volume total coletado de óleo vegetal usado.</p>
             </div>
 
             {/* Card 2 */}
-            <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center transition-transform hover:-translate-y-1">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-500">
-                <Droplets size={32} />
+            <div className="group relative bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden hover:-translate-y-1">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-transparent rounded-full blur-2xl group-hover:bg-blue-400/20 transition-all duration-500"></div>
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-500 shadow-sm border border-blue-200 group-hover:scale-110 transition-transform duration-500">
+                  <Droplets size={36} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-4xl font-black text-gray-800 mb-2 tracking-tight">{(currentTotal * 25000).toLocaleString("pt-BR")} <span className="text-2xl text-gray-400 font-medium">L</span></h3>
+                <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4"></div>
+                <p className="text-gray-900 font-bold text-lg mb-2">Água Preservada</p>
+                <p className="text-sm text-gray-500 leading-relaxed">Evitamos a contaminação direta de mananciais hídricos com essa ação.</p>
               </div>
-              <h3 className="text-3xl font-bold text-gray-800 mb-1">{(currentTotal * 25000).toLocaleString("pt-BR")} L</h3>
-              <p className="text-gray-600 font-medium">Água Preservada</p>
-              <p className="text-xs text-gray-400 mt-2">Evitamos a contaminação deste volume de água.</p>
             </div>
 
             {/* Card 3 */}
-            <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center transition-transform hover:-translate-y-1">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-500">
-                <Zap size={32} />
+            <div className="group relative bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden hover:-translate-y-1">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-gradient-to-br from-emerald-400/10 to-transparent rounded-full blur-2xl group-hover:bg-emerald-400/20 transition-all duration-500"></div>
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl flex items-center justify-center mb-6 text-emerald-500 shadow-sm border border-emerald-200 group-hover:scale-110 transition-transform duration-500">
+                  <Zap size={36} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-4xl font-black text-gray-800 mb-2 tracking-tight">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-2xl text-gray-400 font-medium">L</span></h3>
+                <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4"></div>
+                <p className="text-gray-900 font-bold text-lg mb-2">Biodiesel Gerado</p>
+                <p className="text-sm text-gray-500 leading-relaxed">Apoiamos a produção de energia limpa e renovável para o futuro.</p>
               </div>
-              <h3 className="text-3xl font-bold text-gray-800 mb-1">{(currentTotal * 0.8).toLocaleString("pt-BR")} L</h3>
-              <p className="text-gray-600 font-medium">Biodiesel Gerado</p>
-              <p className="text-xs text-gray-400 mt-2">Apoiamos a produção de energia limpa e renovável.</p>
             </div>
 
           </div>
 
-          <div className="mt-12 border-t pt-8">
-            <p className="text-center text-sm font-semibold text-gray-500 mb-4 uppercase tracking-wider">Alinhado com os Objetivos de Desenvolvimento Sustentável (ONU)</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {/* SDG 6 */}
-              <div className="bg-[#26bde2] text-white w-20 h-20 rounded-md flex flex-col items-center justify-center p-2 text-center shadow">
-                <span className="font-bold text-lg leading-none">6</span>
-                <span className="text-[10px] leading-tight mt-1">ÁGUA POTÁVEL</span>
+          {/* ODS SECTION */}
+          <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 mt-8 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#3DB5D9] via-emerald-400 to-blue-500"></div>
+            
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <h3 className="text-2xl font-bold text-gray-800 mb-3">Compromisso com o Futuro</h3>
+              <p className="text-gray-500">
+                A sua contribuição está diretamente alinhada aos <span className="font-semibold text-gray-700">Objetivos de Desenvolvimento Sustentável (ODS)</span> definidos pelas Nações Unidas (ONU).
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
+              <div className="group flex flex-col items-center">
+                <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+                  <Image src="/ods/ods6.jpeg" alt="ODS 6 - Água Potável" fill className="object-cover" />
+                </div>
               </div>
-              {/* SDG 12 */}
-              <div className="bg-[#bf8b2e] text-white w-20 h-20 rounded-md flex flex-col items-center justify-center p-2 text-center shadow">
-                <span className="font-bold text-lg leading-none">12</span>
-                <span className="text-[10px] leading-tight mt-1">CONSUMO RESPONSÁVEL</span>
+              
+              <div className="group flex flex-col items-center">
+                <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+                  <Image src="/ods/ods12.jpeg" alt="ODS 12 - Consumo Responsável" fill className="object-cover" />
+                </div>
               </div>
-              {/* SDG 13 */}
-              <div className="bg-[#3f7e44] text-white w-20 h-20 rounded-md flex flex-col items-center justify-center p-2 text-center shadow">
-                <span className="font-bold text-lg leading-none">13</span>
-                <span className="text-[10px] leading-tight mt-1">AÇÃO CONTRA CLIMA</span>
+              
+              <div className="group flex flex-col items-center">
+                <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+                  <Image src="/ods/ods13.jpeg" alt="ODS 13 - Ação Contra Clima" fill className="object-cover" />
+                </div>
               </div>
-              {/* SDG 14 */}
-              <div className="bg-[#0a97d9] text-white w-20 h-20 rounded-md flex flex-col items-center justify-center p-2 text-center shadow">
-                <span className="font-bold text-lg leading-none">14</span>
-                <span className="text-[10px] leading-tight mt-1">VIDA NA ÁGUA</span>
+              
+              <div className="group flex flex-col items-center">
+                <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+                  <Image src="/ods/ods14.jpeg" alt="ODS 14 - Vida na Água" fill className="object-cover" />
+                </div>
               </div>
             </div>
           </div>
+          
         </div>
       )}
     </div>
   );
 }
+
