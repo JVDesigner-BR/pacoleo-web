@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Droplet, Droplets, Zap, Leaf, TrendingUp } from "lucide-react";
+import { Droplet, Droplets, Zap, Leaf, TrendingUp, Fuel } from "lucide-react";
 import Image from "next/image";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
 
@@ -102,7 +102,7 @@ export default function DashboardPage() {
             <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-yellow-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Droplet size={36} strokeWidth={2} />
                 </div>
                 <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{currentTotal.toLocaleString("pt-BR")} <span className="text-2xl text-white/80 font-medium">L</span></h3>
@@ -113,7 +113,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Card 2 */}
-            <div className="group relative bg-gradient-to-br from-[#268ca6] to-[#1d6b80] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
@@ -127,11 +127,11 @@ export default function DashboardPage() {
             </div>
 
             {/* Card 3 */}
-            <div className="group relative bg-gradient-to-br from-[#4dc2e2] to-[#2ba1c4] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
-                  <Zap size={36} strokeWidth={2} />
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-red-500 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                  <Fuel size={36} strokeWidth={2} />
                 </div>
                 <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-2xl text-white/80 font-medium">L</span></h3>
                 <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
