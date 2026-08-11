@@ -82,10 +82,14 @@ export async function getGlobalImpact(startDate?: string, endDate?: string) {
     let from = 0;
     const limit = 1000;
     
+    // Insights stats
+    const clientStats: Record<string, { litros: number, coletas: number }> = {};
+    let largestCollection = { clienteId: "", litros: 0 };
+    
     while (true) {
       let query = supabaseAdmin
         .from("coletas")
-        .select("litros_coletados")
+        .select("litros_coletados, cliente_id")
         .range(from, from + limit - 1);
       
       if (startDate) {
@@ -104,14 +108,40 @@ export async function getGlobalImpact(startDate?: string, endDate?: string) {
       
       if (!data || data.length === 0) break;
       
-      const sum = data.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0);
-      totalLitros += sum;
+      for (const curr of data) {
+        const litros = Number(curr.litros_coletados);
+        const cid = curr.cliente_id;
+        
+        totalLitros += litros;
+        
+        if (cid) {
+          if (!clientStats[cid]) clientStats[cid] = { litros: 0, coletas: 0 };
+          clientStats[cid].litros += litros;
+          clientStats[cid].coletas += 1;
+          
+          if (litros > largestCollection.litros) {
+            largestCollection = { clienteId: cid, litros };
+          }
+        }
+      }
       totalColetas += data.length;
       
       if (data.length < limit) break;
       from += limit;
     }
     
+    let topClienteLitros = { id: "", value: 0 };
+    let topClienteColetas = { id: "", value: 0 };
+    
+    for (const [cid, stats] of Object.entries(clientStats)) {
+      if (stats.litros > topClienteLitros.value) {
+        topClienteLitros = { id: cid, value: stats.litros };
+      }
+      if (stats.coletas > topClienteColetas.value) {
+        topClienteColetas = { id: cid, value: stats.coletas };
+      }
+    }
+
     // Fetch min and max dates
     let minQuery = supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: true }).limit(1);
     let maxQuery = supabaseAdmin.from("coletas").select("data_coleta").order("data_coleta", { ascending: false }).limit(1);
@@ -131,7 +161,18 @@ export async function getGlobalImpact(startDate?: string, endDate?: string) {
     const minDate = minData && minData.length > 0 ? minData[0].data_coleta : null;
     const maxDate = maxData && maxData.length > 0 ? maxData[0].data_coleta : null;
     
-    return { success: true, totalLitros, totalColetas, minDate, maxDate };
+    return { 
+      success: true, 
+      totalLitros, 
+      totalColetas, 
+      minDate, 
+      maxDate,
+      insights: {
+        topLitros: topClienteLitros,
+        topColetas: topClienteColetas,
+        largestCollection
+      }
+    };
   } catch (error: any) {
     console.error("Unexpected error in getGlobalImpact:", error);
     return { success: false, error: error.message };

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Droplet, Droplets, Zap, ExternalLink, Plus, X, Truck } from "lucide-react";
+import { Droplet, Droplets, Zap, ExternalLink, Plus, X, Truck, Trophy, Star, Award } from "lucide-react";
 import { createClientAccount, getGlobalImpact } from "./actions";
 
 export default function AdminClientesPage() {
@@ -13,6 +13,7 @@ export default function AdminClientesPage() {
   
   const [globalTotal, setGlobalTotal] = useState(0);
   const [globalColetas, setGlobalColetas] = useState(0);
+  const [globalInsights, setGlobalInsights] = useState<any>(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -47,6 +48,7 @@ export default function AdminClientesPage() {
     if (res.success) {
       setGlobalTotal(res.totalLitros || 0);
       setGlobalColetas(res.totalColetas || 0);
+      setGlobalInsights(res.insights);
     }
   };
 
@@ -153,6 +155,50 @@ export default function AdminClientesPage() {
           </div>
         </div>
       </div>
+
+      {/* DESTAQUES DO PERÍODO */}
+      {globalInsights && clientes.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 print:hidden">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-start gap-4">
+            <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center shrink-0">
+              <Trophy size={24} />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500 mb-1">Campeão de Reciclagem</p>
+              <h4 className="font-bold text-gray-800 text-lg leading-tight line-clamp-1" title={clientes.find(c => c.id === globalInsights.topLitros?.id)?.nome_empresa || "Nenhum"}>
+                {clientes.find(c => c.id === globalInsights.topLitros?.id)?.nome_empresa || "Nenhum"}
+              </h4>
+              <p className="text-sm text-gray-600 mt-1">{globalInsights.topLitros?.value.toLocaleString("pt-BR")} Litros recolhidos</p>
+            </div>
+          </div>
+          
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-start gap-4">
+            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0">
+              <Award size={24} />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500 mb-1">Cliente Mais Frequente</p>
+              <h4 className="font-bold text-gray-800 text-lg leading-tight line-clamp-1" title={clientes.find(c => c.id === globalInsights.topColetas?.id)?.nome_empresa || "Nenhum"}>
+                {clientes.find(c => c.id === globalInsights.topColetas?.id)?.nome_empresa || "Nenhum"}
+              </h4>
+              <p className="text-sm text-gray-600 mt-1">{globalInsights.topColetas?.value} Coletas realizadas</p>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-start gap-4">
+            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0">
+              <Star size={24} />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500 mb-1">Maior Coleta Única</p>
+              <h4 className="font-bold text-gray-800 text-lg leading-tight line-clamp-1" title={clientes.find(c => c.id === globalInsights.largestCollection?.clienteId)?.nome_empresa || "Nenhum"}>
+                {clientes.find(c => c.id === globalInsights.largestCollection?.clienteId)?.nome_empresa || "Nenhum"}
+              </h4>
+              <p className="text-sm text-gray-600 mt-1">{globalInsights.largestCollection?.litros.toLocaleString("pt-BR")} Litros de uma vez</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* SELEÇÃO E RELATÓRIO DO CLIENTE */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 print:hidden">
