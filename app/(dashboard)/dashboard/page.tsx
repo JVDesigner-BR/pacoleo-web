@@ -28,8 +28,10 @@ export default function DashboardPage() {
         .eq("id", session.user.id)
         .single();
       
-      if (cliente) setCompanyName(cliente.nome_empresa);
-
+      if (cliente) {
+        // Remove the numeric ID prefix (e.g. "[204] ") from the company name
+        setCompanyName(cliente.nome_empresa.replace(/^\[\d+\]\s*/, ''));
+      }
       const { data: coletas } = await supabase
         .from("coletas")
         .select("litros_coletados");
