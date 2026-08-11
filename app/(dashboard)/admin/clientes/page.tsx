@@ -182,6 +182,32 @@ export default function AdminClientesPage() {
       
       {/* HEADER E RESUMO GLOBAL */}
       <div>
+        {/* HEADER EXCLUSIVO PARA IMPRESSÃO */}
+        <div className="hidden print:flex flex-col mb-10 pb-6 border-b-2 border-[#3DB5D9]">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-2 text-[#3DB5D9]">
+              <Droplet size={40} className="fill-[#3DB5D9]" />
+              <h1 className="text-3xl font-black tracking-tight">PacOleo</h1>
+            </div>
+            <div className="text-right">
+              <h2 className="text-xl font-bold text-gray-800 uppercase tracking-widest">Relatório de Impacto Ambiental</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Data de Emissão: {new Date().toLocaleDateString('pt-BR')}
+              </p>
+            </div>
+          </div>
+          
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Cliente</p>
+            <h3 className="text-lg font-bold text-gray-900">
+              [{clienteData.id}] {clienteData.nome_empresa}
+            </h3>
+            {clienteData.cnpj && (
+              <p className="text-sm text-gray-600 mt-1">CNPJ: {clienteData.cnpj}</p>
+            )}
+          </div>
+        </div>
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 print:hidden">
           <h1 className="text-2xl font-bold text-gray-800">Visão de Clientes (Admin)</h1>
           <button 
@@ -364,31 +390,31 @@ export default function AdminClientesPage() {
               </div>
             </div>
             
-            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-opacity ${loading ? 'opacity-50' : ''}`}>
-              <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-3 text-amber-500"><Truck size={24} /></div>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 bg-white print:p-0 p-6 rounded-xl shadow-sm print:shadow-none border border-gray-100 print:border-none transition-opacity ${loading ? 'opacity-50' : ''}`}>
+              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-amber-100 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-amber-500"><Truck size={24} /></div>
                 <h3 className="text-2xl font-bold text-gray-800">{clienteData.totalColetas}</h3>
                 <p className="text-sm text-gray-600 font-medium">Coletas Realizadas</p>
               </div>
-              <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-[#3DB5D9]/10 rounded-full flex items-center justify-center mb-3 text-[#3DB5D9]"><Droplet size={24} /></div>
+              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-[#3DB5D9]/10 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-[#3DB5D9]"><Droplet size={24} /></div>
                 <h3 className="text-2xl font-bold text-gray-800">{clienteData.totalLitros.toLocaleString("pt-BR")} L</h3>
                 <p className="text-sm text-gray-600 font-medium">Óleo Reciclado</p>
               </div>
-              <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3 text-blue-500"><Droplets size={24} /></div>
+              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-blue-100 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-blue-500"><Droplets size={24} /></div>
                 <h3 className="text-2xl font-bold text-gray-800">{(clienteData.totalLitros * 25000).toLocaleString("pt-BR")} L</h3>
                 <p className="text-sm text-gray-600 font-medium">Água Preservada</p>
               </div>
-              <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3 text-green-500"><Zap size={24} /></div>
+              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-green-100 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-green-500"><Zap size={24} /></div>
                 <h3 className="text-2xl font-bold text-gray-800">{(clienteData.totalLitros * 0.8).toLocaleString("pt-BR")} L</h3>
                 <p className="text-sm text-gray-600 font-medium">Biodiesel Gerado</p>
               </div>
             </div>
           </div>
 
-          <div>
+          <div className="print:hidden">
             <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
               <Folder className="text-[#3DB5D9]" size={24} />
               Arquivos do Cliente (Google Drive)
@@ -476,7 +502,27 @@ export default function AdminClientesPage() {
                 )}
               </div>
             </div>
+          </div>
 
+          {/* RODAPÉ E ASSINATURA EXCLUSIVO PARA IMPRESSÃO */}
+          <div className="hidden print:block mt-32">
+            <div className="flex justify-around items-end">
+              <div className="text-center w-64">
+                <div className="border-b border-gray-400 mb-2"></div>
+                <p className="text-sm font-semibold text-gray-800">Assinatura do Cliente</p>
+                <p className="text-xs text-gray-500">{clienteData.nome_empresa}</p>
+              </div>
+              <div className="text-center w-64">
+                <div className="border-b border-gray-400 mb-2"></div>
+                <p className="text-sm font-semibold text-gray-800">PacOleo</p>
+                <p className="text-xs text-gray-500">Gestão Ambiental</p>
+              </div>
+            </div>
+            
+            <div className="mt-16 text-center text-xs text-gray-400 border-t border-gray-200 pt-4">
+              <p>Este relatório ambiental foi gerado eletronicamente e contém o resumo das atividades de coleta e destinação sustentável de óleo vegetal usado.</p>
+              <p className="mt-1">© {new Date().getFullYear()} PacOleo. Todos os direitos reservados.</p>
+            </div>
           </div>
         </div>
       )}
