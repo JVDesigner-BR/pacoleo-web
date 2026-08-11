@@ -17,7 +17,12 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 export async function createClientAccount(formData: FormData) {
   const nome_empresa = formData.get("nome_empresa") as string;
   const cnpj = formData.get("cnpj") as string;
-  const email = formData.get("email") as string;
+  let email = formData.get("email") as string;
+  
+  if (!email || email.trim() === "") {
+    // Generate a placeholder email based on a timestamp to guarantee uniqueness
+    email = `cliente_${Date.now()}@pacoleo.sistema`;
+  }
   
   // Generate a random 6-digit temporary password
   const tempPassword = Math.floor(100000 + Math.random() * 900000).toString();
@@ -67,5 +72,38 @@ export async function createClientAccount(formData: FormData) {
   } catch (error: any) {
     console.error("Erro interno:", error);
     return { success: false, error: error.message };
+  }
+}
+
+export async function getGlobalImpact() {
+  try {
+    let totalLitros = 0;
+    let from = 0;
+    const limit = 1000;
+    
+    while (true) {
+      const { data, error } = await supabaseAdmin
+        .from("coletas")
+        .select("litros_coletados")
+        .range(from, from + limit - 1);
+        
+      if (error) {
+        console.error("Erro fetchGlobalImpact:", error);
+        break;
+      }
+      
+      if (!data || data.length === 0) break;
+      
+      const sum = data.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0);
+      totalLitros += sum;
+      
+      if (data.length < limit) break;
+      from += limit;
+    }
+    
+    return { success: true, totalLitros };
+  } catch (error: any) {
+    console.error("Exception in getGlobalImpact:", error);
+    return { success: false, totalLitros: 0 };
   }
 }

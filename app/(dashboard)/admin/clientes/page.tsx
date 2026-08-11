@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Droplet, Droplets, Zap, ExternalLink, Plus, X } from "lucide-react";
-import { createClientAccount } from "./actions";
+import { createClientAccount, getGlobalImpact } from "./actions";
 
 export default function AdminClientesPage() {
   const [clientes, setClientes] = useState<{id: string, nome_empresa: string, cnpj: string}[]>([]);
@@ -32,10 +32,9 @@ export default function AdminClientesPage() {
   }, [selectedCliente]);
 
   const fetchGlobalImpact = async () => {
-    const { data: coletas } = await supabase.from("coletas").select("litros_coletados");
-    if (coletas) {
-      const sum = coletas.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0);
-      setGlobalTotal(sum);
+    const res = await getGlobalImpact();
+    if (res.success) {
+      setGlobalTotal(res.totalLitros);
     }
   };
 
@@ -251,9 +250,10 @@ export default function AdminClientesPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">E-mail (Login)</label>
-                    <input type="email" name="email" required placeholder="contato@empresa.com" 
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">E-mail (Opcional)</label>
+                    <input type="email" name="email" placeholder="contato@empresa.com" 
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] outline-none" />
+                    <p className="text-xs text-gray-500 mt-1">Se não preenchido, o sistema gerará um e-mail interno para permitir o cadastro.</p>
                   </div>
                   
                   <div className="pt-4">
