@@ -184,12 +184,6 @@ export default function AdminClientesPage() {
       <div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 print:hidden">
           <h1 className="text-2xl font-bold text-gray-800">Visão de Clientes (Admin)</h1>
-          <button 
-            onClick={() => { setShowModal(true); setCreatedCredentials(null); }}
-            className="bg-[#3DB5D9] hover:bg-[#349ec0] text-white px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2"
-          >
-            <Plus size={18} /> Novo Cliente
-          </button>
         </div>
 
         <div className="bg-gradient-to-r from-[#3DB5D9] to-blue-500 rounded-xl p-6 text-white shadow-lg relative print:hidden">
@@ -324,7 +318,7 @@ export default function AdminClientesPage() {
         </div>
         
         {clientes.length === 0 && !loading && (
-          <p className="text-sm text-gray-500 mt-2">Nenhum cliente cadastrado ainda. Clique em "Novo Cliente" acima para começar.</p>
+          <p className="text-sm text-gray-500 mt-2">Nenhum cliente cadastrado ainda.</p>
         )}
       </div>
 
