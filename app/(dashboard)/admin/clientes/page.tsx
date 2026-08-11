@@ -42,14 +42,28 @@ export default function AdminClientesPage() {
     if (res.success) {
       setGlobalTotal(res.totalLitros);
       
-      if (res.minDate && res.maxDate) {
-        const formatDt = (iso: string) => {
-          const [y, m, d] = iso.split("-");
-          return `${d}/${m}/${y}`;
-        };
-        setGlobalPeriod(`${formatDt(res.minDate)} a ${formatDt(res.maxDate)}`);
-      } else {
-        setGlobalPeriod("");
+      const today = new Date();
+      const formatToday = (d: Date) => {
+        return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+      };
+      
+      const formattedToday = formatToday(today);
+      
+      if (filter === "total") {
+        if (res.minDate) {
+          const [y, m, d] = res.minDate.split("-");
+          setGlobalPeriod(`${d}/${m}/${y} a ${formattedToday}`);
+        } else {
+          setGlobalPeriod("");
+        }
+      } else if (filter === "1_semana") {
+        const past = new Date(today);
+        past.setDate(past.getDate() - 7);
+        setGlobalPeriod(`${formatToday(past)} a ${formattedToday}`);
+      } else if (filter === "1_mes") {
+        const past = new Date(today);
+        past.setMonth(past.getMonth() - 1);
+        setGlobalPeriod(`${formatToday(past)} a ${formattedToday}`);
       }
     }
   };
