@@ -130,7 +130,7 @@ export default function DashboardPage() {
             <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-red-500 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-green-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Fuel size={36} strokeWidth={2} />
                 </div>
                 <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-2xl text-white/80 font-medium">L</span></h3>
