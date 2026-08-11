@@ -49,10 +49,12 @@ export default function PrimeiroAcessoPage() {
 
     // Atualiza a flag na tabela clientes
     if (authData.user) {
-      const { error: dbError } = await supabase
+      const { data: clienteData, error: dbError } = await supabase
         .from("clientes")
         .update({ is_primeiro_acesso: false })
-        .eq("id", authData.user.id);
+        .eq("id", authData.user.id)
+        .select("nivel_acesso")
+        .single();
 
       if (dbError) {
         setError("Erro ao atualizar o perfil. Tente novamente.");
@@ -60,8 +62,12 @@ export default function PrimeiroAcessoPage() {
         return;
       }
 
-      // Redireciona para o dashboard
-      router.push("/dashboard");
+      // Redireciona para a tela certa
+      if (clienteData?.nivel_acesso === "admin") {
+        router.push("/admin/clientes");
+      } else {
+        router.push("/dashboard");
+      }
     }
   };
 

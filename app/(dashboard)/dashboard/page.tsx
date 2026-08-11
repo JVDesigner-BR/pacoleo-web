@@ -39,28 +39,29 @@ export default function DashboardPage() {
         setMeuTotal(sum);
       }
 
-      // Impacto Global (usando RPC)
-      let startDate = null;
-      let endDate = null;
-
+      // Impacto Global (sem RPC)
+      let query = supabase.from("coletas").select("litros_coletados, data_coleta");
+      
       if (globalFilter === "semana") {
         const today = new Date();
         const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
-        startDate = firstDay.toISOString().split("T")[0];
-        endDate = new Date().toISOString().split("T")[0];
+        const startDate = firstDay.toISOString().split("T")[0];
+        query = query.gte("data_coleta", startDate);
       } else if (globalFilter === "mes") {
         const today = new Date();
         const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-        startDate = firstDay.toISOString().split("T")[0];
-        endDate = new Date().toISOString().split("T")[0];
+        const startDate = firstDay.toISOString().split("T")[0];
+        query = query.gte("data_coleta", startDate);
       }
 
-      const { data: globalSum } = await supabase.rpc("get_impacto_global", {
-        start_date: startDate,
-        end_date: endDate
-      });
+      const { data: globalColetas } = await query;
+      
+      let globalSum = 0;
+      if (globalColetas) {
+        globalSum = globalColetas.reduce((acc, curr) => acc + Number(curr.litros_coletados), 0);
+      }
 
-      setGlobalTotal(Number(globalSum) || 0);
+      setGlobalTotal(globalSum);
     }
     
     setLoading(false);
