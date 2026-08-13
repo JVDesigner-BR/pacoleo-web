@@ -6,6 +6,14 @@ import { Droplet, Droplets, Zap, Leaf, TrendingUp, Fuel } from "lucide-react";
 import Image from "next/image";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
 
+const formatCompactNumber = (number: number) => {
+  if (number < 10000) return Math.round(number).toLocaleString("pt-BR");
+  return new Intl.NumberFormat('pt-BR', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(number);
+};
+
 export default function DashboardPage() {
   const [meuTotal, setMeuTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -99,43 +107,43 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
             {/* Card 1 */}
-            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 min-w-0">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-yellow-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Droplet size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm break-all sm:break-normal">{Math.round(currentTotal).toLocaleString("pt-BR")} <span className="text-xl text-white/80 font-medium">L</span></h3>
+                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm truncate w-full" title={currentTotal.toLocaleString("pt-BR")}>{formatCompactNumber(currentTotal)} <span className="text-xl text-white/80 font-medium">L</span></h3>
                 <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
-                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm break-words">Óleo Reciclado</p>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm truncate w-full">Óleo Reciclado</p>
                 <p className="text-sm text-white/90 leading-relaxed font-medium">Volume total coletado de óleo vegetal que deixou de poluir a natureza.</p>
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 min-w-0">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Droplets size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm break-all sm:break-normal">{Math.round(currentTotal * 25000).toLocaleString("pt-BR")} <span className="text-xl text-white/80 font-medium">L</span></h3>
+                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm truncate w-full" title={(currentTotal * 25000).toLocaleString("pt-BR")}>{formatCompactNumber(currentTotal * 25000)} <span className="text-xl text-white/80 font-medium">L</span></h3>
                 <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
-                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm break-words">Água Preservada</p>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm truncate w-full">Água Preservada</p>
                 <p className="text-sm text-white/90 leading-relaxed font-medium">Evitamos a contaminação direta de mananciais hídricos com essa ação.</p>
               </div>
             </div>
 
             {/* Card 3 */}
-            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
+            <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 min-w-0">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-green-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Fuel size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm break-all sm:break-normal">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-xl text-white/80 font-medium">L</span></h3>
+                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm truncate w-full" title={(currentTotal * 0.8).toLocaleString("pt-BR")}>{formatCompactNumber(currentTotal * 0.8)} <span className="text-xl text-white/80 font-medium">L</span></h3>
                 <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
-                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm break-words">Biodiesel Gerado</p>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm truncate w-full">Biodiesel Gerado</p>
                 <p className="text-sm text-white/90 leading-relaxed font-medium">Apoiamos a produção de energia limpa e renovável para o futuro.</p>
               </div>
             </div>
