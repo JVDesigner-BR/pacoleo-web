@@ -108,6 +108,14 @@ export default function LandingPage() {
     }
   ];
 
+  const scrollToTop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans">
       
@@ -115,8 +123,13 @@ export default function LandingPage() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           
-          {/* Logo Compacta */}
-          <Link href="/" className="flex items-center shrink-0 group">
+          {/* Logo Compacta com Scroll Suave ao Topo */}
+          <a 
+            href="#" 
+            onClick={scrollToTop} 
+            className="flex items-center shrink-0 group cursor-pointer"
+            title="Voltar ao início da página"
+          >
             <div className="relative w-32 sm:w-36 h-9 transition-transform group-hover:scale-105">
               <Image 
                 src="/logo-colorida.png" 
@@ -126,7 +139,7 @@ export default function LandingPage() {
                 priority
               />
             </div>
-          </Link>
+          </a>
 
           {/* Links de Navegação Desktop - Títulos Diretos e sem Quebra */}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-semibold text-slate-600">
@@ -944,14 +957,19 @@ export default function LandingPage() {
             
             {/* Coluna 1: Sobre e CNPJ */}
             <div className="space-y-4 md:col-span-2">
-              <div className="relative w-44 sm:w-52 h-12">
+              <a 
+                href="#"
+                onClick={scrollToTop}
+                title="Voltar ao início da página"
+                className="block relative w-44 sm:w-52 h-12 transition-transform hover:scale-105 cursor-pointer"
+              >
                 <Image 
                   src="/logo-branca.png" 
                   alt="PacÓleo Coleta e Reciclagem" 
                   fill 
                   className="object-contain object-left" 
                 />
-              </div>
+              </a>
               <p className="text-xs text-slate-400 max-w-md leading-relaxed">
                 Especialistas em logística reversa, coleta e destinação sustentável de óleo vegetal usado. Gerando impacto ecológico positivo e valor ESG para empresas e condomínios.
               </p>
