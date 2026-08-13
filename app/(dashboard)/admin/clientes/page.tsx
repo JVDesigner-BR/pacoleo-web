@@ -2,8 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Droplet, Droplets, Zap, ExternalLink, Plus, X, Truck, Trophy, Star, Award, Folder, FileText, Download, ChevronRight, TrendingUp, Leaf } from "lucide-react";
-import { createClientAccount, getGlobalImpact } from "./actions";
+import { 
+  Droplet, 
+  Droplets, 
+  Zap, 
+  ExternalLink, 
+  X, 
+  Truck, 
+  Trophy, 
+  Star, 
+  Award, 
+  Folder, 
+  FileText, 
+  Download, 
+  ChevronRight, 
+  TrendingUp, 
+  Leaf, 
+  RotateCcw 
+} from "lucide-react";
+import { getGlobalImpact } from "./actions";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
 
 const formatCompactNumber = (number: number) => {
@@ -17,31 +34,25 @@ const formatCompactNumber = (number: number) => {
 export default function AdminClientesPage() {
   const [clientes, setClientes] = useState<{id: string, nome_empresa: string, cnpj: string}[]>([]);
   const [selectedCliente, setSelectedCliente] = useState<string>("");
-  const [clienteData, setClienteData] = useState<any>(null);
+  const [clienteData, setClienteData] = useState<{ totalLitros: number; totalColetas: number; documentos: any[]; nome_empresa?: string } | null>(null);
   const [loading, setLoading] = useState(true);
   
   const [driveFolderId, setDriveFolderId] = useState<string | null>(null);
-  const [driveItems, setDriveItems] = useState<any[]>([]);
+  const [driveItems, setDriveItems] = useState<{ id: string; name: string; isFolder?: boolean; viewUrl?: string; downloadUrl?: string }[]>([]);
   const [driveBreadcrumbs, setDriveBreadcrumbs] = useState<{id: string, name: string}[]>([]);
   const [loadingDrive, setLoadingDrive] = useState(false);
   const [driveError, setDriveError] = useState("");
   
   const [globalTotal, setGlobalTotal] = useState(0);
   const [globalColetas, setGlobalColetas] = useState(0);
-  const [globalInsights, setGlobalInsights] = useState<any>(null);
+  const [globalInsights, setGlobalInsights] = useState<{ topLitros?: { id: string; value: number }; topColetas?: { id: string; value: number }; largestCollection?: { clienteId: string; litros: number } } | null>(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
   const [clientStartDate, setClientStartDate] = useState("");
   const [clientEndDate, setClientEndDate] = useState("");
-  const [clientChartData, setClientChartData] = useState<any[]>([]);
-
-  // Modal State
-  const [showModal, setShowModal] = useState(false);
-  const [modalLoading, setModalLoading] = useState(false);
-  const [modalError, setModalError] = useState("");
-  const [createdCredentials, setCreatedCredentials] = useState<{email: string, password: string} | null>(null);
+  const [clientChartData, setClientChartData] = useState<{ name: string; volume: number }[]>([]);
 
   useEffect(() => {
     fetchGlobalImpact(startDate, endDate);
@@ -76,7 +87,7 @@ export default function AdminClientesPage() {
     if (res.success) {
       setGlobalTotal(res.totalLitros || 0);
       setGlobalColetas(res.totalColetas || 0);
-      setGlobalInsights(res.insights);
+      setGlobalInsights(res.insights || null);
     }
   };
 
@@ -104,7 +115,7 @@ export default function AdminClientesPage() {
         setDriveError(data.error || "Pasta não encontrada.");
         setLoadingDrive(false);
       }
-    } catch (e: any) {
+    } catch {
       setDriveError("Erro de conexão ao buscar a pasta no Google Drive.");
       setLoadingDrive(false);
     }
@@ -119,7 +130,7 @@ export default function AdminClientesPage() {
       const data = await res.json();
       if (data.success) {
         // Sort: Folders first, then alphabetically
-        const sortedItems = data.items.sort((a: any, b: any) => {
+        const sortedItems = data.items.sort((a: { isFolder?: boolean; name: string }, b: { isFolder?: boolean; name: string }) => {
           if (a.isFolder === b.isFolder) {
             return a.name.localeCompare(b.name);
           }
@@ -129,7 +140,7 @@ export default function AdminClientesPage() {
       } else {
         setDriveError(data.error || "Erro ao listar a pasta.");
       }
-    } catch (e: any) {
+    } catch {
       setDriveError("Erro de conexão ao listar a pasta no Google Drive.");
     } finally {
       setLoadingDrive(false);
@@ -160,11 +171,11 @@ export default function AdminClientesPage() {
     let totalColetas = 0;
     
     if (coletas) {
-      totalLitros = coletas.reduce((acc: number, curr: any) => acc + Number(curr.litros_coletados), 0);
+      totalLitros = coletas.reduce((acc: number, curr: { litros_coletados: number }) => acc + Number(curr.litros_coletados), 0);
       totalColetas = coletas.length;
 
       const grouped: Record<string, number> = {};
-      coletas.forEach((c: any) => {
+      coletas.forEach((c: { data_coleta?: string; litros_coletados: number }) => {
         if (!c.data_coleta) return;
         const [ano, mes] = c.data_coleta.split("-");
         const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
@@ -192,28 +203,10 @@ export default function AdminClientesPage() {
     if (end) docsQuery = docsQuery.lte("data_referencia", end);
     
     const { data: documentos } = await docsQuery;
+    const clienteObj = clientes.find(c => c.id === clienteId);
 
-    setClienteData({ totalLitros, totalColetas, documentos: documentos || [] });
+    setClienteData({ totalLitros, totalColetas, documentos: documentos || [], nome_empresa: clienteObj?.nome_empresa });
     setLoading(false);
-  };
-
-  const handleCreateClient = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setModalLoading(true);
-    setModalError("");
-    
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    
-    const res = await createClientAccount(formData);
-    
-    if (res.success) {
-      setCreatedCredentials({ email, password: res.tempPassword! });
-      fetchClientes(); // Atualizar lista
-    } else {
-      setModalError(res.error || "Ocorreu um erro ao criar o cliente.");
-    }
-    setModalLoading(false);
   };
 
   return (
@@ -221,69 +214,105 @@ export default function AdminClientesPage() {
       
       {/* HEADER E RESUMO GLOBAL */}
       <div>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-gray-100 print:hidden mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200/80 print:hidden mb-6">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="bg-[#3DB5D9]/10 p-2 rounded-lg text-[#3DB5D9]">
-                <Leaf size={24} />
+            <div className="flex items-center gap-2 mb-1">
+              <div className="bg-[#3DB5D9]/10 p-2 rounded-xl text-[#3DB5D9]">
+                <Leaf size={22} className="stroke-[2.5]" />
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Visão de Clientes (Admin)</h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Painel Administrativo & Gestão
+              </h1>
             </div>
-            <p className="text-gray-500 text-lg">Acompanhe o impacto global da plataforma e os dados de cada cliente.</p>
+            <p className="text-slate-500 text-sm">
+              Acompanhe os indicadores globais da rede PacÓleo e emita relatórios por cliente.
+            </p>
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-[#3DB5D9] to-[#2b9abf] rounded-3xl p-8 text-white shadow-lg relative overflow-hidden print:hidden">
-          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="bg-gradient-to-br from-[#3DB5D9] via-[#2ba5cb] to-[#1d7d9a] rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-sky-900/10 relative overflow-hidden print:hidden">
+          <div className="absolute top-0 right-0 -mt-6 -mr-6 w-56 h-56 bg-white/10 rounded-full blur-3xl"></div>
+          
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/20 pb-6">
-            <h2 className="text-2xl font-bold text-white tracking-tight drop-shadow-sm">Impacto Global da Plataforma</h2>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2 border border-white/30 backdrop-blur-sm shadow-sm">
-                <span className="text-sm font-medium text-white/90">De</span>
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-white/80 bg-white/15 px-3 py-1 rounded-full backdrop-blur-sm border border-white/20">
+                Rede PacÓleo
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-2 drop-shadow-sm">
+                Impacto Global da Plataforma
+              </h2>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2 bg-white/20 rounded-xl px-3.5 py-2 border border-white/30 backdrop-blur-sm shadow-xs">
+                <span className="text-xs font-semibold text-white/90">De</span>
                 <input 
                   type="date" 
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer font-medium" 
+                  className="bg-transparent text-white text-xs focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer font-medium" 
                 />
-                <span className="text-sm font-medium text-white/90 ml-2">Até</span>
+                <span className="text-xs font-semibold text-white/90 ml-1">Até</span>
                 <input 
                   type="date" 
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer font-medium" 
+                  className="bg-transparent text-white text-xs focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer font-medium" 
                 />
               </div>
+
+              {(startDate || endDate) && (
+                <button
+                  onClick={() => {
+                    setStartDate("");
+                    setEndDate("");
+                  }}
+                  className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition-colors border border-white/30 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                  title="Limpar filtro de data"
+                >
+                  <RotateCcw size={14} />
+                  <span>Limpar</span>
+                </button>
+              )}
             </div>
           </div>
-          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-white shadow-sm border border-white/30">
+
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="bg-white/10 p-5 rounded-2xl border border-white/20 backdrop-blur-md shadow-xs hover:bg-white/15 transition-all min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-2.5 text-white shadow-xs border border-white/30">
                 <Truck size={20} />
               </div>
-              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Coletas Realizadas</p>
-              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={globalColetas.toString()}>{formatCompactNumber(globalColetas)}</h3>
+              <p className="text-white/80 text-xs font-bold uppercase tracking-wider leading-tight">Coletas Feitas</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight mt-1" title={globalColetas.toString()}>
+                {formatCompactNumber(globalColetas)}
+              </h3>
             </div>
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-yellow-300 shadow-sm border border-white/30">
+            <div className="bg-white/10 p-5 rounded-2xl border border-white/20 backdrop-blur-md shadow-xs hover:bg-white/15 transition-all min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-2.5 text-yellow-300 shadow-xs border border-white/30">
                 <Droplet size={20} />
               </div>
-              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Total de Óleo</p>
-              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={globalTotal.toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal)} <span className="text-sm font-bold text-white/70">L</span></h3>
+              <p className="text-white/80 text-xs font-bold uppercase tracking-wider leading-tight">Total de Óleo</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight mt-1" title={globalTotal.toLocaleString("pt-BR")}>
+                {formatCompactNumber(globalTotal)} <span className="text-sm font-bold text-white/70">L</span>
+              </h3>
             </div>
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-blue-200 shadow-sm border border-white/30">
+            <div className="bg-white/10 p-5 rounded-2xl border border-white/20 backdrop-blur-md shadow-xs hover:bg-white/15 transition-all min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-2.5 text-sky-200 shadow-xs border border-white/30">
                 <Droplets size={20} />
               </div>
-              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Água Preservada</p>
-              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={(globalTotal * 25000).toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal * 25000)} <span className="text-sm font-bold text-white/70">L</span></h3>
+              <p className="text-white/80 text-xs font-bold uppercase tracking-wider leading-tight">Água Preservada</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight mt-1" title={(globalTotal * 25000).toLocaleString("pt-BR")}>
+                {formatCompactNumber(globalTotal * 25000)} <span className="text-sm font-bold text-white/70">L</span>
+              </h3>
             </div>
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-green-300 shadow-sm border border-white/30">
+            <div className="bg-white/10 p-5 rounded-2xl border border-white/20 backdrop-blur-md shadow-xs hover:bg-white/15 transition-all min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-2.5 text-emerald-300 shadow-xs border border-white/30">
                 <Zap size={20} />
               </div>
-              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Biodiesel Gerado</p>
-              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={(globalTotal * 0.8).toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal * 0.8)} <span className="text-sm font-bold text-white/70">L</span></h3>
+              <p className="text-white/80 text-xs font-bold uppercase tracking-wider leading-tight">Biodiesel Gerado</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight mt-1" title={(globalTotal * 0.8).toLocaleString("pt-BR")}>
+                {formatCompactNumber(globalTotal * 0.8)} <span className="text-sm font-bold text-white/70">L</span>
+              </h3>
             </div>
           </div>
         </div>
@@ -675,7 +704,7 @@ export default function AdminClientesPage() {
                                     <FileText size={20} />
                                   </div>
                                 )}
-                                <span className={`font-medium ${item.isFolder ? 'text-gray-800 cursor-pointer hover:text-blue-600' : 'text-gray-700'}`}
+                                <span className={`font-semibold text-sm truncate block ${item.isFolder ? 'text-slate-800 cursor-pointer hover:text-[#3DB5D9]' : 'text-slate-700'}`}
                                       onClick={() => item.isFolder && handleNavigateFolder(item.id, item.name)}>
                                   {item.name}
                                 </span>
@@ -685,18 +714,23 @@ export default function AdminClientesPage() {
                               {item.isFolder ? (
                                 <button 
                                   onClick={() => handleNavigateFolder(item.id, item.name)}
-                                  className="text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className="text-xs font-bold text-[#3DB5D9] hover:text-[#329fbe] bg-sky-50 hover:bg-sky-100 px-3.5 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1 cursor-pointer"
                                 >
-                                  Abrir
+                                  <span>Abrir</span>
+                                  <ChevronRight size={13} />
                                 </button>
                               ) : (
-                                <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <a href={item.viewUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-gray-600 hover:text-gray-900 bg-gray-100 px-3 py-1.5 rounded-md flex items-center gap-1">
-                                    <ExternalLink size={14} /> Ver
-                                  </a>
-                                  <a href={item.downloadUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-white bg-[#3DB5D9] hover:bg-[#349ec0] px-3 py-1.5 rounded-md flex items-center gap-1">
-                                    <Download size={14} /> Baixar
-                                  </a>
+                                <div className="flex items-center justify-end gap-2">
+                                  {item.viewUrl && (
+                                    <a href={item.viewUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors">
+                                      <ExternalLink size={13} /> Ver
+                                    </a>
+                                  )}
+                                  {item.downloadUrl && (
+                                    <a href={item.downloadUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white bg-[#3DB5D9] hover:bg-[#329fbe] px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-xs transition-all">
+                                      <Download size={13} /> Baixar
+                                    </a>
+                                  )}
                                 </div>
                               )}
                             </td>
@@ -712,89 +746,6 @@ export default function AdminClientesPage() {
 
           </div>
         </>
-      )}
-
-      {/* MODAL NOVO CLIENTE */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-800">Cadastrar Novo Cliente</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                <X size={24} />
-              </button>
-            </div>
-            
-            <div className="p-6">
-              {createdCredentials ? (
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800">Cliente Cadastrado!</h3>
-                  <p className="text-gray-600 text-sm mb-6">
-                    Envie estas credenciais para que o cliente possa fazer o primeiro acesso e criar sua senha definitiva.
-                  </p>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-left space-y-3">
-                    <div>
-                      <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider block">E-mail:</span>
-                      <span className="font-mono text-gray-800">{createdCredentials.email}</span>
-                    </div>
-                    <div>
-                      <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider block">Senha Temporária:</span>
-                      <span className="font-mono text-2xl font-bold text-[#3DB5D9] tracking-widest">{createdCredentials.password}</span>
-                    </div>
-                  </div>
-                  
-                  <button 
-                    onClick={() => setShowModal(false)}
-                    className="w-full bg-gray-900 text-white font-medium py-3 rounded-lg hover:bg-gray-800 transition-colors mt-6"
-                  >
-                    Fechar
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleCreateClient} className="space-y-4">
-                  {modalError && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm border border-red-100">
-                      {modalError}
-                    </div>
-                  )}
-                  
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Nome da Empresa</label>
-                    <input type="text" name="nome_empresa" required placeholder="Ex: Padaria do Zé" 
-                      className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] outline-none" />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">CNPJ (Opcional)</label>
-                    <input type="text" name="cnpj" placeholder="00.000.000/0001-00" 
-                      className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] outline-none" />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">E-mail (Opcional)</label>
-                    <input type="email" name="email" placeholder="contato@empresa.com" 
-                      className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-[#3DB5D9] outline-none" />
-                    <p className="text-xs text-gray-500 mt-1">Se não preenchido, o sistema gerará um e-mail interno para permitir o cadastro.</p>
-                  </div>
-                  
-                  <div className="pt-4">
-                    <button 
-                      type="submit" 
-                      disabled={modalLoading}
-                      className="w-full bg-[#3DB5D9] text-white font-medium py-3 rounded-lg hover:bg-[#349ec0] transition-colors disabled:opacity-70 flex justify-center items-center gap-2"
-                    >
-                      {modalLoading ? "Cadastrando..." : "Cadastrar e Gerar Senha"}
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
