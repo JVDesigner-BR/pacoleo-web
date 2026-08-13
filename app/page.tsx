@@ -108,12 +108,12 @@ export default function LandingPage() {
     <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans">
       
       {/* NAVBAR SUPERIOR */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           
-          {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <div className="relative w-44 sm:w-52 h-12 transition-transform group-hover:scale-105">
+          {/* Logo Compacta */}
+          <Link href="/" className="flex items-center shrink-0 group">
+            <div className="relative w-32 sm:w-36 h-9 transition-transform group-hover:scale-105">
               <Image 
                 src="/logo-colorida.png" 
                 alt="PacÓleo Coleta e Reciclagem" 
@@ -124,31 +124,31 @@ export default function LandingPage() {
             </div>
           </Link>
 
-          {/* Links de Navegação Desktop */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
-            <a href="#o-que-fazemos" className="hover:text-[#3DB5D9] transition-colors">O que fazemos</a>
-            <a href="#formas-de-coleta" className="hover:text-[#3DB5D9] transition-colors">Formas de Coleta</a>
-            <a href="#como-funciona" className="hover:text-[#3DB5D9] transition-colors">Como Funciona</a>
-            <a href="#calculadora" className="hover:text-[#3DB5D9] transition-colors">Calculadora</a>
-            <a href="#ods" className="hover:text-[#3DB5D9] transition-colors">ODS & Impacto</a>
+          {/* Links de Navegação Desktop - Títulos Diretos e sem Quebra */}
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-semibold text-slate-600">
+            <a href="#o-que-fazemos" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Serviços</a>
+            <a href="#formas-de-coleta" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Coleta</a>
+            <a href="#como-funciona" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Como Funciona</a>
+            <a href="#calculadora" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Calculadora</a>
+            <a href="#ods" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Sustentabilidade</a>
           </nav>
 
           {/* Botões de Ação Desktop */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
             <Link
               href="/login"
-              className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:text-[#3DB5D9] hover:border-[#3DB5D9] font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-xs"
+              className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:text-[#3DB5D9] hover:border-[#3DB5D9] font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap"
             >
               <Lock size={14} className="text-[#3DB5D9]" />
-              <span>Entrar no Portal</span>
+              <span>Entrar</span>
             </Link>
 
             <button
               onClick={() => openModalWithTipo("Restaurante / Bar")}
-              className="px-5 py-2.5 rounded-xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#3DB5D9]/25 hover:shadow-[#3DB5D9]/40 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#3DB5D9]/25 hover:shadow-[#3DB5D9]/40 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
             >
               <Sparkles size={14} />
-              <span>Cadastre seu Negócio</span>
+              <span>Solicitar Coleta</span>
             </button>
           </div>
 
@@ -156,7 +156,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/login"
-              className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:text-[#3DB5D9] text-xs font-bold"
+              className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:text-[#3DB5D9] text-xs font-bold whitespace-nowrap"
             >
               Login
             </Link>
@@ -179,7 +179,7 @@ export default function LandingPage() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2 border-b border-slate-100 flex items-center justify-between"
               >
-                <span>O que fazemos</span>
+                <span>Serviços</span>
                 <ChevronRight size={16} className="text-slate-400" />
               </a>
               <a 
@@ -203,7 +203,7 @@ export default function LandingPage() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2 border-b border-slate-100 flex items-center justify-between"
               >
-                <span>Calculadora Ecológica</span>
+                <span>Calculadora de Impacto</span>
                 <ChevronRight size={16} className="text-slate-400" />
               </a>
               <a 
@@ -211,7 +211,7 @@ export default function LandingPage() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2 border-b border-slate-100 flex items-center justify-between"
               >
-                <span>Compromisso ODS (ONU)</span>
+                <span>Sustentabilidade (ODS)</span>
                 <ChevronRight size={16} className="text-slate-400" />
               </a>
             </nav>
