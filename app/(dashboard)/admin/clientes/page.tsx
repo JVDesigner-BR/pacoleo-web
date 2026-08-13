@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Droplet, Droplets, Zap, ExternalLink, Plus, X, Truck, Trophy, Star, Award, Folder, FileText, Download, ChevronRight } from "lucide-react";
+import { Droplet, Droplets, Zap, ExternalLink, Plus, X, Truck, Trophy, Star, Award, Folder, FileText, Download, ChevronRight, TrendingUp, Leaf } from "lucide-react";
 import { createClientAccount, getGlobalImpact } from "./actions";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
 
 export default function AdminClientesPage() {
   const [clientes, setClientes] = useState<{id: string, nome_empresa: string, cnpj: string}[]>([]);
@@ -26,6 +27,7 @@ export default function AdminClientesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [clientStartDate, setClientStartDate] = useState("");
   const [clientEndDate, setClientEndDate] = useState("");
+  const [clientChartData, setClientChartData] = useState<any[]>([]);
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -140,13 +142,42 @@ export default function AdminClientesPage() {
   const fetchClienteData = async (clienteId: string, start?: string, end?: string) => {
     setLoading(true);
     
-    let coletasQuery = supabase.from("coletas").select("litros_coletados").eq("cliente_id", clienteId);
+    let coletasQuery = supabase.from("coletas").select("litros_coletados, data_coleta").eq("cliente_id", clienteId);
     if (start) coletasQuery = coletasQuery.gte("data_coleta", start);
     if (end) coletasQuery = coletasQuery.lte("data_coleta", end);
     
     const { data: coletas } = await coletasQuery;
-    const totalLitros = coletas ? coletas.reduce((acc: number, curr: any) => acc + Number(curr.litros_coletados), 0) : 0;
-    const totalColetas = coletas ? coletas.length : 0;
+    
+    let totalLitros = 0;
+    let totalColetas = 0;
+    
+    if (coletas) {
+      totalLitros = coletas.reduce((acc: number, curr: any) => acc + Number(curr.litros_coletados), 0);
+      totalColetas = coletas.length;
+
+      const grouped: Record<string, number> = {};
+      coletas.forEach((c: any) => {
+        if (!c.data_coleta) return;
+        const [ano, mes] = c.data_coleta.split("-");
+        const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const monthName = months[parseInt(mes, 10) - 1];
+        const key = `${monthName}/${ano.substring(2)}`;
+        grouped[key] = (grouped[key] || 0) + Number(c.litros_coletados);
+      });
+
+      const sortedKeys = Object.keys(grouped).sort((a, b) => {
+        const [mA, yA] = a.split("/");
+        const [mB, yB] = b.split("/");
+        const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        if (yA !== yB) return Number(yA) - Number(yB);
+        return months.indexOf(mA) - months.indexOf(mB);
+      });
+
+      const formattedChartData = sortedKeys.map(k => ({ name: k, volume: grouped[k] }));
+      setClientChartData(formattedChartData);
+    } else {
+      setClientChartData([]);
+    }
 
     let docsQuery = supabase.from("documentos").select("*").eq("cliente_id", clienteId).order("data_referencia", { ascending: false });
     if (start) docsQuery = docsQuery.gte("data_referencia", start);
@@ -182,48 +213,69 @@ export default function AdminClientesPage() {
       
       {/* HEADER E RESUMO GLOBAL */}
       <div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 print:hidden">
-          <h1 className="text-2xl font-bold text-gray-800">Visão de Clientes (Admin)</h1>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-gray-100 print:hidden mb-6">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="bg-[#3DB5D9]/10 p-2 rounded-lg text-[#3DB5D9]">
+                <Leaf size={24} />
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Visão de Clientes (Admin)</h1>
+            </div>
+            <p className="text-gray-500 text-lg">Acompanhe o impacto global da plataforma e os dados de cada cliente.</p>
+          </div>
         </div>
 
-        <div className="bg-gradient-to-r from-[#3DB5D9] to-blue-500 rounded-xl p-6 text-white shadow-lg relative print:hidden">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <h2 className="text-lg font-semibold text-white/90">Impacto Global da Plataforma</h2>
+        <div className="bg-gradient-to-r from-[#3DB5D9] to-[#2b9abf] rounded-3xl p-8 text-white shadow-lg relative overflow-hidden print:hidden">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/20 pb-6">
+            <h2 className="text-2xl font-bold text-white tracking-tight drop-shadow-sm">Impacto Global da Plataforma</h2>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 bg-white/20 rounded-md px-3 py-1.5 border border-white/30 backdrop-blur-sm">
+              <div className="flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2 border border-white/30 backdrop-blur-sm shadow-sm">
                 <span className="text-sm font-medium text-white/90">De</span>
                 <input 
                   type="date" 
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer" 
+                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer font-medium" 
                 />
                 <span className="text-sm font-medium text-white/90 ml-2">Até</span>
                 <input 
                   type="date" 
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer" 
+                  className="bg-transparent text-white text-sm focus:outline-none [&::-webkit-calendar-picker-indicator]:invert cursor-pointer font-medium" 
                 />
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">
-              <p className="text-white/70 text-sm font-medium mb-1">Coletas Realizadas</p>
-              <h3 className="text-3xl font-bold">{globalColetas}</h3>
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-white shadow-sm border border-white/30">
+                <Truck size={24} />
+              </div>
+              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider">Coletas Realizadas</p>
+              <h3 className="text-4xl font-black drop-shadow-sm">{globalColetas}</h3>
             </div>
-            <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">
-              <p className="text-white/70 text-sm font-medium mb-1">Total de Óleo Reciclado</p>
-              <h3 className="text-3xl font-bold">{globalTotal.toLocaleString("pt-BR")} L</h3>
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-yellow-300 shadow-sm border border-white/30">
+                <Droplet size={24} />
+              </div>
+              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider">Total de Óleo</p>
+              <h3 className="text-4xl font-black drop-shadow-sm">{globalTotal.toLocaleString("pt-BR")} <span className="text-xl text-white/70 font-medium">L</span></h3>
             </div>
-            <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">
-              <p className="text-white/70 text-sm font-medium mb-1">Água Preservada</p>
-              <h3 className="text-3xl font-bold">{(globalTotal * 25000).toLocaleString("pt-BR")} L</h3>
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-blue-200 shadow-sm border border-white/30">
+                <Droplets size={24} />
+              </div>
+              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider">Água Preservada</p>
+              <h3 className="text-4xl font-black drop-shadow-sm">{(globalTotal * 25000).toLocaleString("pt-BR")} <span className="text-xl text-white/70 font-medium">L</span></h3>
             </div>
-            <div className="bg-white/10 p-4 rounded-lg border border-white/20 backdrop-blur-sm">
-              <p className="text-white/70 text-sm font-medium mb-1">Biodiesel Gerado</p>
-              <h3 className="text-3xl font-bold">{(globalTotal * 0.8).toLocaleString("pt-BR")} L</h3>
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-green-300 shadow-sm border border-white/30">
+                <Zap size={24} />
+              </div>
+              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider">Biodiesel Gerado</p>
+              <h3 className="text-4xl font-black drop-shadow-sm">{(globalTotal * 0.8).toLocaleString("pt-BR")} <span className="text-xl text-white/70 font-medium">L</span></h3>
             </div>
           </div>
         </div>
@@ -459,28 +511,105 @@ export default function AdminClientesPage() {
               </div>
             </div>
             
-            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 bg-white print:p-0 p-6 rounded-xl shadow-sm print:shadow-none border border-gray-100 print:border-none transition-opacity ${loading ? 'opacity-50' : ''}`}>
-              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-amber-100 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-amber-500"><Truck size={24} /></div>
-                <h3 className="text-2xl font-bold text-gray-800">{clienteData.totalColetas}</h3>
-                <p className="text-sm text-gray-600 font-medium">Coletas Realizadas</p>
+            <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 print:p-0 transition-opacity ${loading ? 'opacity-50' : ''}`}>
+              
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800">
+                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
+                <div className="relative z-10 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-gray-100 print:border-none print:text-gray-600">
+                    <Truck size={32} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none">{clienteData.totalColetas}</h3>
+                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none">Coletas Realizadas</p>
+                </div>
               </div>
-              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-[#3DB5D9]/10 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-[#3DB5D9]"><Droplet size={24} /></div>
-                <h3 className="text-2xl font-bold text-gray-800">{clienteData.totalLitros.toLocaleString("pt-BR")} L</h3>
-                <p className="text-sm text-gray-600 font-medium">Óleo Reciclado</p>
+
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800">
+                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
+                <div className="relative z-10 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-yellow-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-yellow-50 print:border-none print:text-yellow-600">
+                    <Droplet size={32} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none">{clienteData.totalLitros.toLocaleString("pt-BR")} <span className="text-xl text-white/80 font-medium print:text-gray-500">L</span></h3>
+                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none">Óleo Reciclado</p>
+                </div>
               </div>
-              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-blue-100 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-blue-500"><Droplets size={24} /></div>
-                <h3 className="text-2xl font-bold text-gray-800">{(clienteData.totalLitros * 25000).toLocaleString("pt-BR")} L</h3>
-                <p className="text-sm text-gray-600 font-medium">Água Preservada</p>
+
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800">
+                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
+                <div className="relative z-10 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-blue-50 print:border-none print:text-blue-600">
+                    <Droplets size={32} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none">{(clienteData.totalLitros * 25000).toLocaleString("pt-BR")} <span className="text-xl text-white/80 font-medium print:text-gray-500">L</span></h3>
+                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none">Água Preservada</p>
+                </div>
               </div>
-              <div className="bg-gray-50 print:bg-white p-6 rounded-xl border border-gray-100 print:border-2 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-green-100 print:bg-transparent rounded-full flex items-center justify-center mb-3 text-green-500"><Zap size={24} /></div>
-                <h3 className="text-2xl font-bold text-gray-800">{(clienteData.totalLitros * 0.8).toLocaleString("pt-BR")} L</h3>
-                <p className="text-sm text-gray-600 font-medium">Biodiesel Gerado</p>
+
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800">
+                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
+                <div className="relative z-10 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-green-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-green-50 print:border-none print:text-green-600">
+                    <Zap size={32} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none">{(clienteData.totalLitros * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-xl text-white/80 font-medium print:text-gray-500">L</span></h3>
+                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none">Biodiesel Gerado</p>
+                </div>
               </div>
             </div>
+
+            {/* GRÁFICO DE ANÁLISE DO CLIENTE */}
+            {clientChartData.length > 0 && (
+              <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mt-8 relative overflow-hidden transition-all duration-500 hover:shadow-md print:hidden">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-[#3DB5D9]/10 p-3 rounded-xl text-[#3DB5D9]">
+                      <TrendingUp size={24} strokeWidth={2} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-800 tracking-tight">Evolução no Descarte</h3>
+                      <p className="text-sm text-gray-500 mt-1">Histórico de volume de óleo reciclado por mês.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-[300px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={clientChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                      <XAxis
+                        dataKey="name"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#6B7280', fontSize: 13, fontWeight: 500 }}
+                        dy={10}
+                      />
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#9CA3AF', fontSize: 12 }}
+                        tickFormatter={(value) => `${value}L`}
+                      />
+                      <Tooltip
+                        cursor={{ fill: '#f9fafb' }}
+                        contentStyle={{ borderRadius: '16px', border: '1px solid #f3f4f6', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '12px' }}
+                        labelStyle={{ fontWeight: 'bold', color: '#374151', marginBottom: '4px' }}
+                        itemStyle={{ color: '#3DB5D9', fontWeight: 600 }}
+                        formatter={(value: any) => [`${Number(value).toLocaleString('pt-BR')} Litros`, 'Volume']}
+                      />
+                      <Bar dataKey="volume" radius={[6, 6, 0, 0]} maxBarSize={60}>
+                        {clientChartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={index === clientChartData.length - 1 ? '#3DB5D9' : '#bae6fd'} className="transition-all duration-300 hover:opacity-80" />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="print:hidden">
