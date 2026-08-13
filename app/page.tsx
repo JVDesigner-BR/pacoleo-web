@@ -112,23 +112,15 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 transition-transform group-hover:scale-105">
+          <Link href="/" className="flex items-center group">
+            <div className="relative w-44 sm:w-52 h-12 transition-transform group-hover:scale-105">
               <Image 
-                src="/logo-pacman.png" 
-                alt="Logo PacÓleo" 
+                src="/logo-colorida.png" 
+                alt="PacÓleo Coleta e Reciclagem" 
                 fill 
-                className="object-contain" 
+                className="object-contain object-left" 
                 priority
               />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tight text-slate-900 leading-none">
-                Pac<span className="text-[#3DB5D9]">Óleo</span>
-              </span>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 mt-0.5">
-                Coleta & Reciclagem
-              </span>
             </div>
           </Link>
 
@@ -858,19 +850,14 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             
             {/* Coluna 1: Sobre e CNPJ */}
-            <div className="space-y-3 md:col-span-2">
-              <div className="flex items-center gap-3">
-                <div className="relative w-8 h-8">
-                  <Image 
-                    src="/logo-branca.png" 
-                    alt="Logo PacÓleo" 
-                    fill 
-                    className="object-contain" 
-                  />
-                </div>
-                <span className="text-xl font-black text-white tracking-tight">
-                  Pac<span className="text-[#3DB5D9]">Óleo</span>
-                </span>
+            <div className="space-y-4 md:col-span-2">
+              <div className="relative w-44 sm:w-52 h-12">
+                <Image 
+                  src="/logo-branca.png" 
+                  alt="PacÓleo Coleta e Reciclagem" 
+                  fill 
+                  className="object-contain object-left" 
+                />
               </div>
               <p className="text-xs text-slate-400 max-w-md leading-relaxed">
                 Especialistas em logística reversa, coleta e destinação sustentável de óleo vegetal usado. Gerando impacto ecológico positivo e valor ESG para empresas e condomínios.
