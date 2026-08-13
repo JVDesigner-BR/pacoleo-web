@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-import { Eye, EyeOff, Lock, CheckCircle2, XCircle, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, Lock, CheckCircle2, XCircle, ShieldCheck, ArrowRight, ArrowLeft, AlertCircle, Home } from "lucide-react";
 
 export default function PrimeiroAcessoPage() {
   const [password, setPassword] = useState("");
@@ -80,14 +81,36 @@ export default function PrimeiroAcessoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 sm:p-6">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 sm:p-6 relative">
       {/* Background ambient accents */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-72 bg-gradient-to-b from-[#3DB5D9]/15 to-transparent pointer-events-none -z-10 blur-3xl"></div>
 
       <div className="max-w-md w-full">
+        {/* Botão de Voltar para a Página Inicial */}
+        <div className="flex items-center justify-between mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-[#3DB5D9] bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-200/80 shadow-xs transition-all hover:-translate-x-0.5"
+          >
+            <ArrowLeft size={15} />
+            <span>Voltar para o Início</span>
+          </Link>
+
+          <Link
+            href="/login"
+            className="text-xs font-semibold text-slate-500 hover:text-[#3DB5D9] transition-colors"
+          >
+            Fazer Login
+          </Link>
+        </div>
+
         {/* Header Branding */}
         <div className="text-center mb-8 flex flex-col items-center">
-          <div className="bg-[#3DB5D9] p-4 rounded-2xl shadow-lg shadow-[#3DB5D9]/20 mb-4 inline-flex items-center justify-center">
+          <Link 
+            href="/"
+            title="Ir para a Página Inicial"
+            className="bg-[#3DB5D9] p-4 rounded-2xl shadow-lg shadow-[#3DB5D9]/20 mb-4 inline-flex items-center justify-center transition-transform hover:scale-105"
+          >
             <Image 
               src="/logo-branca.png" 
               alt="PacÓleo Logo" 
@@ -96,7 +119,7 @@ export default function PrimeiroAcessoPage() {
               className="object-contain" 
               priority
             />
-          </div>
+          </Link>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3DB5D9]/10 text-[#2488a4] text-xs font-semibold uppercase tracking-wider mb-2">
             <ShieldCheck size={14} /> Ativação de Acesso
           </span>

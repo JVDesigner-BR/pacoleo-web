@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-import { Eye, EyeOff, Mail, Lock, AlertCircle, HelpCircle, ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, AlertCircle, HelpCircle, ShieldCheck, ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -19,44 +20,51 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
+    try {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password,
+      });
 
-    if (authError) {
-      setError("E-mail ou senha incorretos. Por favor, verifique suas credenciais.");
-      setLoading(false);
-      return;
-    }
-
-    if (data.user) {
-      // Verificar se é primeiro acesso
-      const { data: cliente, error: dbError } = await supabase
-        .from("clientes")
-        .select("is_primeiro_acesso, nivel_acesso")
-        .eq("id", data.user.id)
-        .single();
-
-      if (dbError) {
-        setError("Erro ao buscar seus dados de acesso. Tente novamente.");
+      if (authError) {
+        if (authError.message.includes("Invalid login credentials")) {
+          setError("E-mail ou senha incorretos. Verifique suas credenciais.");
+        } else {
+          setError(authError.message);
+        }
         setLoading(false);
         return;
       }
 
-      if (cliente.is_primeiro_acesso) {
-        router.push("/primeiro-acesso");
-      } else if (cliente.nivel_acesso === "admin") {
-        router.push("/admin/clientes");
-      } else {
-        router.push("/dashboard");
+      if (data?.user) {
+        // Verificar se é primeiro acesso na tabela clientes
+        const { data: cliente, error: clienteError } = await supabase
+          .from("clientes")
+          .select("is_primeiro_acesso, nivel_acesso")
+          .eq("id", data.user.id)
+          .single();
+
+        if (clienteError) {
+          console.error("Erro ao buscar dados do cliente:", clienteError);
+        }
+
+        if (cliente?.is_primeiro_acesso) {
+          router.push("/primeiro-acesso");
+        } else if (cliente?.nivel_acesso === "admin") {
+          router.push("/admin/clientes");
+        } else {
+          router.push("/dashboard");
+        }
       }
+    } catch (err: any) {
+      setError("Ocorreu um erro inesperado ao tentar fazer login.");
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      {/* Left Panel - Branding */}
+    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-50">
+      {/* Left Panel - Branding & Highlights */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-[#3DB5D9] via-[#329fbe] to-[#1e7a96] flex-col items-center justify-center p-12 overflow-hidden shadow-2xl">
         {/* Decorative background elements */}
         <div className="absolute top-0 left-0 w-full h-full opacity-25 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent"></div>
@@ -64,7 +72,11 @@ export default function LoginPage() {
         <div className="absolute top-1/4 right-1/4 w-72 h-72 rounded-full bg-emerald-400/10 blur-3xl"></div>
 
         <div className="relative z-10 flex flex-col items-center max-w-lg text-center">
-          <div className="mb-10 p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 shadow-xl transition-transform duration-500 hover:scale-105">
+          <Link
+            href="/"
+            title="Ir para a Página Inicial"
+            className="mb-10 p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 shadow-xl transition-transform duration-500 hover:scale-105"
+          >
             <Image 
               src="/logo-branca.png" 
               alt="PacÓleo Logo" 
@@ -73,7 +85,7 @@ export default function LoginPage() {
               className="object-contain drop-shadow-md"
               priority
             />
-          </div>
+          </Link>
           
           <div className="space-y-4">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold uppercase tracking-wider border border-white/30">
@@ -107,8 +119,23 @@ export default function LoginPage() {
       {/* Right Panel - Login Form */}
       <div className="flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-20 xl:px-28 bg-white">
         <div className="mx-auto w-full max-w-md">
+          {/* Back to Home Link */}
+          <div className="mb-6">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#3DB5D9] transition-all hover:-translate-x-0.5"
+            >
+              <ArrowLeft size={14} />
+              <span>Voltar para a Página Inicial</span>
+            </Link>
+          </div>
+
           {/* Mobile Logo */}
-          <div className="flex lg:hidden justify-center bg-gradient-to-r from-[#3DB5D9] to-[#2b9abf] p-6 rounded-2xl mb-8 shadow-md">
+          <Link 
+            href="/" 
+            title="Ir para a Página Inicial"
+            className="flex lg:hidden justify-center bg-gradient-to-r from-[#3DB5D9] to-[#2b9abf] p-6 rounded-2xl mb-8 shadow-md"
+          >
             <Image 
               src="/logo-branca.png" 
               alt="PacÓleo Logo" 
@@ -116,7 +143,7 @@ export default function LoginPage() {
               height={70} 
               className="object-contain" 
             />
-          </div>
+          </Link>
 
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Bem-vindo(a)</h2>
