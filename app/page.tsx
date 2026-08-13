@@ -108,6 +108,65 @@ export default function LandingPage() {
     }
   ];
 
+  const parceirosOficiais = [
+    {
+      nome: "Globo Comunicações",
+      categoria: "Mídia & Comunicação",
+      descricao: "O Grupo Globo é o maior conglomerado de mídia e comunicação do Brasil, com gestão consciente de seus resíduos.",
+      logo: "/parceiros/globo.png",
+      badgeColor: "bg-red-50 text-red-700 border-red-200"
+    },
+    {
+      nome: "Sesc RJ",
+      categoria: "Cultura & Assistência",
+      descricao: "Com 22 unidades no estado do Rio de Janeiro, o Sesc é referência em cultura, educação, lazer e responsabilidade socioambiental.",
+      logo: "/parceiros/sesc.png",
+      badgeColor: "bg-amber-50 text-amber-700 border-amber-200"
+    },
+    {
+      nome: "Empório Jardim",
+      categoria: "Gastronomia Premiada",
+      descricao: "Padaria, Bistrô e Deli com café da manhã artesanal de excelência, eleito 11 vezes o melhor do Rio de Janeiro.",
+      logo: "/parceiros/emporio-jardim.png",
+      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200"
+    },
+    {
+      nome: "Satyricon",
+      categoria: "Alta Gastronomia (Desde 1985)",
+      descricao: "Porto seguro e referência em culinária mediterrânea e frutos do mar frescos, com descarte ecológico certificado.",
+      logo: "/parceiros/satyricon.png",
+      badgeColor: "bg-cyan-50 text-cyan-700 border-cyan-200"
+    },
+    {
+      nome: "Minha Coleta",
+      categoria: "Reciclagem Inteligente",
+      descricao: "A solução inovadora e essencial para acelerar e fortalecer a reciclagem e a logística reversa no país.",
+      logo: "/parceiros/minha-coleta.png",
+      badgeColor: "bg-lime-50 text-lime-800 border-lime-200"
+    },
+    {
+      nome: "Ciclo Orgânico",
+      categoria: "Compostagem Urbana",
+      descricao: "Primeira empresa do Brasil pioneira na coleta e compostagem de resíduos orgânicos residenciais e comerciais.",
+      logo: "/parceiros/ciclo-organico.png",
+      badgeColor: "bg-teal-50 text-teal-700 border-teal-200"
+    },
+    {
+      nome: "Feira Faz Girar",
+      categoria: "Economia Circular",
+      descricao: "Mercado social e feira pioneira focada em reutilização, troca consciente, reciclagem e upcycle sustentável.",
+      logo: "/parceiros/faz-girar.png",
+      badgeColor: "bg-purple-50 text-purple-700 border-purple-200"
+    },
+    {
+      nome: "Minds English School",
+      categoria: "Educação & Idiomas",
+      descricao: "Rede inovadora de ensino de idiomas com metodologia dinâmica e engajamento com o futuro sustentável.",
+      logo: "/parceiros/minds.png",
+      badgeColor: "bg-blue-50 text-blue-700 border-blue-200"
+    }
+  ];
+
   const scrollToTop = (e: React.MouseEvent) => {
     e.preventDefault();
     window.scrollTo({
@@ -147,6 +206,7 @@ export default function LandingPage() {
             <a href="#formas-de-coleta" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Coleta</a>
             <a href="#como-funciona" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Como Funciona</a>
             <a href="#calculadora" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Calculadora</a>
+            <a href="#parceiros" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Parceiros</a>
             <a href="#ods" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Sustentabilidade</a>
           </nav>
 
@@ -221,6 +281,14 @@ export default function LandingPage() {
                 className="py-2 border-b border-slate-100 flex items-center justify-between"
               >
                 <span>Calculadora de Impacto</span>
+                <ChevronRight size={16} className="text-slate-400" />
+              </a>
+              <a 
+                href="#parceiros" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 border-b border-slate-100 flex items-center justify-between"
+              >
+                <span>Parceiros Oficiais</span>
                 <ChevronRight size={16} className="text-slate-400" />
               </a>
               <a 
@@ -920,6 +988,84 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* SEÇÃO: PARCEIROS OFICIAIS */}
+      <section id="parceiros" className="py-24 bg-white border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#3DB5D9] bg-[#3DB5D9]/10 px-3 py-1 rounded-full">
+              🌿 Rede de Impacto & Sustentabilidade
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Conheça nossos Parceiros Oficiais
+            </h2>
+            <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
+              Empresas, instituições e grandes marcas que confiam na PacÓleo. <strong>Com eles, o meio ambiente é levado a sério!</strong>
+            </p>
+          </div>
+
+          {/* Grid de Parceiros Oficiais */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {parceirosOficiais.map((parceiro) => (
+              <div 
+                key={parceiro.nome}
+                className="bg-slate-50/70 hover:bg-white p-6 rounded-3xl border border-slate-200/80 hover:border-[#3DB5D9]/40 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
+              >
+                <div>
+                  {/* Container da Logo Oficial */}
+                  <div className="relative w-full h-28 rounded-2xl bg-white p-4 flex items-center justify-center border border-slate-100 shadow-2xs mb-4 group-hover:scale-105 transition-transform duration-300">
+                    <Image 
+                      src={parceiro.logo} 
+                      alt={parceiro.nome} 
+                      fill 
+                      className="object-contain p-3" 
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    />
+                  </div>
+
+                  <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border mb-2 inline-block ${parceiro.badgeColor}`}>
+                    {parceiro.categoria}
+                  </span>
+
+                  <h3 className="text-base font-extrabold text-slate-900 leading-tight">
+                    {parceiro.nome}
+                  </h3>
+
+                  <p className="text-xs text-slate-500 leading-relaxed mt-2">
+                    {parceiro.descricao}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA Banner de Parceria */}
+          <div className="mt-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 sm:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border border-slate-700/60">
+            <div className="space-y-2 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#3DB5D9] text-xs font-bold uppercase tracking-wider">
+                <Sparkles size={14} />
+                <span>Faça Parte dessa Rede</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                Sua empresa também pode se tornar um parceiro oficial.
+              </h3>
+              <p className="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
+                Fornecemos bombonas gratuitas, coleta programada sem custo e emissão de todos os certificados ambientais para sua empresa.
+              </p>
+            </div>
+
+            <button
+              onClick={() => openModalWithTipo("Parceiro / Pac Ponto")}
+              className="px-8 py-4 rounded-2xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 transition-all hover:-translate-y-0.5 cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-2"
+            >
+              <span>Seja um Parceiro Oficial</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
+
+        </div>
+      </section>
+
       {/* BANNER FINAL CTA */}
       <section className="py-16 bg-gradient-to-r from-[#3DB5D9] via-[#2ba5cb] to-[#1d7d9a] text-white">
         <div className="max-w-5xl mx-auto px-4 text-center space-y-6">
@@ -988,6 +1134,7 @@ export default function LandingPage() {
                 <li><a href="#formas-de-coleta" className="hover:text-[#3DB5D9] transition-colors">Formas de Coleta</a></li>
                 <li><a href="#como-funciona" className="hover:text-[#3DB5D9] transition-colors">Como Funciona</a></li>
                 <li><a href="#calculadora" className="hover:text-[#3DB5D9] transition-colors">Calculadora de Impacto</a></li>
+                <li><a href="#parceiros" className="hover:text-[#3DB5D9] transition-colors">Parceiros Oficiais</a></li>
                 <li><a href="#ods" className="hover:text-[#3DB5D9] transition-colors">Metas ODS</a></li>
               </ul>
             </div>
