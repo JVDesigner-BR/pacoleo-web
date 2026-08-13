@@ -5,9 +5,23 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-import { Eye, EyeOff, Lock, CheckCircle2, XCircle, ShieldCheck, ArrowRight, ArrowLeft, AlertCircle, Home } from "lucide-react";
+import { 
+  Eye, 
+  EyeOff, 
+  Lock, 
+  CheckCircle2, 
+  XCircle, 
+  ShieldCheck, 
+  ArrowRight, 
+  ArrowLeft, 
+  AlertCircle, 
+  KeyRound,
+  Sparkles,
+  HelpCircle
+} from "lucide-react";
 
 export default function PrimeiroAcessoPage() {
+  const [hasSession, setHasSession] = useState<boolean | null>(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,13 +31,11 @@ export default function PrimeiroAcessoPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Garantir que temos uma sessão ativa
+    // Verificar se o usuário já está autenticado com senha temporária
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        router.push("/login");
-      }
+      setHasSession(!!session);
     });
-  }, [router]);
+  }, []);
 
   const hasMinLength = password.length >= 6;
   const passwordsMatch = password.length > 0 && password === confirmPassword;
@@ -80,6 +92,108 @@ export default function PrimeiroAcessoPage() {
     }
   };
 
+  // Carregando verificação de sessão
+  if (hasSession === null) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3DB5D9]"></div>
+      </div>
+    );
+  }
+
+  // CASO 1: Usuário NÃO está logado (veio pelo rodapé ou link direto)
+  // Exibimos uma tela explicativa sem redirecionamento forçado, permitindo voltar pelo botão do navegador
+  if (!hasSession) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 sm:p-6 relative">
+        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-72 bg-gradient-to-b from-[#3DB5D9]/15 to-transparent pointer-events-none -z-10 blur-3xl"></div>
+
+        <div className="max-w-md w-full">
+          {/* Header Link */}
+          <div className="flex items-center justify-between mb-6">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-[#3DB5D9] bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-200/80 shadow-xs transition-all hover:-translate-x-0.5"
+            >
+              <ArrowLeft size={15} />
+              <span>Voltar para o Início</span>
+            </Link>
+
+            <Link
+              href="/login"
+              className="text-xs font-semibold text-slate-500 hover:text-[#3DB5D9] transition-colors"
+            >
+              Fazer Login
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-8 text-center space-y-6">
+            <Link 
+              href="/"
+              title="Ir para a Página Inicial"
+              className="bg-[#3DB5D9] p-4 rounded-2xl shadow-lg shadow-[#3DB5D9]/20 inline-flex items-center justify-center transition-transform hover:scale-105"
+            >
+              <Image 
+                src="/logo-branca.png" 
+                alt="PacÓleo Logo" 
+                width={160} 
+                height={60} 
+                className="object-contain" 
+                priority
+              />
+            </Link>
+
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3DB5D9]/10 text-[#2488a4] text-xs font-bold uppercase tracking-wider">
+                <KeyRound size={14} /> Ativação de Acesso
+              </span>
+              <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                Como funciona o Primeiro Acesso?
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Para cadastrar sua senha pessoal definitiva, faça login primeiro com a <strong>senha provisória</strong> gerada para o seu estabelecimento.
+              </p>
+            </div>
+
+            {/* Passo a Passo Didático */}
+            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-left space-y-3 text-xs text-slate-700">
+              <div className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#3DB5D9] text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
+                <span>Acesse a página de login informando seu e-mail e a senha temporária recebida.</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#3DB5D9] text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
+                <span>O portal identificará que é seu primeiro login e abrirá a tela de nova senha.</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#3DB5D9] text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">3</span>
+                <span>Pronto! Sua senha segura estará ativada para todos os próximos acessos.</span>
+              </div>
+            </div>
+
+            <div className="space-y-2.5 pt-2">
+              <Link
+                href="/login"
+                className="w-full py-3.5 rounded-xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#3DB5D9]/25 hover:shadow-[#3DB5D9]/40 transition-all flex items-center justify-center gap-2"
+              >
+                <span>Ir para a Tela de Login</span>
+                <ArrowRight size={16} />
+              </Link>
+
+              <Link
+                href="/"
+                className="w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+              >
+                <span>Voltar para a Página Inicial</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // CASO 2: Usuário ESTÁ logado com sessão ativa (definir nova senha)
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 sm:p-6 relative">
       {/* Background ambient accents */}
@@ -236,4 +350,3 @@ export default function PrimeiroAcessoPage() {
     </div>
   );
 }
-
