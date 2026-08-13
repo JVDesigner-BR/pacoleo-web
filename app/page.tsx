@@ -50,12 +50,16 @@ export default function LandingPage() {
     responsavel: "",
     whatsapp: "",
     bairroCidade: "",
-    volumeMensal: "50L a 100L"
+    volumeMensal: "100 Litros / mês"
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const openModalWithTipo = (tipo: string) => {
-    setFormData(prev => ({ ...prev, tipoNegocio: tipo }));
+    setFormData(prev => ({ 
+      ...prev, 
+      tipoNegocio: tipo,
+      volumeMensal: `${calcLitros} Litros / mês`
+    }));
     setFormSubmitted(false);
     setShowSignupModal(true);
   };
@@ -1065,18 +1069,15 @@ export default function LandingPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Volume Mensal Aprox.</label>
-                      <select 
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Volume Mensal Estimado</label>
+                      <input 
+                        type="text" 
+                        required
                         value={formData.volumeMensal}
                         onChange={(e) => setFormData({ ...formData, volumeMensal: e.target.value })}
-                        className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:ring-2 focus:ring-[#3DB5D9]/30 focus:border-[#3DB5D9] outline-none bg-white"
-                      >
-                        <option value="Até 50L/mês">Até 50 Litros / mês</option>
-                        <option value="50L a 100L/mês">50L a 100 Litros / mês</option>
-                        <option value="100L a 300L/mês">100L a 300 Litros / mês</option>
-                        <option value="Mais de 300L/mês">Mais de 300 Litros / mês</option>
-                        <option value="Ainda não sei estimar">Ainda não sei estimar</option>
-                      </select>
+                        placeholder="Ex: 100 Litros / mês" 
+                        className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:ring-2 focus:ring-[#3DB5D9]/30 focus:border-[#3DB5D9] outline-none font-medium text-slate-800 bg-white"
+                      />
                     </div>
                   </div>
 
