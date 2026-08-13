@@ -631,11 +631,11 @@ export default function LandingPage() {
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Lado Esquerdo: Slider e Contexto */}
+            {/* Lado Esquerdo: Controles Interativos da Calculadora */}
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#3DB5D9] text-xs font-bold uppercase tracking-wider border border-white/15">
                 <Calculator size={14} />
-                <span>Simulador de Preservação</span>
+                <span>Simulador de Preservação em Tempo Real</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
@@ -643,114 +643,203 @@ export default function LandingPage() {
               </h2>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Cada litro de óleo descartado incorretamente contamina até <strong>25.000 litros de água potável</strong>. Calcule a contribuição do seu negócio:
+                Cada litro de óleo descartado incorretamente contamina até <strong>25.000 litros de água potável</strong>. Ajuste o volume abaixo para calcular seu impacto ecológico:
               </p>
 
-              <div className="bg-white/10 p-6 rounded-3xl border border-white/20 backdrop-blur-md space-y-4">
-                <div className="flex justify-between items-center">
+              {/* Caixa de Controle do Slider e Input Numérico */}
+              <div className="bg-white/10 p-6 sm:p-7 rounded-3xl border border-white/20 backdrop-blur-md space-y-5 shadow-2xl">
+                
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <label className="text-xs uppercase font-bold text-slate-300 tracking-wider">
-                    Volume Estimado por Mês:
+                    Volume de Óleo (Litros/Mês):
                   </label>
-                  <span className="text-2xl font-black text-[#3DB5D9]">
-                    {calcLitros} Litros
+
+                  {/* Input Direto + Stepper +/- */}
+                  <div className="flex items-center gap-2 bg-slate-950/60 p-1.5 rounded-2xl border border-white/15">
+                    <button
+                      type="button"
+                      onClick={() => setCalcLitros(prev => Math.max(10, prev - 10))}
+                      className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-lg flex items-center justify-center transition-colors cursor-pointer"
+                      title="Diminuir 10 litros"
+                    >
+                      -
+                    </button>
+
+                    <div className="flex items-center px-2">
+                      <input 
+                        type="number"
+                        min="1"
+                        max="100000"
+                        value={calcLitros || ""}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value, 10);
+                          setCalcLitros(isNaN(val) ? 0 : Math.max(0, val));
+                        }}
+                        className="w-16 bg-transparent text-right font-black text-xl text-[#3DB5D9] outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <span className="text-xs font-bold text-slate-300 ml-1">L</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setCalcLitros(prev => prev + 10)}
+                      className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-lg flex items-center justify-center transition-colors cursor-pointer"
+                      title="Aumentar 10 litros"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Slider / Range */}
+                <div className="space-y-2">
+                  <input 
+                    type="range" 
+                    min="10" 
+                    max="1000" 
+                    step="10" 
+                    value={Math.min(1000, Math.max(10, calcLitros))}
+                    onChange={(e) => setCalcLitros(Number(e.target.value))}
+                    className="w-full h-3 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#3DB5D9]"
+                  />
+                  <div className="flex justify-between text-[11px] text-slate-400 font-semibold px-0.5">
+                    <span>10L</span>
+                    <span>250L</span>
+                    <span>500L</span>
+                    <span>1.000L+</span>
+                  </div>
+                </div>
+
+                {/* Chips de Volumes Pré-definidos */}
+                <div className="space-y-2 pt-1 border-t border-white/10">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Seleção Rápida por Porte:
                   </span>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { label: "20L (Pequeno)", val: 20 },
+                      { label: "50L", val: 50 },
+                      { label: "100L (Médio)", val: 100 },
+                      { label: "250L", val: 250 },
+                      { label: "500L (Grande)", val: 500 },
+                      { label: "1.000L (Rede)", val: 1000 }
+                    ].map((preset) => (
+                      <button
+                        key={preset.val}
+                        type="button"
+                        onClick={() => setCalcLitros(preset.val)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          calcLitros === preset.val 
+                            ? "bg-[#3DB5D9] text-white shadow-md shadow-[#3DB5D9]/40" 
+                            : "bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white"
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                <input 
-                  type="range" 
-                  min="20" 
-                  max="1000" 
-                  step="10" 
-                  value={calcLitros}
-                  onChange={(e) => setCalcLitros(Number(e.target.value))}
-                  className="w-full h-2.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#3DB5D9]"
-                />
-
-                <div className="flex justify-between text-[11px] text-slate-400 font-semibold">
-                  <span>20L (Pequeno)</span>
-                  <span>200L (Médio)</span>
-                  <span>500L</span>
-                  <span>1.000L+ (Grande)</span>
-                </div>
               </div>
 
+              {/* Botão de Solicitação Conectado com o Volume */}
               <button
                 onClick={() => {
-                  setFormData(prev => ({ ...prev, volumeMensal: `${calcLitros} Litros/mês` }));
+                  setFormData(prev => ({ ...prev, volumeMensal: `${calcLitros} Litros / mês` }));
                   setFormSubmitted(false);
                   setShowSignupModal(true);
                 }}
-                className="w-full py-3.5 rounded-2xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-4 rounded-2xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-black text-xs uppercase tracking-wider transition-all shadow-xl shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 flex items-center justify-center gap-2 cursor-pointer hover:-translate-y-0.5"
               >
-                <span>Quero esse impacto no meu negócio</span>
+                <span>Quero esse impacto no meu negócio ({calcLitros}L/mês)</span>
                 <ArrowRight size={16} />
               </button>
             </div>
 
-            {/* Lado Direito: Cards de Equivalência */}
+            {/* Lado Direito: Cards de Equivalência e Resultados em Tempo Real */}
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
               
-              {/* Card Água */}
-              <div className="bg-gradient-to-br from-[#0284C7]/40 to-[#0369A1]/60 p-6 sm:p-7 rounded-3xl border border-sky-400/30 backdrop-blur-md space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-lg shadow-sky-500/30">
-                  <Droplets size={26} />
+              {/* Card 1: Água Preservada */}
+              <div className="bg-gradient-to-br from-[#0284C7]/40 to-[#0369A1]/70 p-6 sm:p-7 rounded-3xl border border-sky-400/30 backdrop-blur-md space-y-4 shadow-xl transition-all hover:scale-[1.02]">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-lg shadow-sky-500/40">
+                    <Droplets size={26} />
+                  </div>
+                  <span className="text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-sky-500/20 text-sky-200 border border-sky-400/20">
+                    1L Óleo = 25.000L Água
+                  </span>
                 </div>
                 <div>
                   <span className="text-xs uppercase font-bold text-sky-200 tracking-wider block">Água Preservada</span>
-                  <h3 className="text-3xl sm:text-4xl font-black text-white mt-1">
-                    {(calcLitros * 25000).toLocaleString("pt-BR")} <span className="text-lg font-bold text-sky-200">L</span>
+                  <h3 className="text-3xl sm:text-4xl font-black text-white mt-1 tracking-tight">
+                    {(calcLitros * 25000).toLocaleString("pt-BR")} <span className="text-lg font-bold text-sky-200">Litros</span>
                   </h3>
                 </div>
-                <p className="text-xs text-sky-100/80 leading-relaxed">
-                  Volume de água potável protegido contra contaminação química em rios e lençóis freáticos.
+                <p className="text-xs text-sky-100/85 leading-relaxed">
+                  Volume de água potável protegido contra contaminação química em rios, córregos e lençóis freáticos.
                 </p>
               </div>
 
-              {/* Card Biodiesel */}
-              <div className="bg-gradient-to-br from-emerald-600/40 to-emerald-800/60 p-6 sm:p-7 rounded-3xl border border-emerald-400/30 backdrop-blur-md space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                  <Zap size={26} />
+              {/* Card 2: Biodiesel Sustentável */}
+              <div className="bg-gradient-to-br from-emerald-600/40 to-emerald-800/70 p-6 sm:p-7 rounded-3xl border border-emerald-400/30 backdrop-blur-md space-y-4 shadow-xl transition-all hover:scale-[1.02]">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/40">
+                    <Zap size={26} />
+                  </div>
+                  <span className="text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/20">
+                    Energia Limpa
+                  </span>
                 </div>
                 <div>
                   <span className="text-xs uppercase font-bold text-emerald-200 tracking-wider block">Biodiesel Gerado</span>
-                  <h3 className="text-3xl sm:text-4xl font-black text-white mt-1">
-                    {(calcLitros * 0.8).toLocaleString("pt-BR")} <span className="text-lg font-bold text-emerald-200">L</span>
+                  <h3 className="text-3xl sm:text-4xl font-black text-white mt-1 tracking-tight">
+                    {(calcLitros * 0.85).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-lg font-bold text-emerald-200">Litros</span>
                   </h3>
                 </div>
-                <p className="text-xs text-emerald-100/80 leading-relaxed">
-                  Substitui derivados do petróleo e evita a emissão de gases de efeito estufa na atmosfera.
+                <p className="text-xs text-emerald-100/85 leading-relaxed">
+                  Substitui o diesel fóssil poluente e evita a emissão de aproximadamente <strong>{Math.round(calcLitros * 2.6).toLocaleString("pt-BR")} kg de CO₂</strong>.
                 </p>
               </div>
 
-              {/* Card MTR */}
-              <div className="bg-gradient-to-br from-purple-600/40 to-purple-800/60 p-6 sm:p-7 rounded-3xl border border-purple-400/30 backdrop-blur-md space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-500/30">
-                  <FileText size={26} />
+              {/* Card 3: Conformidade Legal MTR & CDF */}
+              <div className="bg-gradient-to-br from-purple-600/40 to-purple-800/70 p-6 sm:p-7 rounded-3xl border border-purple-400/30 backdrop-blur-md space-y-4 shadow-xl transition-all hover:scale-[1.02]">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-500/40">
+                    <FileText size={26} />
+                  </div>
+                  <span className="text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/20">
+                    Rastreabilidade
+                  </span>
                 </div>
                 <div>
                   <span className="text-xs uppercase font-bold text-purple-200 tracking-wider block">Conformidade Legal</span>
-                  <h3 className="text-2xl font-black text-white mt-1">
+                  <h3 className="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">
                     100% Certificado
                   </h3>
                 </div>
-                <p className="text-xs text-purple-100/80 leading-relaxed">
-                  Emissão de Manifesto de Transporte de Resíduos (MTR) e CDF para alvarás e órgãos reguladores.
+                <p className="text-xs text-purple-100/85 leading-relaxed">
+                  Emissão periódica de Manifesto de Transporte (MTR) e CDF para atender todas as exigências ambientais e alvarás.
                 </p>
               </div>
 
-              {/* Card Custo Zero */}
-              <div className="bg-gradient-to-br from-amber-600/40 to-amber-800/60 p-6 sm:p-7 rounded-3xl border border-amber-400/30 backdrop-blur-md space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/30">
-                  <ShieldCheck size={26} />
+              {/* Card 4: Custo Zero */}
+              <div className="bg-gradient-to-br from-amber-600/40 to-amber-800/70 p-6 sm:p-7 rounded-3xl border border-amber-400/30 backdrop-blur-md space-y-4 shadow-xl transition-all hover:scale-[1.02]">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/40">
+                    <ShieldCheck size={26} />
+                  </div>
+                  <span className="text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/20">
+                    Sem Custos
+                  </span>
                 </div>
                 <div>
-                  <span className="text-xs uppercase font-bold text-amber-200 tracking-wider block">Custo Financeiro</span>
-                  <h3 className="text-2xl font-black text-white mt-1">
+                  <span className="text-xs uppercase font-bold text-amber-200 tracking-wider block">Custo para o Parceiro</span>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">
                     R$ 0,00
                   </h3>
                 </div>
-                <p className="text-xs text-amber-100/80 leading-relaxed">
-                  Fornecimento das bombonas e logística de coleta totalmente gratuitos para o parceiro.
+                <p className="text-xs text-amber-100/85 leading-relaxed">
+                  Fornecimento das bombonas adequadas e logística de recolhimento totalmente gratuitas para o seu estabelecimento.
                 </p>
               </div>
 
