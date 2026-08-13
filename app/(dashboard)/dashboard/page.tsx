@@ -111,7 +111,7 @@ export default function DashboardPage() {
     },
     {
       number: 13,
-      title: "Ação Contra Mudança do Clima",
+      title: "Ação Contra a Mudança Global do Clima",
       desc: "Reduz a queima de combustíveis fósseis através da substituição por biocombustível de baixa emissão.",
       image: "/ods/ods13.jpeg",
       color: "border-emerald-600 text-emerald-700 bg-emerald-50"
@@ -356,7 +356,7 @@ export default function DashboardPage() {
           )}
 
           {/* ODS SECTION - OBJETIVOS DE DESENVOLVIMENTO SUSTENTÁVEL */}
-          <div className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 relative overflow-hidden">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/80 relative overflow-hidden">
             {/* Top Accent Strip */}
             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#3DB5D9] via-emerald-400 to-blue-500"></div>
 
@@ -375,27 +375,33 @@ export default function DashboardPage() {
             </div>
 
             {/* ODS Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {odsList.map((ods) => (
                 <div 
                   key={ods.number}
-                  className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/70 hover:border-slate-300 hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-slate-50/80 hover:bg-white rounded-2xl p-4 border border-slate-200/70 hover:border-[#3DB5D9]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
                 >
-                  <div>
-                    <div className="relative w-full h-36 rounded-xl overflow-hidden mb-3 shadow-sm group-hover:scale-[1.02] transition-transform duration-300">
+                  <div className="flex flex-col">
+                    {/* Square ODS Badge (100% visible, no crop) */}
+                    <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4 shadow-sm border border-slate-200/60 bg-white">
                       <Image 
                         src={ods.image} 
                         alt={`ODS ${ods.number} - ${ods.title}`} 
                         fill 
-                        className="object-cover" 
+                        className="object-contain" 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                       />
                     </div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-xs font-black px-2 py-0.5 rounded-md bg-slate-900 text-white">
+                    
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-slate-900 text-white shrink-0">
                         ODS {ods.number}
                       </span>
-                      <h4 className="text-xs font-bold text-slate-800 line-clamp-1">{ods.title}</h4>
+                      <h4 className="text-xs font-bold text-slate-800 leading-tight">
+                        {ods.title}
+                      </h4>
                     </div>
+
                     <p className="text-xs text-slate-500 leading-relaxed">
                       {ods.desc}
                     </p>
