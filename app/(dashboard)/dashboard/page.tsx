@@ -105,9 +105,9 @@ export default function DashboardPage() {
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-yellow-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Droplet size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{currentTotal.toLocaleString("pt-BR")} <span className="text-2xl text-white/80 font-medium">L</span></h3>
+                <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm break-all sm:break-normal">{Math.round(currentTotal).toLocaleString("pt-BR")} <span className="text-xl text-white/80 font-medium">L</span></h3>
                 <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
-                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm">Óleo Reciclado</p>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm break-words">Óleo Reciclado</p>
                 <p className="text-sm text-white/90 leading-relaxed font-medium">Volume total coletado de óleo vegetal que deixou de poluir a natureza.</p>
               </div>
             </div>
@@ -119,9 +119,9 @@ export default function DashboardPage() {
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Droplets size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{(currentTotal * 25000).toLocaleString("pt-BR")} <span className="text-2xl text-white/80 font-medium">L</span></h3>
+                <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm break-all sm:break-normal">{Math.round(currentTotal * 25000).toLocaleString("pt-BR")} <span className="text-xl text-white/80 font-medium">L</span></h3>
                 <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
-                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm">Água Preservada</p>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm break-words">Água Preservada</p>
                 <p className="text-sm text-white/90 leading-relaxed font-medium">Evitamos a contaminação direta de mananciais hídricos com essa ação.</p>
               </div>
             </div>
@@ -133,9 +133,9 @@ export default function DashboardPage() {
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 text-green-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500">
                   <Fuel size={36} strokeWidth={2} />
                 </div>
-                <h3 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-2xl text-white/80 font-medium">L</span></h3>
+                <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm break-all sm:break-normal">{(currentTotal * 0.8).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} <span className="text-xl text-white/80 font-medium">L</span></h3>
                 <div className="w-12 h-1 bg-white/30 mb-4 rounded-full"></div>
-                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm">Biodiesel Gerado</p>
+                <p className="text-white font-bold text-lg mb-2 drop-shadow-sm break-words">Biodiesel Gerado</p>
                 <p className="text-sm text-white/90 leading-relaxed font-medium">Apoiamos a produção de energia limpa e renovável para o futuro.</p>
               </div>
             </div>
