@@ -257,33 +257,33 @@ export default function AdminClientesPage() {
             </div>
           </div>
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-white shadow-sm border border-white/30">
-                <Truck size={24} />
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-white shadow-sm border border-white/30">
+                <Truck size={20} />
               </div>
-              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider truncate">Coletas Realizadas</p>
-              <h3 className="text-3xl xl:text-4xl font-black drop-shadow-sm truncate" title={globalColetas.toString()}>{formatCompactNumber(globalColetas)}</h3>
+              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Coletas Realizadas</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={globalColetas.toString()}>{formatCompactNumber(globalColetas)}</h3>
             </div>
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-yellow-300 shadow-sm border border-white/30">
-                <Droplet size={24} />
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-yellow-300 shadow-sm border border-white/30">
+                <Droplet size={20} />
               </div>
-              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider truncate">Total de Óleo</p>
-              <h3 className="text-3xl xl:text-4xl font-black drop-shadow-sm truncate" title={globalTotal.toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal)} <span className="text-lg text-white/70 font-medium">L</span></h3>
+              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Total de Óleo</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={globalTotal.toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal)} <span className="text-sm font-bold text-white/70">L</span></h3>
             </div>
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-blue-200 shadow-sm border border-white/30">
-                <Droplets size={24} />
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-blue-200 shadow-sm border border-white/30">
+                <Droplets size={20} />
               </div>
-              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider truncate">Água Preservada</p>
-              <h3 className="text-3xl xl:text-4xl font-black drop-shadow-sm truncate" title={(globalTotal * 25000).toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal * 25000)} <span className="text-lg text-white/70 font-medium">L</span></h3>
+              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Água Preservada</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={(globalTotal * 25000).toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal * 25000)} <span className="text-sm font-bold text-white/70">L</span></h3>
             </div>
-            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 text-green-300 shadow-sm border border-white/30">
-                <Zap size={24} />
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-sm hover:bg-white/20 transition-all duration-300 min-w-0 flex flex-col justify-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 text-green-300 shadow-sm border border-white/30">
+                <Zap size={20} />
               </div>
-              <p className="text-white/80 text-sm font-bold mb-1 uppercase tracking-wider truncate">Biodiesel Gerado</p>
-              <h3 className="text-3xl xl:text-4xl font-black drop-shadow-sm truncate" title={(globalTotal * 0.8).toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal * 0.8)} <span className="text-lg text-white/70 font-medium">L</span></h3>
+              <p className="text-white/90 text-xs font-bold mb-1 uppercase tracking-wider leading-tight">Biodiesel Gerado</p>
+              <h3 className="text-2xl lg:text-3xl font-black drop-shadow-sm tracking-tight" title={(globalTotal * 0.8).toLocaleString("pt-BR")}>{formatCompactNumber(globalTotal * 0.8)} <span className="text-sm font-bold text-white/70">L</span></h3>
             </div>
           </div>
         </div>
@@ -521,51 +521,51 @@ export default function AdminClientesPage() {
             
             <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 print:p-0 transition-opacity ${loading ? 'opacity-50' : ''}`}>
               
-              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0">
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-5 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0 flex flex-col justify-center">
                 <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
                 <div className="relative z-10 flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-gray-100 print:border-none print:text-gray-600">
-                    <Truck size={32} strokeWidth={2} />
+                  <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-3 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-gray-100 print:border-none print:text-gray-600">
+                    <Truck size={28} strokeWidth={2} />
                   </div>
-                  <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none truncate w-full" title={clienteData.totalColetas.toString()}>{formatCompactNumber(clienteData.totalColetas)}</h3>
-                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
-                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none truncate w-full">Coletas Realizadas</p>
+                  <h3 className="text-2xl lg:text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none" title={clienteData.totalColetas.toString()}>{formatCompactNumber(clienteData.totalColetas)}</h3>
+                  <div className="w-10 h-1 bg-white/30 mb-2 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white/90 font-bold text-xs uppercase tracking-wider drop-shadow-sm print:text-gray-600 print:drop-shadow-none leading-tight">Coletas Realizadas</p>
                 </div>
               </div>
 
-              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0">
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-5 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0 flex flex-col justify-center">
                 <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
                 <div className="relative z-10 flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-yellow-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-yellow-50 print:border-none print:text-yellow-600">
-                    <Droplet size={32} strokeWidth={2} />
+                  <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-3 text-yellow-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-yellow-50 print:border-none print:text-yellow-600">
+                    <Droplet size={28} strokeWidth={2} />
                   </div>
-                  <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none truncate w-full" title={clienteData.totalLitros.toLocaleString("pt-BR")}>{formatCompactNumber(clienteData.totalLitros)} <span className="text-lg text-white/80 font-medium print:text-gray-500">L</span></h3>
-                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
-                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none truncate w-full">Óleo Reciclado</p>
+                  <h3 className="text-2xl lg:text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none" title={clienteData.totalLitros.toLocaleString("pt-BR")}>{formatCompactNumber(clienteData.totalLitros)} <span className="text-sm font-bold text-white/80 print:text-gray-500">L</span></h3>
+                  <div className="w-10 h-1 bg-white/30 mb-2 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white/90 font-bold text-xs uppercase tracking-wider drop-shadow-sm print:text-gray-600 print:drop-shadow-none leading-tight">Óleo Reciclado</p>
                 </div>
               </div>
 
-              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0">
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-5 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0 flex flex-col justify-center">
                 <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
                 <div className="relative z-10 flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-blue-50 print:border-none print:text-blue-600">
-                    <Droplets size={32} strokeWidth={2} />
+                  <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-3 text-white shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-blue-50 print:border-none print:text-blue-600">
+                    <Droplets size={28} strokeWidth={2} />
                   </div>
-                  <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none truncate w-full" title={(clienteData.totalLitros * 25000).toLocaleString("pt-BR")}>{formatCompactNumber(clienteData.totalLitros * 25000)} <span className="text-lg text-white/80 font-medium print:text-gray-500">L</span></h3>
-                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
-                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none truncate w-full">Água Preservada</p>
+                  <h3 className="text-2xl lg:text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none" title={(clienteData.totalLitros * 25000).toLocaleString("pt-BR")}>{formatCompactNumber(clienteData.totalLitros * 25000)} <span className="text-sm font-bold text-white/80 print:text-gray-500">L</span></h3>
+                  <div className="w-10 h-1 bg-white/30 mb-2 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white/90 font-bold text-xs uppercase tracking-wider drop-shadow-sm print:text-gray-600 print:drop-shadow-none leading-tight">Água Preservada</p>
                 </div>
               </div>
 
-              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0">
+              <div className="group relative bg-gradient-to-br from-[#3DB5D9] to-[#2b9abf] p-5 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1 print:bg-white print:border-2 print:border-gray-200 print:shadow-none print:text-gray-800 min-w-0 flex flex-col justify-center">
                 <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl transition-all duration-500 group-hover:scale-150 print:hidden"></div>
                 <div className="relative z-10 flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 text-green-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-green-50 print:border-none print:text-green-600">
-                    <Zap size={32} strokeWidth={2} />
+                  <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-3 text-green-400 shadow-sm border border-white/30 group-hover:scale-110 transition-transform duration-500 print:bg-green-50 print:border-none print:text-green-600">
+                    <Zap size={28} strokeWidth={2} />
                   </div>
-                  <h3 className="text-3xl xl:text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none truncate w-full" title={(clienteData.totalLitros * 0.8).toLocaleString("pt-BR")}>{formatCompactNumber(clienteData.totalLitros * 0.8)} <span className="text-lg text-white/80 font-medium print:text-gray-500">L</span></h3>
-                  <div className="w-10 h-1 bg-white/30 mb-3 rounded-full print:bg-gray-300"></div>
-                  <p className="text-white font-bold text-sm mb-1 drop-shadow-sm print:text-gray-600 print:drop-shadow-none truncate w-full">Biodiesel Gerado</p>
+                  <h3 className="text-2xl lg:text-3xl font-black text-white mb-2 tracking-tight drop-shadow-sm print:text-gray-800 print:drop-shadow-none" title={(clienteData.totalLitros * 0.8).toLocaleString("pt-BR")}>{formatCompactNumber(clienteData.totalLitros * 0.8)} <span className="text-sm font-bold text-white/80 print:text-gray-500">L</span></h3>
+                  <div className="w-10 h-1 bg-white/30 mb-2 rounded-full print:bg-gray-300"></div>
+                  <p className="text-white/90 font-bold text-xs uppercase tracking-wider drop-shadow-sm print:text-gray-600 print:drop-shadow-none leading-tight">Biodiesel Gerado</p>
                 </div>
               </div>
             </div>
