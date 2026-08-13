@@ -27,7 +27,13 @@ import {
   Recycle, 
   Award,
   CalendarCheck,
-  Calculator
+  Calculator,
+  Megaphone,
+  Star,
+  Home,
+  MapPin,
+  HelpCircle,
+  Users
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -48,17 +54,23 @@ export default function LandingPage() {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  const openModalWithTipo = (tipo: string) => {
+    setFormData(prev => ({ ...prev, tipoNegocio: tipo }));
+    setFormSubmitted(false);
+    setShowSignupModal(true);
+  };
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const phone = "5521999999999"; // Contato PacÓleo
-    const text = `🌿 *Solicitação de Cadastro / Coleta PacÓleo*\n\n` +
-      `🏢 *Empresa:* ${formData.nomeEmpresa}\n` +
-      `🏷️ *Tipo:* ${formData.tipoNegocio}\n` +
+    const text = `🌿 *Solicitação de Parceria / Coleta PacÓleo*\n\n` +
+      `🏢 *Estabelecimento / Nome:* ${formData.nomeEmpresa}\n` +
+      `🏷️ *Modalidade:* ${formData.tipoNegocio}\n` +
       `👤 *Responsável:* ${formData.responsavel}\n` +
       `📱 *WhatsApp:* ${formData.whatsapp}\n` +
       `📍 *Localização:* ${formData.bairroCidade}\n` +
       `🛢️ *Volume Estimado:* ${formData.volumeMensal}\n\n` +
-      `Olá! Gostaria de agendar a entrega das bombonas e iniciar a coleta de óleo vegetal com a PacÓleo.`;
+      `Olá! Gostaria de mais informações e de iniciar a parceria com a PacÓleo.`;
 
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
@@ -121,12 +133,12 @@ export default function LandingPage() {
           </Link>
 
           {/* Links de Navegação Desktop */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+          <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
+            <a href="#o-que-fazemos" className="hover:text-[#3DB5D9] transition-colors">O que fazemos</a>
+            <a href="#formas-de-coleta" className="hover:text-[#3DB5D9] transition-colors">Formas de Coleta</a>
             <a href="#como-funciona" className="hover:text-[#3DB5D9] transition-colors">Como Funciona</a>
-            <a href="#beneficios" className="hover:text-[#3DB5D9] transition-colors">Vantagens</a>
             <a href="#calculadora" className="hover:text-[#3DB5D9] transition-colors">Calculadora</a>
-            <a href="#segmentos" className="hover:text-[#3DB5D9] transition-colors">Quem Atendemos</a>
-            <a href="#ods" className="hover:text-[#3DB5D9] transition-colors">Compromisso ODS</a>
+            <a href="#ods" className="hover:text-[#3DB5D9] transition-colors">ODS & Impacto</a>
           </nav>
 
           {/* Botões de Ação Desktop */}
@@ -140,10 +152,7 @@ export default function LandingPage() {
             </Link>
 
             <button
-              onClick={() => {
-                setFormSubmitted(false);
-                setShowSignupModal(true);
-              }}
+              onClick={() => openModalWithTipo("Restaurante / Bar")}
               className="px-5 py-2.5 rounded-xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#3DB5D9]/25 hover:shadow-[#3DB5D9]/40 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5"
             >
               <Sparkles size={14} />
@@ -174,6 +183,22 @@ export default function LandingPage() {
           <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-4 animate-in slide-in-from-top-4 duration-200 shadow-xl">
             <nav className="flex flex-col space-y-3 font-semibold text-slate-700 text-sm">
               <a 
+                href="#o-que-fazemos" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 border-b border-slate-100 flex items-center justify-between"
+              >
+                <span>O que fazemos</span>
+                <ChevronRight size={16} className="text-slate-400" />
+              </a>
+              <a 
+                href="#formas-de-coleta" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 border-b border-slate-100 flex items-center justify-between"
+              >
+                <span>Formas de Coleta</span>
+                <ChevronRight size={16} className="text-slate-400" />
+              </a>
+              <a 
                 href="#como-funciona" 
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2 border-b border-slate-100 flex items-center justify-between"
@@ -182,27 +207,11 @@ export default function LandingPage() {
                 <ChevronRight size={16} className="text-slate-400" />
               </a>
               <a 
-                href="#beneficios" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
-              >
-                <span>Vantagens & Conformidade</span>
-                <ChevronRight size={16} className="text-slate-400" />
-              </a>
-              <a 
                 href="#calculadora" 
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2 border-b border-slate-100 flex items-center justify-between"
               >
                 <span>Calculadora Ecológica</span>
-                <ChevronRight size={16} className="text-slate-400" />
-              </a>
-              <a 
-                href="#segmentos" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
-              >
-                <span>Quem Atendemos</span>
                 <ChevronRight size={16} className="text-slate-400" />
               </a>
               <a 
@@ -219,8 +228,7 @@ export default function LandingPage() {
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  setFormSubmitted(false);
-                  setShowSignupModal(true);
+                  openModalWithTipo("Restaurante / Bar");
                 }}
                 className="w-full py-3 rounded-xl bg-[#3DB5D9] text-white font-bold text-sm shadow-md text-center flex items-center justify-center gap-2"
               >
@@ -269,10 +277,7 @@ export default function LandingPage() {
             {/* CTAs Principais */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
-                onClick={() => {
-                  setFormSubmitted(false);
-                  setShowSignupModal(true);
-                }}
+                onClick={() => openModalWithTipo("Restaurante / Bar")}
                 className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 transition-all hover:-translate-y-1 cursor-pointer flex items-center justify-center gap-2"
               >
                 <Sparkles size={18} />
@@ -335,7 +340,206 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SEÇÃO 1: COMO FUNCIONA O PROCESSO */}
+      {/* SEÇÃO NOBRE: O QUE FAZEMOS */}
+      <section id="o-que-fazemos" className="py-20 bg-white border-y border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#3DB5D9] tracking-tight">
+              O que fazemos
+            </h2>
+            <p className="text-slate-500 text-sm sm:text-base">
+              Conheça as três frentes fundamentais do trabalho da PacÓleo para transformar resíduos em sustentabilidade real.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            {/* Pilar 1: Coleta de óleo usado */}
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200/80 hover:border-[#3DB5D9]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-center items-center group hover:-translate-y-1">
+              <div className="flex flex-col items-center">
+                <div className="w-20 h-20 rounded-2xl bg-[#3DB5D9]/10 text-[#0284C7] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Droplets size={44} className="stroke-[2.2]" />
+                </div>
+                <h3 className="text-xl font-extrabold text-[#0284C7] mb-4">
+                  Coleta de óleo usado
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Realizamos a coleta do óleo vegetal usado e direcionamos o resíduo para um local de reciclagem, transformando ele em um novo produto.
+                </p>
+              </div>
+            </div>
+
+            {/* Pilar 2: Gerenciamento do óleo recolhido */}
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200/80 hover:border-[#3DB5D9]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-center items-center group hover:-translate-y-1">
+              <div className="flex flex-col items-center">
+                <div className="w-20 h-20 rounded-2xl bg-[#3DB5D9]/10 text-[#0284C7] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Recycle size={44} className="stroke-[2.2]" />
+                </div>
+                <h3 className="text-xl font-extrabold text-[#0284C7] mb-4">
+                  Gerenciamento do óleo recolhido
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                  Transformamos o óleo vegetal recolhido nos estabelecimentos, condomínios e domicílios conscientes, em produtos e ações sustentáveis.
+                </p>
+              </div>
+              <a
+                href="#ods"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-bold shadow-sm transition-all"
+              >
+                <span>Ver Ações Sustentáveis</span>
+                <ChevronRight size={14} />
+              </a>
+            </div>
+
+            {/* Pilar 3: Marketing verde */}
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200/80 hover:border-[#3DB5D9]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-center items-center group hover:-translate-y-1">
+              <div className="flex flex-col items-center">
+                <div className="w-20 h-20 rounded-2xl bg-[#3DB5D9]/10 text-[#0284C7] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Megaphone size={44} className="stroke-[2.2]" />
+                </div>
+                <h3 className="text-xl font-extrabold text-[#0284C7] mb-4">
+                  Marketing verde
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Damos visibilidade ao impacto gerado nas coletas nos estabelecimentos, condomínios e domicílios conscientes.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* SEÇÃO NOBRE: FORMAS DE COLETA */}
+      <section id="formas-de-coleta" className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#3DB5D9] tracking-tight">
+              Formas de coleta
+            </h2>
+            <p className="text-slate-500 text-sm sm:text-base">
+              Atendemos diferentes perfis de geradores com logística adaptada e eficiente.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* Card 1: Pac Ponto */}
+            <div className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-[#0284C7]/30 transition-all duration-300 flex flex-col justify-between items-center text-center group hover:-translate-y-1">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                  <Star size={34} className="fill-[#0284C7] stroke-[#0284C7]" />
+                </div>
+                <h3 className="text-lg font-extrabold text-[#0284C7] mb-2">
+                  Pac Ponto
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                  Disponibilizamos pontos de coleta voluntários para recolhimento do óleo.
+                </p>
+              </div>
+              <button
+                onClick={() => openModalWithTipo("Pac Ponto / Ponto de Coleta")}
+                className="px-5 py-2 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all cursor-pointer"
+              >
+                Saiba mais
+              </button>
+            </div>
+
+            {/* Card 2: Domicílio */}
+            <div className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-[#0284C7]/30 transition-all duration-300 flex flex-col justify-between items-center text-center group hover:-translate-y-1">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                  <Home size={34} className="fill-[#0284C7] stroke-[#0284C7]" />
+                </div>
+                <h3 className="text-lg font-extrabold text-[#0284C7] mb-2">
+                  Domicílio
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                  Realizamos a coleta do óleo vegetal direto na sua porta.
+                </p>
+              </div>
+              <button
+                onClick={() => openModalWithTipo("Domicílio")}
+                className="px-5 py-2 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all cursor-pointer"
+              >
+                Saiba mais
+              </button>
+            </div>
+
+            {/* Card 3: Condomínio */}
+            <div className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-[#0284C7]/30 transition-all duration-300 flex flex-col justify-between items-center text-center group hover:-translate-y-1">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                  <Building2 size={34} className="stroke-[2.2]" />
+                </div>
+                <h3 className="text-lg font-extrabold text-[#0284C7] mb-2">
+                  Condomínio
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                  Implantamos o ponto de coleta adequado às necessidades do seu condomínio.
+                </p>
+              </div>
+              <button
+                onClick={() => openModalWithTipo("Condomínio Residencial")}
+                className="px-5 py-2 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all cursor-pointer"
+              >
+                Saiba mais
+              </button>
+            </div>
+
+            {/* Card 4: Restaurante */}
+            <div className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-[#0284C7]/30 transition-all duration-300 flex flex-col justify-between items-center text-center group hover:-translate-y-1">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                  <UtensilsCrossed size={34} className="stroke-[2.2]" />
+                </div>
+                <h3 className="text-lg font-extrabold text-[#0284C7] mb-2">
+                  Restaurante
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                  Realizamos a coleta com a periodicidade e documentação que seu restaurante precisa.
+                </p>
+              </div>
+              <button
+                onClick={() => openModalWithTipo("Restaurante / Bar")}
+                className="px-5 py-2 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all cursor-pointer"
+              >
+                Saiba mais
+              </button>
+            </div>
+
+          </div>
+
+          {/* PERGUNTA: MAS EU NÃO GERO ÓLEO USADO? */}
+          <div className="mt-14 bg-gradient-to-r from-sky-500/10 via-[#3DB5D9]/15 to-emerald-500/10 rounded-3xl p-8 border border-[#3DB5D9]/30 text-center max-w-4xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 text-[#0284C7] text-xs font-black uppercase tracking-wider">
+              <HelpCircle size={16} />
+              <span>Engajamento & Parcerias</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+              Mas eu não gero óleo usado, como posso me tornar um parceiro?
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Você pode se tornar um <strong>Pac Ponto</strong> no seu comércio ou associação, incentivar a coleta no condomínio onde mora ou atuar como embaixador da sustentabilidade na sua região!
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={() => openModalWithTipo("Parceiro / Pac Ponto")}
+                className="px-6 py-3 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white font-extrabold text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer inline-flex items-center gap-2"
+              >
+                <Users size={16} />
+                <span>Quero ser um Parceiro / Pac Ponto</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* SEÇÃO: COMO FUNCIONA O PROCESSO (4 PASSOS) */}
       <section id="como-funciona" className="py-20 bg-white border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
@@ -426,7 +630,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SEÇÃO 2: CALCULADORA DE IMPACTO ECOLÓGICO */}
+      {/* SEÇÃO: CALCULADORA DE IMPACTO ECOLÓGICO */}
       <section id="calculadora" className="py-20 bg-slate-900 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#3DB5D9]/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -565,74 +769,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SEÇÃO 3: QUEM ATENDEMOS (SEGMENTOS) */}
-      <section id="segmentos" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#3DB5D9] bg-[#3DB5D9]/10 px-3 py-1 rounded-full">
-              Segmentos B2B
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Soluções sob medida para o seu setor
-            </h2>
-            <p className="text-slate-500 text-sm sm:text-base">
-              Atendemos de pequenos estabelecimentos a grandes redes corporativas com máxima eficiência.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* Restaurantes */}
-            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200/70 hover:shadow-lg transition-all space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center">
-                <UtensilsCrossed size={24} />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Restaurantes & Bares</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Evite entupimentos graves na caixa de gordura, garanta conformidade com a Vigilância Sanitária e receba certificados periódicos.
-              </p>
-            </div>
-
-            {/* Condomínios */}
-            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200/70 hover:shadow-lg transition-all space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                <Building2 size={24} />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Condomínios</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Ponto de Entrega Voluntária (PEV) para moradores descartarem o óleo residencial de forma limpa, organizada e sem odores.
-              </p>
-            </div>
-
-            {/* Hotéis e Shoppings */}
-            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200/70 hover:shadow-lg transition-all space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
-                <Hotel size={24} />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Hotéis & Shoppings</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Gestão de grandes volumes com relatórios ESG detalhados para relatórios de sustentabilidade e auditorias corporativas.
-              </p>
-            </div>
-
-            {/* Escolas e Universidades */}
-            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200/70 hover:shadow-lg transition-all space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                <GraduationCap size={24} />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Escolas & Faculdades</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Incentivo à educação ambiental prática para alunos e comunidade acadêmica, com workshops e material informativo.
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* SEÇÃO 4: COMPROMISSO ODS (ONU) */}
+      {/* SEÇÃO: COMPROMISSO ODS (ONU) */}
       <section id="ods" className="py-20 bg-slate-50 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
@@ -696,10 +833,7 @@ export default function LandingPage() {
           </p>
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => {
-                setFormSubmitted(false);
-                setShowSignupModal(true);
-              }}
+              onClick={() => openModalWithTipo("Restaurante / Bar")}
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-xl transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
             >
               <Sparkles size={16} />
@@ -723,7 +857,7 @@ export default function LandingPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             
-            {/* Coluna 1: Sobre */}
+            {/* Coluna 1: Sobre e CNPJ */}
             <div className="space-y-3 md:col-span-2">
               <div className="flex items-center gap-3">
                 <div className="relative w-8 h-8">
@@ -741,15 +875,21 @@ export default function LandingPage() {
               <p className="text-xs text-slate-400 max-w-md leading-relaxed">
                 Especialistas em logística reversa, coleta e destinação sustentável de óleo vegetal usado. Gerando impacto ecológico positivo e valor ESG para empresas e condomínios.
               </p>
+              <div className="pt-1">
+                <span className="inline-block text-[11px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg">
+                  CNPJ: 44.551.744/0001-70
+                </span>
+              </div>
             </div>
 
             {/* Coluna 2: Navegação */}
             <div className="space-y-2">
               <h4 className="text-xs font-bold text-white uppercase tracking-wider">Navegação</h4>
               <ul className="space-y-1.5 text-xs">
+                <li><a href="#o-que-fazemos" className="hover:text-[#3DB5D9] transition-colors">O que fazemos</a></li>
+                <li><a href="#formas-de-coleta" className="hover:text-[#3DB5D9] transition-colors">Formas de Coleta</a></li>
                 <li><a href="#como-funciona" className="hover:text-[#3DB5D9] transition-colors">Como Funciona</a></li>
                 <li><a href="#calculadora" className="hover:text-[#3DB5D9] transition-colors">Calculadora de Impacto</a></li>
-                <li><a href="#segmentos" className="hover:text-[#3DB5D9] transition-colors">Quem Atendemos</a></li>
                 <li><a href="#ods" className="hover:text-[#3DB5D9] transition-colors">Metas ODS</a></li>
               </ul>
             </div>
@@ -767,7 +907,7 @@ export default function LandingPage() {
           </div>
 
           <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-            <p>© {new Date().getFullYear()} PacÓleo - Todos os direitos reservados.</p>
+            <p>© {new Date().getFullYear()} PacÓleo Coleta e Reciclagem • CNPJ 44.551.744/0001-70</p>
             <p className="flex items-center gap-1.5">
               <span>Feito com compromisso pelo meio ambiente 🌱</span>
             </p>
@@ -787,8 +927,8 @@ export default function LandingPage() {
                   <Leaf size={18} />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-base">Solicitar Coleta Gratuita</h3>
-                  <p className="text-xs text-slate-400">Cadastre seu negócio para receber as bombonas</p>
+                  <h3 className="font-extrabold text-slate-900 text-base">Solicitar Coleta / Parceria</h3>
+                  <p className="text-xs text-slate-400">Cadastre seu negócio para receber as bombonas gratuitas</p>
                 </div>
               </div>
               <button 
@@ -819,31 +959,32 @@ export default function LandingPage() {
               ) : (
                 <form onSubmit={handleFormSubmit} className="space-y-3.5">
                   <div className="space-y-1">
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nome do Estabelecimento / Condomínio</label>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nome do Estabelecimento / Responsável</label>
                     <input 
                       type="text" 
                       required 
                       value={formData.nomeEmpresa}
                       onChange={(e) => setFormData({ ...formData, nomeEmpresa: e.target.value })}
-                      placeholder="Ex: Restaurante Sabor do Rio ou Cond. Solar" 
+                      placeholder="Ex: Restaurante Sabor do Rio, Condomínio Solar ou Nome" 
                       className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:ring-2 focus:ring-[#3DB5D9]/30 focus:border-[#3DB5D9] outline-none"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Tipo de Negócio</label>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Forma de Coleta / Tipo</label>
                       <select 
                         value={formData.tipoNegocio}
                         onChange={(e) => setFormData({ ...formData, tipoNegocio: e.target.value })}
                         className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:ring-2 focus:ring-[#3DB5D9]/30 focus:border-[#3DB5D9] outline-none bg-white"
                       >
                         <option value="Restaurante / Bar">Restaurante / Bar</option>
-                        <option value="Condomínio Residencial">Condomínio Residencial</option>
+                        <option value="Condomínio Residencial">Condomínio</option>
+                        <option value="Domicílio">Domicílio</option>
+                        <option value="Pac Ponto / Ponto de Coleta">Pac Ponto</option>
                         <option value="Hotel / Pousada">Hotel / Pousada</option>
                         <option value="Escola / Universidade">Escola / Faculdade</option>
-                        <option value="Indústria / Fábrica">Indústria / Fábrica</option>
-                        <option value="Outro">Outro</option>
+                        <option value="Parceiro / Pac Ponto">Quero ser Parceiro</option>
                       </select>
                     </div>
 
@@ -858,13 +999,14 @@ export default function LandingPage() {
                         <option value="50L a 100L/mês">50L a 100 Litros / mês</option>
                         <option value="100L a 300L/mês">100L a 300 Litros / mês</option>
                         <option value="Mais de 300L/mês">Mais de 300 Litros / mês</option>
+                        <option value="Ainda não sei estimar">Ainda não sei estimar</option>
                       </select>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nome do Responsável</label>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nome do Contato</label>
                       <input 
                         type="text" 
                         required 
