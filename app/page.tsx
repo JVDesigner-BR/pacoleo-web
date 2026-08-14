@@ -231,9 +231,9 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans">
       
-      {/* NAVBAR SUPERIOR */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      {/* NAVBAR SUPERIOR MODERNA (Pill & Glassmorphism) */}
+      <div className="pt-4 px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto sticky top-0 z-50">
+        <header className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-slate-200/50 rounded-2xl px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4 transition-all duration-300">
           
           {/* Logo Compacta com Scroll Suave ao Topo */}
           <a 
@@ -242,7 +242,7 @@ export default function LandingPage() {
             className="flex items-center shrink-0 group cursor-pointer"
             title="Voltar ao início da página"
           >
-            <div className="relative w-32 sm:w-36 h-9 transition-transform group-hover:scale-105">
+            <div className="relative w-28 sm:w-36 h-8 sm:h-9 transition-transform group-hover:scale-105">
               <Image 
                 src="/logo-colorida.png" 
                 alt="PacÓleo Coleta e Reciclagem" 
@@ -253,21 +253,21 @@ export default function LandingPage() {
             </div>
           </a>
 
-          {/* Links de Navegação Desktop - Títulos Diretos e sem Quebra */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-semibold text-slate-600">
-            <a href="#o-que-fazemos" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Serviços</a>
-            <a href="#formas-de-coleta" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Coleta</a>
-            <a href="#como-funciona" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Como Funciona</a>
-            <a href="#calculadora" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Calculadora</a>
-            <a href="#parceiros" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Parceiros</a>
-            <a href="#ods" className="whitespace-nowrap hover:text-[#3DB5D9] transition-colors">Sustentabilidade</a>
+          {/* Links de Navegação Desktop */}
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-sm font-semibold text-slate-600">
+            <a href="#o-que-fazemos" className="whitespace-nowrap px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Serviços</a>
+            <a href="#formas-de-coleta" className="whitespace-nowrap px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Coleta</a>
+            <a href="#como-funciona" className="whitespace-nowrap px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Como Funciona</a>
+            <a href="#calculadora" className="whitespace-nowrap px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Calculadora</a>
+            <a href="#parceiros" className="whitespace-nowrap px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Parceiros</a>
+            <a href="#ods" className="whitespace-nowrap px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Sustentabilidade</a>
           </nav>
 
           {/* Botões de Ação Desktop */}
           <div className="hidden lg:flex items-center gap-3 shrink-0">
             <Link
               href="/login"
-              className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:text-[#3DB5D9] hover:border-[#3DB5D9] font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap"
+              className="px-4 py-2.5 rounded-xl border-2 border-transparent hover:border-slate-100 hover:bg-slate-50 text-slate-700 hover:text-[#3DB5D9] font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap"
             >
               <Lock size={14} className="text-[#3DB5D9]" />
               <span>Entrar</span>
@@ -275,7 +275,7 @@ export default function LandingPage() {
 
             <button
               onClick={() => openModalWithTipo("Restaurante / Bar")}
-              className="px-5 py-2.5 rounded-xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#3DB5D9]/25 hover:shadow-[#3DB5D9]/40 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#2ba5cb] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
             >
               <Sparkles size={14} />
               <span>Solicitar Coleta</span>
@@ -286,81 +286,81 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/login"
-              className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:text-[#3DB5D9] text-xs font-bold whitespace-nowrap"
+              className="p-2 rounded-xl bg-slate-100/50 text-slate-700 hover:text-[#3DB5D9] text-xs font-bold whitespace-nowrap"
             >
               Login
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:text-[#3DB5D9] hover:bg-slate-200 transition-colors"
+              className="p-2.5 rounded-xl bg-slate-100/50 text-slate-700 hover:text-[#3DB5D9] hover:bg-slate-200/80 transition-colors"
               aria-label="Abrir Menu"
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Drawer Mobile */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-4 animate-in slide-in-from-top-4 duration-200 shadow-xl">
-            <nav className="flex flex-col space-y-3 font-semibold text-slate-700 text-sm">
+          <div className="absolute top-24 left-4 right-4 bg-white/95 backdrop-blur-2xl border border-white/60 rounded-2xl p-6 space-y-4 animate-in slide-in-from-top-4 duration-300 shadow-2xl lg:hidden">
+            <nav className="flex flex-col space-y-2 font-semibold text-slate-700 text-sm">
               <a 
                 href="#o-que-fazemos" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
+                className="py-3 px-4 rounded-xl hover:bg-slate-50 flex items-center justify-between"
               >
                 <span>Serviços</span>
-                <ChevronRight size={16} className="text-slate-400" />
+                <ChevronRight size={16} className="text-[#3DB5D9]" />
               </a>
               <a 
                 href="#formas-de-coleta" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
+                className="py-3 px-4 rounded-xl hover:bg-slate-50 flex items-center justify-between"
               >
                 <span>Formas de Coleta</span>
-                <ChevronRight size={16} className="text-slate-400" />
+                <ChevronRight size={16} className="text-[#3DB5D9]" />
               </a>
               <a 
                 href="#como-funciona" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
+                className="py-3 px-4 rounded-xl hover:bg-slate-50 flex items-center justify-between"
               >
                 <span>Como Funciona</span>
-                <ChevronRight size={16} className="text-slate-400" />
+                <ChevronRight size={16} className="text-[#3DB5D9]" />
               </a>
               <a 
                 href="#calculadora" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
+                className="py-3 px-4 rounded-xl hover:bg-slate-50 flex items-center justify-between"
               >
                 <span>Calculadora de Impacto</span>
-                <ChevronRight size={16} className="text-slate-400" />
+                <ChevronRight size={16} className="text-[#3DB5D9]" />
               </a>
               <a 
                 href="#parceiros" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
+                className="py-3 px-4 rounded-xl hover:bg-slate-50 flex items-center justify-between"
               >
                 <span>Parceiros Oficiais</span>
-                <ChevronRight size={16} className="text-slate-400" />
+                <ChevronRight size={16} className="text-[#3DB5D9]" />
               </a>
               <a 
                 href="#ods" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 border-b border-slate-100 flex items-center justify-between"
+                className="py-3 px-4 rounded-xl hover:bg-slate-50 flex items-center justify-between"
               >
-                <span>Sustentabilidade (ODS)</span>
-                <ChevronRight size={16} className="text-slate-400" />
+                <span>Sustentabilidade (ESG)</span>
+                <ChevronRight size={16} className="text-[#3DB5D9]" />
               </a>
             </nav>
 
-            <div className="pt-2 space-y-2">
+            <div className="pt-4 border-t border-slate-100 space-y-3">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   openModalWithTipo("Restaurante / Bar");
                 }}
-                className="w-full py-3 rounded-xl bg-[#3DB5D9] text-white font-bold text-sm shadow-md text-center flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#2ba5cb] text-white font-bold text-sm shadow-lg shadow-[#3DB5D9]/30 text-center flex items-center justify-center gap-2"
               >
                 <Sparkles size={16} />
                 <span>Solicitar Coleta / Cadastre-se</span>
@@ -369,7 +369,7 @@ export default function LandingPage() {
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm text-center flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm text-center flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors"
               >
                 <Lock size={16} />
                 <span>Acessar Portal do Cliente</span>
@@ -377,7 +377,7 @@ export default function LandingPage() {
             </div>
           </div>
         )}
-      </header>
+      </div>
 
       {/* HERO SECTION */}
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
