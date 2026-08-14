@@ -22,6 +22,7 @@ import {
   Phone, 
   MessageCircle, 
   ChevronRight, 
+  ChevronLeft,
   Lock, 
   Leaf, 
   Recycle, 
@@ -33,7 +34,9 @@ import {
   Home,
   MapPin,
   HelpCircle,
-  Users
+  Users,
+  TrendingUp,
+  BadgeCheck
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -108,64 +111,114 @@ export default function LandingPage() {
     }
   ];
 
+  // Parceiros Interativos
+  const [partnerCategory, setPartnerCategory] = useState("Todos");
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
   const parceirosOficiais = [
     {
+      id: "globo",
       nome: "Globo Comunicações",
       categoria: "Mídia & Comunicação",
-      descricao: "O Grupo Globo é o maior conglomerado de mídia e comunicação do Brasil, com gestão consciente de seus resíduos.",
+      segmento: "Grandes Redes",
+      descricao: "Maior conglomerado de mídia da América Latina, com gestão consciente de seus resíduos e rígido protocolo ESG.",
       logo: "/parceiros/globo.png",
-      badgeColor: "bg-red-50 text-red-700 border-red-200"
+      badgeColor: "bg-red-50 text-red-700 border-red-200",
+      destaque: "Gestão Corporativa ESG",
+      selo: "Parceiro Diamante",
     },
     {
+      id: "sesc",
       nome: "Sesc RJ",
       categoria: "Cultura & Assistência",
-      descricao: "Com 22 unidades no estado do Rio de Janeiro, o Sesc é referência em cultura, educação, lazer e responsabilidade socioambiental.",
+      segmento: "Grandes Redes",
+      descricao: "Com 22 unidades no estado do Rio de Janeiro, o Sesc é referência nacional em cultura, educação e sustentabilidade.",
       logo: "/parceiros/sesc.png",
-      badgeColor: "bg-amber-50 text-amber-700 border-amber-200"
+      badgeColor: "bg-amber-50 text-amber-700 border-amber-200",
+      destaque: "22 Unidades Atendidas",
+      selo: "Rede Socioambiental",
     },
     {
+      id: "emporio-jardim",
       nome: "Empório Jardim",
       categoria: "Gastronomia Premiada",
+      segmento: "Gastronomia",
       descricao: "Padaria, Bistrô e Deli com café da manhã artesanal de excelência, eleito 11 vezes o melhor do Rio de Janeiro.",
       logo: "/parceiros/emporio-jardim.png",
-      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200"
+      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      destaque: "11x Melhor do Rio",
+      selo: "Selo Verde Gastronomia",
     },
     {
-      nome: "Satyricon",
-      categoria: "Alta Gastronomia (Desde 1985)",
-      descricao: "Porto seguro e referência em culinária mediterrânea e frutos do mar frescos, com descarte ecológico certificado.",
+      id: "satyricon",
+      nome: "Satyricon Ristorante",
+      categoria: "Alta Gastronomia",
+      segmento: "Gastronomia",
+      descricao: "Porto seguro e referência em culinária mediterrânea e frutos do mar frescos desde 1985, com descarte ecológico certificado.",
       logo: "/parceiros/satyricon.png",
-      badgeColor: "bg-cyan-50 text-cyan-700 border-cyan-200"
+      badgeColor: "bg-cyan-50 text-cyan-700 border-cyan-200",
+      destaque: "Tradição desde 1985",
+      selo: "Descarte Certificado",
     },
     {
+      id: "minha-coleta",
       nome: "Minha Coleta",
       categoria: "Reciclagem Inteligente",
+      segmento: "Sustentabilidade",
       descricao: "A solução inovadora e essencial para acelerar e fortalecer a reciclagem e a logística reversa no país.",
       logo: "/parceiros/minha-coleta.png",
-      badgeColor: "bg-lime-50 text-lime-800 border-lime-200"
+      badgeColor: "bg-lime-50 text-lime-800 border-lime-200",
+      destaque: "Logística Reversa Tech",
+      selo: "Inovação Circular",
     },
     {
+      id: "ciclo-organico",
       nome: "Ciclo Orgânico",
       categoria: "Compostagem Urbana",
+      segmento: "Sustentabilidade",
       descricao: "Primeira empresa do Brasil pioneira na coleta e compostagem de resíduos orgânicos residenciais e comerciais.",
       logo: "/parceiros/ciclo-organico.png",
-      badgeColor: "bg-teal-50 text-teal-700 border-teal-200"
+      badgeColor: "bg-teal-50 text-teal-700 border-teal-200",
+      destaque: "Pioneira em Compostagem",
+      selo: "Comunidade Sem Lixo",
     },
     {
+      id: "faz-girar",
       nome: "Feira Faz Girar",
       categoria: "Economia Circular",
+      segmento: "Sustentabilidade",
       descricao: "Mercado social e feira pioneira focada em reutilização, troca consciente, reciclagem e upcycle sustentável.",
       logo: "/parceiros/faz-girar.png",
-      badgeColor: "bg-purple-50 text-purple-700 border-purple-200"
+      badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
+      destaque: "Upcycle & Comunidade",
+      selo: "Economia Circular",
     },
     {
+      id: "minds",
       nome: "Minds English School",
       categoria: "Educação & Idiomas",
-      descricao: "Rede inovadora de ensino de idiomas com metodologia dinâmica e engajamento com o futuro sustentável.",
+      segmento: "Grandes Redes",
+      descricao: "Rede inovadora de ensino de idiomas com metodologia dinâmica e engajamento ativo com o futuro sustentável.",
       logo: "/parceiros/minds.png",
-      badgeColor: "bg-blue-50 text-blue-700 border-blue-200"
+      badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
+      destaque: "Rede Nacional de Ensino",
+      selo: "Educação Sustentável",
     }
   ];
+
+  const filteredParceiros = partnerCategory === "Todos" 
+    ? parceirosOficiais 
+    : parceirosOficiais.filter(p => p.segmento === partnerCategory);
+
+  const maxSlideIndex = Math.max(0, filteredParceiros.length - 4);
+
+  const nextSlide = () => {
+    setCarouselIndex(prev => (prev >= maxSlideIndex ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setCarouselIndex(prev => (prev <= 0 ? maxSlideIndex : prev - 1));
+  };
 
   const scrollToTop = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -989,54 +1042,170 @@ export default function LandingPage() {
       </section>
 
       {/* SEÇÃO: PARCEIROS OFICIAIS */}
-      <section id="parceiros" className="py-24 bg-white border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="parceiros" className="py-24 bg-gradient-to-b from-white via-slate-50/50 to-white border-t border-slate-200/80 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#3DB5D9] bg-[#3DB5D9]/10 px-3 py-1 rounded-full">
-              🌿 Rede de Impacto & Sustentabilidade
+          {/* Header da Seção */}
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
+            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#3DB5D9] bg-[#3DB5D9]/10 border border-[#3DB5D9]/20 px-3.5 py-1.5 rounded-full shadow-2xs">
+              <Sparkles size={13} className="text-[#3DB5D9]" />
+              Rede de Impacto & Grandes Marcas
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Conheça nossos Parceiros Oficiais
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+              Empresas Líderes que Confiam na PacÓleo
             </h2>
             <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-              Empresas, instituições e grandes marcas que confiam na PacÓleo. <strong>Com eles, o meio ambiente é levado a sério!</strong>
+              Grandes conglomerados, ícones da gastronomia carioca e instituições unidas por uma economia circular séria, certificada e sustentável.
             </p>
           </div>
 
-          {/* Grid de Parceiros Oficiais */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {parceirosOficiais.map((parceiro) => (
-              <div 
-                key={parceiro.nome}
-                className="bg-slate-50/70 hover:bg-white p-6 rounded-3xl border border-slate-200/80 hover:border-[#3DB5D9]/40 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
-              >
-                <div>
-                  {/* Container da Logo Oficial */}
-                  <div className="relative w-full h-28 rounded-2xl bg-white p-4 flex items-center justify-center border border-slate-100 shadow-2xs mb-4 group-hover:scale-105 transition-transform duration-300">
+          {/* Marquee Infinito de Logos (Social Proof Ticker) */}
+          <div className="mb-14 relative rounded-3xl bg-slate-900/[0.02] border border-slate-200/70 p-4 sm:p-6 overflow-hidden shadow-xs backdrop-blur-xs">
+            {/* Máscaras de Gradiente laterais */}
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
+
+            <div className="animate-marquee items-center gap-4 sm:gap-6">
+              {[...parceirosOficiais, ...parceirosOficiais].map((parceiro, idx) => (
+                <div 
+                  key={`${parceiro.id}-marquee-${idx}`}
+                  className="flex items-center gap-3.5 px-5 py-3 bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:border-[#3DB5D9]/50 hover:shadow-md transition-all duration-300 shrink-0 group cursor-default"
+                >
+                  <div className="relative w-24 h-10 flex items-center justify-center shrink-0">
                     <Image 
                       src={parceiro.logo} 
                       alt={parceiro.nome} 
                       fill 
-                      className="object-contain p-3" 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      className="object-contain"
+                      sizes="120px"
                     />
                   </div>
-
-                  <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border mb-2 inline-block ${parceiro.badgeColor}`}>
-                    {parceiro.categoria}
-                  </span>
-
-                  <h3 className="text-base font-extrabold text-slate-900 leading-tight">
-                    {parceiro.nome}
-                  </h3>
-
-                  <p className="text-xs text-slate-500 leading-relaxed mt-2">
-                    {parceiro.descricao}
-                  </p>
+                  <div className="border-l border-slate-100 pl-3">
+                    <p className="text-xs font-bold text-slate-800 whitespace-nowrap group-hover:text-[#3DB5D9] transition-colors">{parceiro.nome}</p>
+                    <p className="text-[10px] text-slate-400 font-medium whitespace-nowrap">{parceiro.destaque}</p>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Barra de Ferramentas: Filtros por Categoria & Navegação do Carrossel */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+            {/* Filtros de Categoria */}
+            <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0 scrollbar-none">
+              {["Todos", "Gastronomia", "Grandes Redes", "Sustentabilidade"].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    setPartnerCategory(cat);
+                    setCarouselIndex(0);
+                  }}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                    partnerCategory === cat
+                      ? "bg-slate-900 text-white shadow-md shadow-slate-900/10 scale-102"
+                      : "bg-white text-slate-600 hover:bg-slate-100/80 border border-slate-200/80"
+                  }`}
+                >
+                  {cat === "Todos" ? `Todos (${parceirosOficiais.length})` : cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Controles de Navegação do Carrossel */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-slate-400 hidden sm:inline-block mr-1">
+                {carouselIndex + 1} de {Math.max(1, maxSlideIndex + 1)}
+              </span>
+              <button
+                onClick={prevSlide}
+                className="p-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 shadow-xs hover:shadow-md transition-all cursor-pointer active:scale-95"
+                aria-label="Anterior"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="p-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 shadow-xs hover:shadow-md transition-all cursor-pointer active:scale-95"
+                aria-label="Próximo"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Carrossel de Parceiros (Cards Compactos & Elegantes) */}
+          <div className="relative overflow-hidden py-1">
+            <div 
+              className="flex transition-transform duration-500 ease-out gap-5"
+              style={{ 
+                transform: `translateX(-${carouselIndex * (100 / (filteredParceiros.length >= 4 ? 4 : filteredParceiros.length))}%)` 
+              }}
+            >
+              {filteredParceiros.map((parceiro) => (
+                <div 
+                  key={`carousel-${parceiro.id}`}
+                  className="w-full sm:w-[calc(50%-10px)] lg:w-[calc(25%-15px)] shrink-0 bg-white hover:bg-slate-50/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 hover:border-[#3DB5D9]/40 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+                >
+                  <div>
+                    {/* Topo do Card: Categoria e Selo */}
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <span className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full border ${parceiro.badgeColor}`}>
+                        {parceiro.categoria}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        Certificado
+                      </span>
+                    </div>
+
+                    {/* Container da Logo Compacto e 100% Proporcional */}
+                    <div className="relative w-full h-28 rounded-xl bg-white p-3 flex items-center justify-center border border-slate-100 shadow-2xs mb-3 group-hover:scale-102 transition-transform duration-300">
+                      <Image 
+                        src={parceiro.logo} 
+                        alt={parceiro.nome} 
+                        fill 
+                        className="object-contain p-2" 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      />
+                    </div>
+
+                    <div className="mb-1.5">
+                      <span className="text-[10px] font-bold text-[#3DB5D9] tracking-wide block mb-0.5">
+                        {parceiro.destaque}
+                      </span>
+                      <h3 className="text-sm sm:text-base font-extrabold text-slate-900 leading-tight group-hover:text-[#3DB5D9] transition-colors">
+                        {parceiro.nome}
+                      </h3>
+                    </div>
+
+                    <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed line-clamp-3">
+                      {parceiro.descricao}
+                    </p>
+                  </div>
+
+                  <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-medium">
+                    <span>{parceiro.selo}</span>
+                    <span className="text-emerald-600 font-bold">100% Rastreável</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Indicadores de Paginação do Carrossel */}
+            {maxSlideIndex > 0 && (
+              <div className="flex items-center justify-center gap-1.5 mt-6">
+                {Array.from({ length: maxSlideIndex + 1 }).map((_, idx) => (
+                  <button
+                    key={`dot-${idx}`}
+                    onClick={() => setCarouselIndex(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      carouselIndex === idx ? "w-6 bg-[#3DB5D9]" : "w-1.5 bg-slate-200 hover:bg-slate-300"
+                    }`}
+                    aria-label={`Ir para slide ${idx + 1}`}
+                  />
+                ))}
               </div>
-            ))}
+            )}
           </div>
 
           {/* CTA Banner de Parceria */}
