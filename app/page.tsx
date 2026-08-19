@@ -229,11 +229,11 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans">
+    <div className="min-h-screen bg-gradient-to-b from-[#F3F9FC]/80 via-white to-slate-50/70 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans">
       
-      {/* NAVBAR SUPERIOR MODERNA (Pill & Glassmorphism) */}
+      {/* NAVBAR SUPERIOR MODERNA (Pill & Glassmorphism Delicado) */}
       <div className="pt-4 px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto sticky top-0 z-50">
-        <header className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-slate-200/50 rounded-2xl px-4 sm:px-6 xl:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 xl:gap-3 transition-all duration-300">
+        <header className="bg-white/85 backdrop-blur-xl border border-white/80 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.06)] rounded-2xl px-4 sm:px-6 xl:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 xl:gap-3 transition-all duration-300">
           
           {/* Logo Compacta com Scroll Suave ao Topo */}
           <a 
@@ -242,7 +242,7 @@ export default function LandingPage() {
             className="flex items-center shrink-0 group cursor-pointer"
             title="Voltar ao início da página"
           >
-            <div className="relative w-28 xl:w-32 h-8 sm:h-9 transition-transform group-hover:scale-105">
+            <div className="relative w-28 xl:w-32 h-8 sm:h-9 transition-transform duration-300 group-hover:scale-105">
               <Image 
                 src="/logo-colorida.png" 
                 alt="PacÓleo Coleta e Reciclagem" 
@@ -255,19 +255,19 @@ export default function LandingPage() {
 
           {/* Links de Navegação Desktop */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 2xl:gap-2 text-xs 2xl:text-sm font-semibold text-slate-600">
-            <a href="#o-que-fazemos" className="whitespace-nowrap px-2 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Serviços</a>
-            <a href="#formas-de-coleta" className="whitespace-nowrap px-2 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Coleta</a>
-            <a href="#como-funciona" className="whitespace-nowrap px-2 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Como Funciona</a>
-            <a href="#calculadora" className="whitespace-nowrap px-2 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Calculadora</a>
-            <a href="#parceiros" className="whitespace-nowrap px-2 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Parceiros</a>
-            <a href="#ods" className="whitespace-nowrap px-2 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Sustentabilidade</a>
+            <a href="#o-que-fazemos" className="whitespace-nowrap px-2.5 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/70 hover:text-[#0284C7] transition-all">Serviços</a>
+            <a href="#formas-de-coleta" className="whitespace-nowrap px-2.5 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/70 hover:text-[#0284C7] transition-all">Coleta</a>
+            <a href="#como-funciona" className="whitespace-nowrap px-2.5 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/70 hover:text-[#0284C7] transition-all">Como Funciona</a>
+            <a href="#calculadora" className="whitespace-nowrap px-2.5 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/70 hover:text-[#0284C7] transition-all">Calculadora</a>
+            <a href="#parceiros" className="whitespace-nowrap px-2.5 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/70 hover:text-[#0284C7] transition-all">Parceiros</a>
+            <a href="#ods" className="whitespace-nowrap px-2.5 2xl:px-3 py-1.5 rounded-full hover:bg-slate-100/70 hover:text-[#0284C7] transition-all">Sustentabilidade</a>
           </nav>
 
           {/* Botões de Ação Desktop */}
           <div className="hidden lg:flex items-center gap-2 xl:gap-2.5 shrink-0">
             <Link
               href="/login"
-              className="px-2.5 xl:px-3 py-2 rounded-xl border-2 border-transparent hover:border-slate-100 hover:bg-slate-50 text-slate-700 hover:text-[#3DB5D9] font-bold text-[11px] xl:text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap"
+              className="px-3 py-2 rounded-xl text-slate-700 hover:text-[#0284C7] hover:bg-slate-100/70 font-bold text-[11px] xl:text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap"
             >
               <Lock size={14} className="text-[#3DB5D9]" />
               <span>Entrar</span>
@@ -275,7 +275,7 @@ export default function LandingPage() {
 
             <button
               onClick={() => openModalWithTipo("Restaurante / Bar")}
-              className="px-3.5 xl:px-4 py-2 xl:py-2.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#2ba5cb] text-white font-bold text-[11px] xl:text-xs uppercase tracking-wider shadow-lg shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
+              className="px-3.5 xl:px-4 py-2 xl:py-2.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#0284C7] hover:from-[#35a8cb] hover:to-[#0374af] text-white font-bold text-[11px] xl:text-xs uppercase tracking-wider shadow-md shadow-[#3DB5D9]/25 hover:shadow-lg hover:shadow-[#3DB5D9]/35 hover:-translate-y-0.5 transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
             >
               <Sparkles size={14} />
               <span>Solicitar Coleta</span>
@@ -286,13 +286,13 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/login"
-              className="p-2 rounded-xl bg-slate-100/50 text-slate-700 hover:text-[#3DB5D9] text-xs font-bold whitespace-nowrap"
+              className="p-2 rounded-xl bg-slate-100/70 text-slate-700 hover:text-[#0284C7] text-xs font-bold whitespace-nowrap"
             >
               Login
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl bg-slate-100/50 text-slate-700 hover:text-[#3DB5D9] hover:bg-slate-200/80 transition-colors"
+              className="p-2.5 rounded-xl bg-slate-100/70 text-slate-700 hover:text-[#0284C7] hover:bg-slate-200/80 transition-colors"
               aria-label="Abrir Menu"
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -302,7 +302,7 @@ export default function LandingPage() {
 
         {/* Drawer Mobile */}
         {mobileMenuOpen && (
-          <div className="absolute top-24 left-4 right-4 bg-white/95 backdrop-blur-2xl border border-white/60 rounded-2xl p-6 space-y-4 animate-in slide-in-from-top-4 duration-300 shadow-2xl lg:hidden">
+          <div className="absolute top-24 left-4 right-4 bg-white/95 backdrop-blur-2xl border border-white/80 rounded-2xl p-6 space-y-4 animate-in slide-in-from-top-4 duration-300 shadow-2xl lg:hidden">
             <nav className="flex flex-col space-y-2 font-semibold text-slate-700 text-sm">
               <a 
                 href="#o-que-fazemos" 
@@ -360,7 +360,7 @@ export default function LandingPage() {
                   setMobileMenuOpen(false);
                   openModalWithTipo("Restaurante / Bar");
                 }}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#2ba5cb] text-white font-bold text-sm shadow-lg shadow-[#3DB5D9]/30 text-center flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#0284C7] text-white font-bold text-sm shadow-lg shadow-[#3DB5D9]/25 text-center flex items-center justify-center gap-2"
               >
                 <Sparkles size={16} />
                 <span>Solicitar Coleta / Cadastre-se</span>
@@ -379,90 +379,102 @@ export default function LandingPage() {
         )}
       </div>
 
-      {/* HERO SECTION */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
-        {/* Glow Effects */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 sm:w-[600px] h-96 bg-[#3DB5D9]/15 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-        <div className="absolute top-10 right-10 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+      {/* HERO SECTION - DELICADA, MODERNA & ENQUADRADA */}
+      <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-20">
+        {/* Glow Effects Delicados */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#3DB5D9]/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        <div className="absolute top-12 right-12 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-sky-300/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-6">
+          <div className="text-center max-w-4xl mx-auto space-y-5 sm:space-y-6">
             
-            {/* Tag Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3DB5D9]/10 border border-[#3DB5D9]/20 text-[#248dae] text-xs font-bold uppercase tracking-wider shadow-xs">
+            {/* Tag Badge Delicada */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-sky-200/70 text-[#0284C7] text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-[0_2px_10px_-2px_rgba(2,132,199,0.08)]">
               <Leaf size={14} className="text-[#3DB5D9]" />
               <span>Logística Reversa & Rastreabilidade B2B</span>
             </div>
 
-            {/* H1 Principal */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-              Transforme o óleo usado do seu negócio em <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3DB5D9] via-[#2ba5cb] to-[#1681a0]">energia limpa e impacto positivo.</span>
+            {/* H1 Principal - Harmonioso e Delicado */}
+            <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-black text-slate-900 tracking-tight leading-[1.14] max-w-4xl mx-auto">
+              Transforme o óleo usado do seu negócio em{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0284C7] via-[#3DB5D9] to-[#0EA5E9]">
+                energia limpa e impacto positivo.
+              </span>
             </h1>
 
-            {/* Subtítulo */}
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-              Coleta especializada e gratuita de óleo vegetal usado para <strong>restaurantes, condomínios, hotéis e empresas</strong>. Fornecemos bombonas seguras, laudos ambientais e emissão oficial de <strong>MTR & CDF</strong>.
+            {/* Subtítulo Delicado e Legível */}
+            <p className="text-sm sm:text-base lg:text-[17px] text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
+              Coleta especializada e gratuita de óleo vegetal usado para <strong className="text-slate-800 font-semibold">restaurantes, condomínios, hotéis e empresas</strong>. Fornecemos bombonas seguras, laudos ambientais e emissão oficial de <strong className="text-slate-800 font-semibold">MTR & CDF</strong>.
             </p>
 
-            {/* CTAs Principais */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            {/* CTAs Principais Refinados */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
               <button
                 onClick={() => openModalWithTipo("Restaurante / Bar")}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#3DB5D9] hover:bg-[#329fbe] text-white font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 transition-all hover:-translate-y-1 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-7 py-3.5 sm:px-8 sm:py-4 rounded-2xl bg-gradient-to-r from-[#3DB5D9] to-[#0284C7] hover:from-[#35a8cb] hover:to-[#0374af] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-[#3DB5D9]/25 hover:shadow-xl hover:shadow-[#3DB5D9]/35 hover:-translate-y-0.5 transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                <Sparkles size={18} />
+                <Sparkles size={17} />
                 <span>Solicitar Coleta Gratuita</span>
               </button>
 
               <Link
                 href="/login"
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 font-extrabold text-sm uppercase tracking-wider shadow-sm transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-7 py-3.5 sm:px-8 sm:py-4 rounded-2xl bg-white/90 backdrop-blur-sm hover:bg-white border border-slate-200/90 hover:border-slate-300 text-slate-800 hover:text-[#0284C7] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-xs hover:shadow-md transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
-                <Lock size={18} className="text-[#3DB5D9]" />
+                <Lock size={17} className="text-[#3DB5D9]" />
                 <span>Acessar Portal do Cliente</span>
               </Link>
             </div>
 
-            {/* Selos de Confiança */}
-            <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 text-left border-t border-slate-200/80 mt-12">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                  <CheckCircle2 size={18} />
+            {/* BARRINHA DE DESTAQUES / SELOS DE CONFIANÇA (EXATAMENTE COMO A SEGUNDA IMAGEM) */}
+            <div className="pt-8 sm:pt-10 border-t border-slate-200/70 mt-10 sm:mt-12 max-w-5xl mx-auto">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-left">
+                
+                {/* 1. Coleta Sem Custo */}
+                <div className="flex items-center gap-3 sm:gap-3.5 p-1 rounded-2xl transition-all duration-300 hover:bg-white/60 group">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#D1F7E8] text-[#10B981] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                    <CheckCircle2 size={22} className="stroke-[2.2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight">Coleta Sem Custo</h4>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Logística 100% gratuita</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">Coleta Sem Custo</h4>
-                  <p className="text-[11px] text-slate-500">Logística 100% gratuita</p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                  <ShieldCheck size={18} />
+                {/* 2. MTR & CDF */}
+                <div className="flex items-center gap-3 sm:gap-3.5 p-1 rounded-2xl transition-all duration-300 hover:bg-white/60 group">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#DBEAFE] text-[#2563EB] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                    <ShieldCheck size={22} className="stroke-[2.2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight">MTR & CDF</h4>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Conformidade com órgãos</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">MTR & CDF</h4>
-                  <p className="text-[11px] text-slate-500">Conformidade com órgãos</p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
-                  <Truck size={18} />
+                {/* 3. Bombonas Grátis */}
+                <div className="flex items-center gap-3 sm:gap-3.5 p-1 rounded-2xl transition-all duration-300 hover:bg-white/60 group">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#FEF3C7] text-[#D97706] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                    <Truck size={22} className="stroke-[2.2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight">Bombonas Grátis</h4>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Recipientes adequados</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">Bombonas Grátis</h4>
-                  <p className="text-[11px] text-slate-500">Recipientes adequados</p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
-                  <Award size={18} />
+                {/* 4. Portal Online */}
+                <div className="flex items-center gap-3 sm:gap-3.5 p-1 rounded-2xl transition-all duration-300 hover:bg-white/60 group">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#F3E8FF] text-[#9333EA] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                    <Award size={22} className="stroke-[2.2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight">Portal Online</h4>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Indicadores e laudos 24h</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">Portal Online</h4>
-                  <p className="text-[11px] text-slate-500">Indicadores e laudos 24h</p>
-                </div>
+
               </div>
             </div>
 
