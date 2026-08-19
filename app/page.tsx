@@ -233,7 +233,7 @@ export default function LandingPage() {
       
       {/* NAVBAR SUPERIOR MODERNA (Pill & Glassmorphism) */}
       <div className="pt-4 px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto sticky top-0 z-50">
-        <header className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-slate-200/50 rounded-2xl px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 lg:gap-4 transition-all duration-300">
+        <header className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-slate-200/50 rounded-2xl px-4 xl:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 xl:gap-4 transition-all duration-300">
           
           {/* Logo Compacta com Scroll Suave ao Topo */}
           <a 
@@ -242,7 +242,7 @@ export default function LandingPage() {
             className="flex items-center shrink-0 group cursor-pointer"
             title="Voltar ao início da página"
           >
-            <div className="relative w-28 sm:w-32 lg:w-36 h-8 sm:h-9 transition-transform group-hover:scale-105">
+            <div className="relative w-28 xl:w-36 h-8 sm:h-9 transition-transform group-hover:scale-105">
               <Image 
                 src="/logo-colorida.png" 
                 alt="PacÓleo Coleta e Reciclagem" 
@@ -254,30 +254,30 @@ export default function LandingPage() {
           </a>
 
           {/* Links de Navegação Desktop */}
-          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-2 text-[13px] xl:text-sm font-semibold text-slate-600">
-            <a href="#o-que-fazemos" className="whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Serviços</a>
-            <a href="#formas-de-coleta" className="whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Coleta</a>
-            <a href="#como-funciona" className="whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Como Funciona</a>
-            <a href="#calculadora" className="whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Calculadora</a>
-            <a href="#parceiros" className="whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Parceiros</a>
-            <a href="#ods" className="whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Sustentabilidade</a>
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-2 text-[11px] xl:text-sm font-semibold text-slate-600">
+            <a href="#o-que-fazemos" className="whitespace-nowrap px-2 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Serviços</a>
+            <a href="#formas-de-coleta" className="whitespace-nowrap px-2 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Coleta</a>
+            <a href="#como-funciona" className="whitespace-nowrap px-2 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Como Funciona</a>
+            <a href="#calculadora" className="whitespace-nowrap px-2 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Calculadora</a>
+            <a href="#parceiros" className="whitespace-nowrap px-2 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Parceiros</a>
+            <a href="#ods" className="whitespace-nowrap px-2 xl:px-4 py-2 rounded-full hover:bg-slate-100/80 hover:text-[#3DB5D9] transition-all">Sustentabilidade</a>
           </nav>
 
           {/* Botões de Ação Desktop */}
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
             <Link
               href="/login"
-              className="px-4 py-2.5 rounded-xl border-2 border-transparent hover:border-slate-100 hover:bg-slate-50 text-slate-700 hover:text-[#3DB5D9] font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap"
+              className="px-3 xl:px-4 py-2 xl:py-2.5 rounded-xl border-2 border-transparent hover:border-slate-100 hover:bg-slate-50 text-slate-700 hover:text-[#3DB5D9] font-bold text-[10px] xl:text-xs uppercase tracking-wider transition-all flex items-center gap-1 xl:gap-1.5 whitespace-nowrap"
             >
-              <Lock size={14} className="text-[#3DB5D9]" />
+              <Lock size={14} className="text-[#3DB5D9] scale-90 xl:scale-100" />
               <span>Entrar</span>
             </Link>
 
             <button
               onClick={() => openModalWithTipo("Restaurante / Bar")}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#2ba5cb] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
+              className="px-4 xl:px-5 py-2 xl:py-2.5 rounded-xl bg-gradient-to-r from-[#3DB5D9] to-[#2ba5cb] text-white font-bold text-[10px] xl:text-xs uppercase tracking-wider shadow-lg shadow-[#3DB5D9]/30 hover:shadow-[#3DB5D9]/50 transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1 xl:gap-1.5 whitespace-nowrap"
             >
-              <Sparkles size={14} />
+              <Sparkles size={14} className="scale-90 xl:scale-100" />
               <span>Solicitar Coleta</span>
             </button>
           </div>
