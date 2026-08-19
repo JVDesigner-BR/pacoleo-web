@@ -233,7 +233,7 @@ export default function LandingPage() {
       
       {/* NAVBAR SUPERIOR MODERNA (Pill & Glassmorphism) */}
       <div className="pt-4 px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto sticky top-0 z-50">
-        <header className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-slate-200/50 rounded-2xl px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4 transition-all duration-300">
+        <header className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-slate-200/50 rounded-2xl px-6 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-4 transition-all duration-300">
           
           {/* Logo Compacta com Scroll Suave ao Topo */}
           <a 
