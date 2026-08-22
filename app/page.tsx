@@ -380,29 +380,29 @@ export default function LandingPage() {
       </div>
 
       {/* HERO SECTION - DELICADA, MODERNA & ENQUADRADA */}
-      <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-20">
+      <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-20 isolate">
         {/* Background Video Loop com Overlay Suave */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden -z-20 pointer-events-none">
+        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
           <video
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-cover object-center opacity-30"
+            className="w-full h-full object-cover object-center opacity-70"
           >
             <source src="/videofundo.mp4" type="video/mp4" />
           </video>
-          {/* Overlay de gradiente com leve desfoque para preservar nitidez da tipografia */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#F3F9FC]/85 via-white/75 to-white/95 backdrop-blur-[1px]"></div>
+          {/* Overlay refinado de gradiente para contraste e legibilidade impecáveis */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F3F9FC]/75 via-white/55 to-white/90"></div>
         </div>
 
         {/* Glow Effects Delicados */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#3DB5D9]/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-        <div className="absolute top-12 right-12 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-sky-300/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#3DB5D9]/10 rounded-full blur-3xl z-0 pointer-events-none"></div>
+        <div className="absolute top-12 right-12 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl z-0 pointer-events-none"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-sky-300/10 rounded-full blur-3xl z-0 pointer-events-none"></div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto space-y-5 sm:space-y-6">
             
             {/* Tag Badge Delicada */}
