@@ -260,8 +260,8 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#F3F9FC]/80 via-white to-slate-50/70 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans relative">
       
-      {/* BACKGROUND VIDEO HERO & HEADER (Cobre desde o topo absoluto até a base do Hero) */}
-      <div className="absolute top-0 left-0 right-0 h-[880px] sm:h-[950px] lg:h-[980px] overflow-hidden pointer-events-none z-0">
+      {/* BACKGROUND VIDEO HERO & HEADER (Sem zoom, alinhado e subido para o topo) */}
+      <div className="absolute -top-4 sm:-top-8 lg:-top-10 left-0 right-0 h-[800px] sm:h-[860px] lg:h-[900px] overflow-hidden pointer-events-none z-0">
         <video
           ref={videoRef}
           autoPlay
@@ -275,7 +275,7 @@ export default function LandingPage() {
           onPlay={(e) => {
             e.currentTarget.playbackRate = 0.45;
           }}
-          className="w-full h-full object-cover object-top scale-105 opacity-65 transform motion-safe:transition-all duration-1000"
+          className="w-full h-full object-cover object-top opacity-65"
         >
           <source src="/videofundo.mp4" type="video/mp4" />
         </video>
