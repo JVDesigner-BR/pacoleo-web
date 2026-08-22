@@ -43,12 +43,32 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   
-  // Referência e controle de velocidade do vídeo de fundo (super slow-motion suave)
+  // Referência e controle de reprodução do vídeo de fundo (super slow-motion suave e autoplay confiável)
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.45;
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playbackRate = 0.45;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          const playOnInteraction = () => {
+            if (video) {
+              video.muted = true;
+              video.play().catch(() => {});
+            }
+            window.removeEventListener("click", playOnInteraction);
+            window.removeEventListener("scroll", playOnInteraction);
+            window.removeEventListener("touchstart", playOnInteraction);
+          };
+          window.addEventListener("click", playOnInteraction, { once: true });
+          window.addEventListener("scroll", playOnInteraction, { once: true });
+          window.addEventListener("touchstart", playOnInteraction, { once: true });
+        });
+      }
     }
   }, []);
 
@@ -238,8 +258,32 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F3F9FC]/80 via-white to-slate-50/70 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans">
+    <div className="min-h-screen bg-gradient-to-b from-[#F3F9FC]/80 via-white to-slate-50/70 text-slate-900 selection:bg-[#3DB5D9] selection:text-white font-sans relative">
       
+      {/* BACKGROUND VIDEO HERO & HEADER (Cobre desde o topo absoluto até a base do Hero) */}
+      <div className="absolute top-0 left-0 right-0 h-[880px] sm:h-[950px] lg:h-[980px] overflow-hidden pointer-events-none z-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          onLoadedMetadata={(e) => {
+            e.currentTarget.playbackRate = 0.45;
+          }}
+          onPlay={(e) => {
+            e.currentTarget.playbackRate = 0.45;
+          }}
+          className="w-full h-full object-cover object-top scale-105 opacity-65 transform motion-safe:transition-all duration-1000"
+        >
+          <source src="/videofundo.mp4" type="video/mp4" />
+        </video>
+        {/* Overlay refinado de gradiente para contraste, elegância e fusão das bordas */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F3F9FC]/70 via-white/40 to-white"></div>
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+      </div>
+
       {/* NAVBAR SUPERIOR MODERNA (Pill & Glassmorphism Delicado) */}
       <div className="pt-4 px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto sticky top-0 z-50">
         <header className="bg-white/85 backdrop-blur-xl border border-white/80 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.06)] rounded-2xl px-4 sm:px-6 xl:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 xl:gap-3 transition-all duration-300">
@@ -389,32 +433,7 @@ export default function LandingPage() {
       </div>
 
       {/* HERO SECTION - DELICADA, MODERNA & ENQUADRADA */}
-      <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-20 isolate">
-        {/* Background Video Loop com Efeito Slow-Motion e Transição Fluida */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            onLoadedMetadata={(e) => {
-              e.currentTarget.playbackRate = 0.45;
-            }}
-            onPlay={(e) => {
-              e.currentTarget.playbackRate = 0.45;
-            }}
-            className="w-full h-full object-cover object-center scale-105 opacity-65 transform motion-safe:transition-all duration-1000"
-          >
-            <source src="/videofundo.mp4" type="video/mp4" />
-          </video>
-          {/* Overlay refinado de gradiente para contraste, elegância e fusão das bordas */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#F3F9FC]/80 via-white/45 to-white"></div>
-          <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#F3F9FC]/90 to-transparent"></div>
-          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
-        </div>
-
+      <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-20">
         {/* Glow Effects Delicados */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#3DB5D9]/10 rounded-full blur-3xl z-0 pointer-events-none"></div>
         <div className="absolute top-12 right-12 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl z-0 pointer-events-none"></div>
