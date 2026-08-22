@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { 
@@ -22,7 +22,7 @@ import {
   Phone, 
   MessageCircle, 
   ChevronRight, 
-  ChevronLeft,
+  ChevronLeft, 
   Lock, 
   Leaf, 
   Recycle, 
@@ -43,6 +43,15 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   
+  // Referência e controle de velocidade do vídeo de fundo (super slow-motion suave)
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.45;
+    }
+  }, []);
+
   // Calculadora Interativa
   const [calcLitros, setCalcLitros] = useState<number>(100);
 
@@ -381,20 +390,29 @@ export default function LandingPage() {
 
       {/* HERO SECTION - DELICADA, MODERNA & ENQUADRADA */}
       <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-20 isolate">
-        {/* Background Video Loop com Overlay Suave */}
+        {/* Background Video Loop com Efeito Slow-Motion e Transição Fluida */}
         <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-cover object-center opacity-70"
+            onLoadedMetadata={(e) => {
+              e.currentTarget.playbackRate = 0.45;
+            }}
+            onPlay={(e) => {
+              e.currentTarget.playbackRate = 0.45;
+            }}
+            className="w-full h-full object-cover object-center scale-105 opacity-65 transform motion-safe:transition-all duration-1000"
           >
             <source src="/videofundo.mp4" type="video/mp4" />
           </video>
-          {/* Overlay refinado de gradiente para contraste e legibilidade impecáveis */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#F3F9FC]/75 via-white/55 to-white/90"></div>
+          {/* Overlay refinado de gradiente para contraste, elegância e fusão das bordas */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F3F9FC]/80 via-white/45 to-white"></div>
+          <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#F3F9FC]/90 to-transparent"></div>
+          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
         </div>
 
         {/* Glow Effects Delicados */}
